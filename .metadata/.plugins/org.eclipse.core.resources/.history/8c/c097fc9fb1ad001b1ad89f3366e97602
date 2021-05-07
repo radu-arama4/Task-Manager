@@ -1,0 +1,13 @@
+package com.stefanini.taskmanager.service;
+
+public interface Service<E> {
+
+	E createEntity();
+	
+	E readEntity();
+	
+	E updateEntity();
+	
+	boolean deleteEntity();
+	
+}

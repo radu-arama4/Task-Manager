@@ -1,0 +1,5 @@
+package com.stefanini.taskmanager.DB.dao;
+
+public interface TaskDao {
+
+}

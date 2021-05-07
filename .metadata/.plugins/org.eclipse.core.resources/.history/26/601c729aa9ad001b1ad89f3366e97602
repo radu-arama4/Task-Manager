@@ -1,0 +1,22 @@
+package com.stefanini.taskmanager.DB.DaoImpl;
+
+import java.util.List;
+
+import com.stefanini.taskmanager.dto.Task;
+import com.stefanini.taskmanager.persistance.dao.TaskDao;
+
+public class TaskDaoImpl implements TaskDao{
+
+	@Override
+	public Task addTask() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Task> showTasks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

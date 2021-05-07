@@ -1,0 +1,33 @@
+package com.stefanini.taskmanager.dao;
+
+import com.stefanini.taskmanager.data.Task;
+
+public class TaskDao implements Dao<Task>{
+
+	@Override
+	public Task createEntity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Task readEntity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Task updateEntity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteEntity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+	
+}

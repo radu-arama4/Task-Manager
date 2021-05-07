@@ -1,0 +1,5 @@
+package com.stefanini.taskmanager.DB.DaoImpl;
+
+public class GroupDaoImpl {
+
+}

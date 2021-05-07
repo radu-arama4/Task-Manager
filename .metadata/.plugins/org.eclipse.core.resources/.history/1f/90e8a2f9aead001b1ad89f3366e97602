@@ -1,0 +1,55 @@
+package com.stefanini.taskmanager.persistence.daoImpl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import com.stefanini.taskmanager.dto.Group;
+import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.persistence.util.DButil;
+
+public class GroupDaoImpl implements GroupDao {
+
+	Connection connection = DButil.connectToDb();
+	
+	@Override
+	public boolean createGroup(Group group) {
+		try {
+            String groupName = group.getGroupName();
+            String query = "INSERT INTO users.group(groupName) " +
+                    "VALUES('" + groupName + "')";
+            System.out.println(query);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+	}
+
+	@Override
+	public boolean addUserToGroup(User user, Group group) {
+		try {
+            String groupName = group.getGroupName();
+            String userName = user.getUserName();
+
+            String query = "UPDATE user SET groupName = '" + groupName +
+                    "' WHERE userName LIKE '" + userName + "'";
+
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+	}
+
+	@Override
+	public boolean addTaskToGroup() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}

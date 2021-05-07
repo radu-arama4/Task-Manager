@@ -1,0 +1,13 @@
+package com.stefanini.taskmanager.dao;
+
+import java.util.List;
+
+import com.stefanini.taskmanager.data.User;
+
+public interface UserDao {
+	
+	User createUser();
+	
+	List<User> getUsers();
+	
+}

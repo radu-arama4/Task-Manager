@@ -1,0 +1,22 @@
+package com.stefanini.taskmanager.DB.DaoImpl;
+
+import java.util.List;
+
+import com.stefanini.taskmanager.DB.dao.UserDao;
+import com.stefanini.taskmanager.data.User;
+
+public class UserDaoImpl implements UserDao{
+
+	@Override
+	public User createUser() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> getUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

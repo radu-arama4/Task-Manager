@@ -1,0 +1,13 @@
+package com.stefanini.taskmanager.persistence.dao;
+
+import java.util.List;
+
+import com.stefanini.taskmanager.dto.Task;
+
+public interface TaskDao {
+	
+	Task addTask();
+	
+	List<Task> showTasks();
+	
+}

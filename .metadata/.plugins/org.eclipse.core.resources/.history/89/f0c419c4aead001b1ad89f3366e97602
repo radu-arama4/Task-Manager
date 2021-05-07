@@ -1,0 +1,31 @@
+package com.stefanini.taskmanager.persistence.daoImpl;
+
+import java.sql.Connection;
+
+import com.stefanini.taskmanager.dto.Group;
+import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.persistence.util.DButil;
+
+public class GroupDaoImpl implements GroupDao {
+
+	Connection connection = DButil.connectToDb();
+	
+	@Override
+	public Group createGroup() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addUserToGroup() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addTaskToGroup() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}

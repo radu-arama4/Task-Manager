@@ -1,0 +1,15 @@
+package com.stefanini.taskmanager.persistence.dao;
+
+import java.util.List;
+
+import com.stefanini.taskmanager.dto.User;
+
+public interface EntityDao<E> {
+
+	boolean createEntity(E entity);
+	
+	boolean createEntity(E entity, User user);
+	
+	List<E> getEntity();
+	
+}
