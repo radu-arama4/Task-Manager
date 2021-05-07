@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import com.stefanini.taskmanager.dto.Group;
 import com.stefanini.taskmanager.dto.Task;
@@ -74,10 +75,6 @@ public class GroupDaoImpl implements GroupDao {
 
             int ID = getIdByGroupName(groupName);
             
-            if(ID==-1) {
-    			return false;
-    		}
-            
             System.out.println(ID);
             
             String query = "UPDATE sys.user SET sys.user.group_Id = " + ID +
@@ -99,15 +96,12 @@ public class GroupDaoImpl implements GroupDao {
 
 		int ID = getIdByGroupName(group.getGroupName());
 		
-		if(ID==-1) {
-			return false;
-		}
             try {
                 String taskTitle = task.getTaskTitle();
                 String taskDescription = task.getDescription();
 
                 String query = "INSERT INTO sys.task(title,description,user_Id)\r\n"
-                		+ "SELECT '" + taskTitle + "', '" + taskDescription + "', sys.user.user_Id\r\n"
+                		+ "SELECT 'someTitle', 'someDescription', sys.user.user_Id\r\n"
                 		+ "FROM sys.user WHERE sys.user.group_Id = " + ID + ";";
 
                 Statement statement = connection.createStatement();

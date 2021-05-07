@@ -1,9 +1,9 @@
 package com.stefanini.taskmanager.persistence.daoImpl;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import com.stefanini.taskmanager.dto.Group;
 import com.stefanini.taskmanager.dto.Task;
@@ -42,49 +42,15 @@ public class GroupDaoImpl implements GroupDao {
         }
 	}
 
-	private int getIdByGroupName(String groupName) {
-		try {
-			
-			String query = "select sys.group.group_Id as group_Id \r\n"
-					+ "from sys.group\r\n"
-					+ "where sys.group.groupName LIKE '" + groupName + "';";
-			Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-            
-            int ID = -1;
-            
-            while(rs.next()) {
-            	String id = rs.getString("group_Id");
-            	ID = Integer.parseInt(id);
-            	break;
-            }
-            return ID;
-            
-		} catch (SQLException e) {
-			return -1;
-		}
-		
-	}
-	
 	@Override
 	public boolean addUserToGroup(User user, Group group) {
 		try {
             String groupName = group.getGroupName();
             String userName = user.getUserName();
 
-            int ID = getIdByGroupName(groupName);
-            
-            if(ID==-1) {
-    			return false;
-    		}
-            
-            System.out.println(ID);
-            
-            String query = "UPDATE sys.user SET sys.user.group_Id = " + ID +
-                    " WHERE sys.user.userName LIKE '" + userName + "'";
+            String query = "UPDATE user SET groupName = '" + groupName +
+                    "' WHERE userName LIKE '" + userName + "'";
 
-            System.out.println(query);
-            
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
             return true;
@@ -96,19 +62,17 @@ public class GroupDaoImpl implements GroupDao {
 
 	@Override
 	public boolean addTaskToGroup(Task task, Group group) {
-
-		int ID = getIdByGroupName(group.getGroupName());
 		
-		if(ID==-1) {
-			return false;
-		}
+		List<User> groupUsers = group.getGroupUsers();
+
+        for(User usr:groupUsers){
             try {
                 String taskTitle = task.getTaskTitle();
                 String taskDescription = task.getDescription();
+                String userName = usr.getUserName();
 
-                String query = "INSERT INTO sys.task(title,description,user_Id)\r\n"
-                		+ "SELECT '" + taskTitle + "', '" + taskDescription + "', sys.user.user_Id\r\n"
-                		+ "FROM sys.user WHERE sys.user.group_Id = " + ID + ";";
+                String query = "INSERT INTO task(Task_Title,Description,userName) " +
+                        "VALUES('" + taskTitle + "','"+ taskDescription +"','" + userName + "')";
 
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(query);
@@ -116,7 +80,7 @@ public class GroupDaoImpl implements GroupDao {
                 System.out.println(e.getMessage());
                 return false;
             }
-
+        }
         return true;
 	}
 	

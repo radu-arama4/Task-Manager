@@ -10,6 +10,7 @@ public class Group {
     public Group(String groupName) {
         this.groupName = groupName;
         groupUsers = new ArrayList<>();
+        groupTasks = new ArrayList<>();
     }
 
     public void addUserToGroup(User user){
