@@ -1,5 +1,0 @@
-package com.stefanini.taskmanager.dao;
-
-public interface Dao {
-
-}
