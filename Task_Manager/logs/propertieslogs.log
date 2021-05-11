@@ -1,0 +1,7 @@
+[INFO ] 2021-05-11 09:15:32.068 [main] Main - Program started
+[INFO ] 2021-05-11 09:15:32.070 [main] Main - Operation executor created
+[INFO ] 2021-05-11 09:15:32.071 [main] Main - New operation: show all users
+[INFO ] 2021-05-11 09:15:32.079 [main] ReadPropertyFile - Properties extracted successfully
+[INFO ] 2021-05-11 09:15:32.208 [main] DButil - Connected to DataBase jdbc:mysql://localhost:3306/sys?user=root?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Europe/Warsaw
+[INFO ] 2021-05-11 09:15:32.208 [main] GroupDaoImpl - UserDao instantiated
+[INFO ] 2021-05-11 09:15:32.266 [main] Main - Program finished

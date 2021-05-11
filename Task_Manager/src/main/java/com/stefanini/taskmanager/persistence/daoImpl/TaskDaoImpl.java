@@ -18,91 +18,91 @@ import com.stefanini.taskmanager.persistence.util.DButil;
 
 public class TaskDaoImpl implements TaskDao {
 
-	private static TaskDaoImpl singleInstance = null;
-	private Connection connection = null;
-	private static Logger logger = LogManager.getLogger(GroupDaoImpl.class);
+  private static TaskDaoImpl singleInstance = null;
+  private Connection connection = null;
+  private static Logger logger = LogManager.getLogger(GroupDaoImpl.class);
 
-	private TaskDaoImpl() {
-		connection = DButil.connectToDb();
-	}
+  private TaskDaoImpl() {
+    connection = DButil.connectToDb();
+  }
 
-	static public TaskDaoImpl getInstance() {
-		if (singleInstance == null) {
-			singleInstance = new TaskDaoImpl();
-			logger.info("TaskDao instantiated");
-		}
-		return singleInstance;
-	}
+  static public TaskDaoImpl getInstance() {
+    if (singleInstance == null) {
+      singleInstance = new TaskDaoImpl();
+      logger.info("TaskDao instantiated");
+    }
+    return singleInstance;
+  }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean addTask(Task task, User user) {
-		try {
-			String userName = user.getUserName();
-			String taskTitle = task.getTaskTitle();
-			String taskDescription = task.getDescription();
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean addTask(Task task, User user) {
+    try {
+      String userName = user.getUserName();
+      String taskTitle = task.getTaskTitle();
+      String taskDescription = task.getDescription();
 
-			String query = "INSERT INTO sys.task(title, description, user_Id) "
-					+ "SELECT ?, ?, sys.user.user_Id FROM sys.user " + "WHERE sys.user.userName LIKE ?";
+      String query = "INSERT INTO sys.task(title, description, user_Id) "
+          + "SELECT ?, ?, sys.user.user_Id FROM sys.user " + "WHERE sys.user.userName LIKE ?";
 
-			PreparedStatement pStatement = connection.prepareStatement(query);
-			pStatement.setString(1, taskTitle);
-			pStatement.setString(2, taskDescription);
-			pStatement.setString(3, userName);
+      PreparedStatement pStatement = connection.prepareStatement(query);
+      pStatement.setString(1, taskTitle);
+      pStatement.setString(2, taskDescription);
+      pStatement.setString(3, userName);
 
-			int c = pStatement.executeUpdate();
+      int c = pStatement.executeUpdate();
 
-			if (c == 0) {
-				return false;
-			}
+      if (c == 0) {
+        return false;
+      }
 
-			return true;
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-			return false;
-		}
-	}
+      return true;
+    } catch (SQLException e) {
+      logger.error(e.getMessage());
+      return false;
+    }
+  }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Task> showTasks(User selectedUser) throws SQLException {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<Task> showTasks(User selectedUser) throws SQLException {
 
-		String userName = selectedUser.getUserName();
+    String userName = selectedUser.getUserName();
 
-		final String query = "SELECT sys.task.title, sys.task.description \r\n"
-				+ "FROM sys.user JOIN sys.task on sys.user.user_Id=sys.task.user_Id\r\n"
-				+ "WHERE sys.user.userName like ?";
+    final String query = "SELECT sys.task.title, sys.task.description \r\n"
+        + "FROM sys.user JOIN sys.task on sys.user.user_Id=sys.task.user_Id\r\n"
+        + "WHERE sys.user.userName like ?";
 
-		PreparedStatement pStatement = connection.prepareStatement(query);
-		pStatement.setString(1, userName);
+    PreparedStatement pStatement = connection.prepareStatement(query);
+    pStatement.setString(1, userName);
 
-		ResultSet rs = pStatement.executeQuery();
+    ResultSet rs = pStatement.executeQuery();
 
-		List<Task> tasks = new ArrayList<Task>();
+    List<Task> tasks = new ArrayList<Task>();
 
-		while (rs.next()) {
-			String taskTitle = rs.getString("title");
-			String description = rs.getString("description");
+    while (rs.next()) {
+      String taskTitle = rs.getString("title");
+      String description = rs.getString("description");
 
-			System.out.println(taskTitle + " " + description);
+      System.out.println(taskTitle + " " + description);
 
-			tasks.add(new Task(taskTitle, description));
-		}
+      tasks.add(new Task(taskTitle, description));
+    }
 
-		rs.close();
-		return tasks;
-	}
+    rs.close();
+    return tasks;
+  }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void finalize() throws Throwable {
-		DButil.disconnectFromDb();
-	}
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void finalize() throws Throwable {
+    DButil.disconnectFromDb();
+  }
 
 }

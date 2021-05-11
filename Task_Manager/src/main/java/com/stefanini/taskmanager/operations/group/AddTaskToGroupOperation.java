@@ -5,15 +5,15 @@ import com.stefanini.taskmanager.receivers.GroupReceiver;
 
 public class AddTaskToGroupOperation implements Operation {
 
-	GroupReceiver group = null;
-	
-	public AddTaskToGroupOperation(GroupReceiver group) {
-		this.group = group;
-	}
+  GroupReceiver group = null;
 
-	@Override
-	public void execute() {
-		group.addTaskToGroup();
-	}
-	
+  public AddTaskToGroupOperation(GroupReceiver group) {
+    this.group = group;
+  }
+
+  @Override
+  public void execute() {
+    group.addTaskToGroup();
+  }
+
 }
