@@ -5,11 +5,12 @@ import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.dto.Group;
 import com.stefanini.taskmanager.dto.Task;
 import com.stefanini.taskmanager.dto.User;
-import com.stefanini.taskmanager.persistence.daoImpl.GroupDaoImpl;
+import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.persistence.dao.GroupDaoImpl;
 
 public class GroupServiceImpl implements GroupService {
 
-  private GroupDaoImpl groupDao = GroupDaoImpl.getInstance();
+  private GroupDao groupDao = GroupDaoImpl.getInstance();
   private static Logger logger = LogManager.getLogger(GroupServiceImpl.class);
 
   @Override

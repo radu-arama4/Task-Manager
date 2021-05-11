@@ -18,6 +18,18 @@ public class ReadPropertyFile {
   private static Logger logger = LogManager.getLogger(ReadPropertyFile.class);
 
   public ReadPropertyFile() {
+
+    Properties properties = extractProperties();
+
+    user = properties.getProperty("user");
+    password = properties.getProperty("password");
+    url = properties.getProperty("url");
+
+    logger.debug("Properties extracted successfully");
+
+  }
+
+  private Properties extractProperties() {
     Properties prop = new Properties();
     InputStream ip = null;
     try {
@@ -34,12 +46,7 @@ public class ReadPropertyFile {
       logger.error(e.getMessage());
     }
 
-    user = prop.getProperty("user");
-    password = prop.getProperty("password");
-    url = prop.getProperty("url");
-
-    logger.info("Properties extracted successfully");
-
+    return prop;
   }
 
   public String getUser() {

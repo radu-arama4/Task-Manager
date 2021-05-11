@@ -9,7 +9,6 @@ public class TaskReceiver {
   private TaskService taskService = null;
 
   public TaskReceiver(String[] args) {
-    super();
     this.args = args;
     taskService = new TaskServiceImpl();
   }

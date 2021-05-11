@@ -1,5 +1,0 @@
-package com.stefanini.taskmanager;
-
-public interface Operation {
-	boolean execute();
-}

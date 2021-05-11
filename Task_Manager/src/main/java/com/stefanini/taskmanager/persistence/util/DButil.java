@@ -18,10 +18,9 @@ public class DButil {
 
   static private Connection connection = null;
 
+  // Method for connecting to the database
   public static Connection connectToDb() {
-
     try {
-      // Class.forName("com.mysql.cj.jdbc.Driver");
       connection = DriverManager.getConnection(url, user, password);
       logger.info("Connected to DataBase " + url);
       return connection;

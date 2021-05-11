@@ -1,20 +1,16 @@
 package com.stefanini.taskmanager.service;
 
-import java.sql.SQLException;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.dto.Task;
 import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
-import com.stefanini.taskmanager.persistence.dao.UserDao;
-import com.stefanini.taskmanager.persistence.daoImpl.TaskDaoImpl;
-import com.stefanini.taskmanager.persistence.daoImpl.UserDaoImpl;
+import com.stefanini.taskmanager.persistence.dao.TaskDaoImpl;
 
 public class TaskServiceImpl implements TaskService {
 
   TaskDao taskDao = TaskDaoImpl.getInstance();
-  UserDao userDao = UserDaoImpl.getInstance();
   private static Logger logger = LogManager.getLogger(TaskServiceImpl.class);
 
   @Override
@@ -106,14 +102,12 @@ public class TaskServiceImpl implements TaskService {
       userName = arg.substring(5, arg.length() - 1);
     }
 
-    try {
-      List<Task> tasks = taskDao.showTasks(new User(null, null, userName));
-      return tasks;
-    } catch (SQLException e) {
-      logger.error(e.getMessage());
+    List<Task> tasks = taskDao.showTasks(new User(null, null, userName));
+
+    if (tasks == null) {
+      logger.warn("No such user with username: " + userName);
     }
 
-    logger.warn("No such user with username: " + userName);
-    return null;
+    return tasks;
   }
 }

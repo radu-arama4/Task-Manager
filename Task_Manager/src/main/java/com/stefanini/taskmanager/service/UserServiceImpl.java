@@ -1,13 +1,12 @@
 package com.stefanini.taskmanager.service;
 
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
-import com.stefanini.taskmanager.persistence.daoImpl.UserDaoImpl;
+import com.stefanini.taskmanager.persistence.dao.UserDaoImpl;
 
 public class UserServiceImpl implements UserService {
 
@@ -54,12 +53,7 @@ public class UserServiceImpl implements UserService {
 
     List<User> users = null;
 
-    try {
-      users = userDao.getUsers();
-    } catch (SQLException e) {
-      logger.error(e.getMessage());
-      e.printStackTrace();
-    }
+    users = userDao.getUsers();
 
     for (User user : users) {
       logger.info(user.getFirstName() + " " + user.getLastName() + " " + user.getUserName());
@@ -71,12 +65,7 @@ public class UserServiceImpl implements UserService {
   public boolean checkDuplicatedUserNames(String userName) {
 
     List<User> users = null;
-    try {
-      users = userDao.getUsers();
-    } catch (SQLException e) {
-      logger.error(e.getMessage());
-      e.printStackTrace();
-    }
+    users = userDao.getUsers();
 
     for (User user : users) {
       if (user.getUserName().equals(userName)) {
