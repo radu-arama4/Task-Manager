@@ -1,0 +1,5 @@
+package com.stefanini.taskmanager.operations.task;
+
+public class AddTaskOperation {
+
+}

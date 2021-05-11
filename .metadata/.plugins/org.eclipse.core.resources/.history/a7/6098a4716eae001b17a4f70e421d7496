@@ -1,0 +1,5 @@
+package com.stefanini.taskmanager.service;
+
+public interface BasicService {
+
+}

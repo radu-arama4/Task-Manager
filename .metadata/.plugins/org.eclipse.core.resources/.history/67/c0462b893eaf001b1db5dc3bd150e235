@@ -1,0 +1,18 @@
+package com.stefanini.taskmanager.operations.user;
+
+import com.stefanini.taskmanager.Operation;
+import com.stefanini.taskmanager.receivers.UserReceiver;
+
+public class CreateUserOperation implements Operation {
+
+	UserReceiver user;
+	
+	public CreateUserOperation(UserReceiver user) {
+		this.user = user;
+	}
+
+	@Override
+	public void execute() {
+		user.addUser();
+	}
+}

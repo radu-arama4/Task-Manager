@@ -1,0 +1,5 @@
+package com.stefanini.taskmanager.persistence.dao;
+
+public class SomeEntity {
+
+}

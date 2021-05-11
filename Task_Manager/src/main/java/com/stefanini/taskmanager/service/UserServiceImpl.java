@@ -20,9 +20,7 @@ public class UserServiceImpl implements UserService {
     logger.info("createUser method started");
 
     if (arguments.length > 4) {
-      logger.warn("Too many arguments!");
-      System.out.println("Too many arguments!");
-      System.out.println(Arrays.toString(arguments));
+      logger.warn("Too many arguments!" + Arrays.toString(arguments));
     }
 
     String firstName = null;
@@ -40,16 +38,13 @@ public class UserServiceImpl implements UserService {
     }
 
     if (firstName == null || lastName == null || userName == null) {
-      System.out.println("Information missing!");
       logger.warn("Missing information!");
     } else if (!checkDuplicatedUserNames(userName)) {
       if (userDao.createUser(new User(firstName, lastName, userName))) {
-        System.out.println("New User " + userName + " added!");
         logger.info("New user with [first name: " + firstName + "], [last name: " + lastName
             + "], [username: " + userName + "] added.");
       }
     } else {
-      System.out.println("This username already exists!");
       logger.warn("Duplicated username!");
     }
   }
@@ -67,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     for (User user : users) {
-      System.out.println(user.getFirstName() + " " + user.getLastName() + " " + user.getUserName());
+      logger.info(user.getFirstName() + " " + user.getLastName() + " " + user.getUserName());
     }
 
     return users;

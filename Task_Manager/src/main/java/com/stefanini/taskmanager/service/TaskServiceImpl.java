@@ -111,7 +111,6 @@ public class TaskServiceImpl implements TaskService {
       return tasks;
     } catch (SQLException e) {
       logger.error(e.getMessage());
-      e.printStackTrace();
     }
 
     logger.warn("No such user with username: " + userName);

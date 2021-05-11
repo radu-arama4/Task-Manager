@@ -1,0 +1,13 @@
+package com.stefanini.taskmanager.service;
+
+import java.util.List;
+
+import com.stefanini.taskmanager.dto.Task;
+
+public interface TaskService {
+	
+	boolean addTask(String[] arguments);
+	
+	List<Task> showTasks(String[] arguments);
+	
+}
