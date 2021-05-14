@@ -13,4 +13,5 @@ Commands:
     
 Database schema:
 
-![image](https://user-images.githubusercontent.com/59333010/118286885-98d70d00-b4db-11eb-9c8a-355af0e1750e.png)
+![image](https://user-images.githubusercontent.com/59333010/118287087-cae86f00-b4db-11eb-8942-137dc5e16fac.png)
+
