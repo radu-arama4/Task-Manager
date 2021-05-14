@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.dto.Group;
@@ -29,44 +30,31 @@ public class GroupDaoImpl implements GroupDao {
   }
 
   @Override
-  public boolean createGroup(Group group) {
+  public Group createGroup(Group group) {
     try {
       String groupName = group.getGroupName();
-      String query = "INSERT INTO sys.group(groupName) VALUES(?)";
+      String query = "INSERT INTO group(group_name) VALUES(?)";
 
-      PreparedStatement statement = connection.prepareStatement(query);
+      PreparedStatement statement =
+          connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       statement.setString(1, groupName);
 
       statement.executeUpdate();
-      return true;
-    } catch (SQLException e) {
-      logger.error(e);
-      return false;
-    }
-  }
 
-  private int getIdByGroupName(String groupName) {
-    try {
-      String query = "SELECT group.group_Id AS group_Id FROM group WHERE group.groupName LIKE ?";
-      PreparedStatement statement = connection.prepareStatement(query);
-      statement.setString(1, groupName);
+      ResultSet rs = statement.getGeneratedKeys();
+      Long group_id = null;
 
-      ResultSet rs = statement.executeQuery();
-
-      int ID = -1;
-
-      while (rs.next()) {
-        String id = rs.getString("group_Id");
-        ID = Integer.parseInt(id);
-        break;
+      if (rs.next()) {
+        group_id = rs.getLong(1);
+      } else {
+        return null;
       }
-      return ID;
 
+      return new Group(group_id, groupName);
     } catch (SQLException e) {
       logger.error(e);
-      return -1;
+      return null;
     }
-
   }
 
   @Override
@@ -75,18 +63,14 @@ public class GroupDaoImpl implements GroupDao {
       String groupName = group.getGroupName();
       String userName = user.getUserName();
 
-      // TODO rename
-      int ID = getIdByGroupName(groupName);
-
-      if (ID == -1) {
-        return false;
-      }
-
-      String query = "UPDATE user SET user.group_Id = ? WHERE user.userName LIKE ?";
+      String query =
+          "INSERT INTO user_to_group (user_id, group_id) SELECT (SELECT user.user_id FROM user"
+              + "WHERE user.username LIKE ?) AS user_id, (SELECT group.group_id FROM group"
+              + "WHERE group.group_name LIKE ?) as group_id";
 
       PreparedStatement statement = connection.prepareStatement(query);
-      statement.setInt(1, ID);
-      statement.setString(2, userName);
+      statement.setString(1, userName);
+      statement.setString(2, groupName);
       int nrOfUpdates = statement.executeUpdate();
 
       if (nrOfUpdates == 0) {
@@ -103,30 +87,46 @@ public class GroupDaoImpl implements GroupDao {
   @Override
   public boolean addTaskToGroup(Task task, Group group) {
 
-    int ID = getIdByGroupName(group.getGroupName());
+    String taskTitle = task.getTaskTitle();
+    String taskDescription = task.getDescription();
+    String groupName = group.getGroupName();
 
-    if (ID == -1) {
-      return false;
-    }
+    String query = "INSERT INTO task(task_title, task_description) VALUES(?, ?)";
+    String query2 = "INSERT INTO task_to_group(task_id, group_id)"
+        + "SELECT ?, group_id FROM group WHERE group.group_name LIKE ?";
+
     try {
-      String taskTitle = task.getTaskTitle();
-      String taskDescription = task.getDescription();
-
-      String query = "INSERT INTO task(title,description,user_Id)\r\n"
-          + "SELECT ?, ?, user.user_Id FROM user WHERE user.group_Id = ?";
-
-      PreparedStatement statement = connection.prepareStatement(query);
+      PreparedStatement statement =
+          connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       statement.setString(1, taskTitle);
       statement.setString(2, taskDescription);
-      statement.setInt(3, ID);
 
       statement.executeUpdate();
 
+      ResultSet rs = statement.getGeneratedKeys();
+      Long task_id = null;
+
+      if (rs.next()) {
+        task_id = rs.getLong(1);
+      } else {
+        return false;
+      }
+
+      statement = connection.prepareStatement(query2);
+      statement.setLong(1, task_id);
+      statement.setString(2, groupName);
+
+      int nrOfUpdates = statement.executeUpdate();
+
+      if (nrOfUpdates == 0) {
+        return false;
+      }
+
+      return true;
     } catch (SQLException e) {
       logger.error(e);
       return false;
     }
 
-    return true;
   }
 }

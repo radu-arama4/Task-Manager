@@ -19,7 +19,7 @@ public interface UserDao {
    * @param newUser - the user that will be created
    * @return boolean value - to show if the operation succeeded
    */
-  boolean createUser(User newUser);
+  User createUser(User newUser);
 
   /**
    * 

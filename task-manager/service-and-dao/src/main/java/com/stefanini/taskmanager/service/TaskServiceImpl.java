@@ -75,7 +75,8 @@ public class TaskServiceImpl implements TaskService {
     if (userName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Missing information!");
     } else {
-      if (taskDao.addTask(new Task(taskTitle, taskDescription), new User(null, null, userName))) {
+      if (taskDao.addTask(new Task(taskTitle, taskDescription),
+          new User(null, null, userName)) != null) {
         logger.info("Task with [Title: " + taskTitle + "], " + "[Description: " + taskDescription
             + "] added to user: " + userName + ".");
         return true;

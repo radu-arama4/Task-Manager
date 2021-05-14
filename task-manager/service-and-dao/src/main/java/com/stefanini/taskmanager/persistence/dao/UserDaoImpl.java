@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -29,24 +30,34 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public boolean createUser(User newUser) {
+  public User createUser(User newUser) {
     try {
+
       String firstName = newUser.getFirstName();
       String lastName = newUser.getLastName();
       String userName = newUser.getUserName();
 
-      String query = "INSERT INTO user(firstName,lastName,userName) VALUES(?, ?, ?)";
+      String query = "INSERT INTO user(first_name,last_name,username) VALUES(?, ?, ?)";
 
-      PreparedStatement statement = connection.prepareStatement(query);
+      PreparedStatement statement =
+          connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       statement.setString(1, firstName);
       statement.setString(2, lastName);
       statement.setString(3, userName);
 
       statement.executeUpdate();
-      return true;
+      ResultSet rs = statement.getGeneratedKeys();
+      Long id = null;
+
+      if (rs.next()) {
+        id = rs.getLong(1);
+        return new User(id, firstName, lastName, userName);
+      } else {
+        return null;
+      }
     } catch (SQLException e) {
       logger.error(e);
-      return false;
+      return null;
     }
   }
 
@@ -62,11 +73,12 @@ public class UserDaoImpl implements UserDao {
       ResultSet rs = statement.executeQuery(query);
 
       while (rs.next()) {
-        String firstName = rs.getString("firstName");
-        String lastName = rs.getString("lastName");
-        String userName = rs.getString("userName");
+        Long id = rs.getLong("user_id");
+        String firstName = rs.getString("first_name");
+        String lastName = rs.getString("last_name");
+        String userName = rs.getString("username");
 
-        User newUser = new User(firstName, lastName, userName);
+        User newUser = new User(id, firstName, lastName, userName);
         users.add(newUser);
       }
       rs.close();

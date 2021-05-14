@@ -22,7 +22,7 @@ public interface TaskDao {
    * @param user - the user to whom the task will be added
    * @return boolean value - to show if the operation succeeded
    */
-  boolean addTask(Task task, User user);
+  Task addTask(Task task, User user);
 
   /**
    * 

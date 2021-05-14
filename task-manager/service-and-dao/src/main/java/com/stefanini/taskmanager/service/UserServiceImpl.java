@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
       logger.warn("Missing information!");
       return false;
     } else if (!checkDuplicatedUserNames(userName)) {
-      if (userDao.createUser(new User(firstName, lastName, userName))) {
+      User createdUser = userDao.createUser(new User(firstName, lastName, userName));
+      if (createdUser != null) {
         logger.info("New user with [first name: " + firstName + "], [last name: " + lastName
             + "], [username: " + userName + "] added.");
         return true;

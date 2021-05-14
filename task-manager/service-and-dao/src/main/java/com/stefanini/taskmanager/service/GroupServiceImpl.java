@@ -26,7 +26,7 @@ public class GroupServiceImpl implements GroupService {
 
     if (arguments[1].startsWith("-gn='") && arguments[1].endsWith("'")) {
       groupName = arguments[1].substring(5, arguments[1].length() - 1);
-      if (groupDao.createGroup(new Group(groupName))) {
+      if (groupDao.createGroup(new Group(groupName)) != null) {
         logger.info("New group " + groupName + " created!");
         return true;
       }

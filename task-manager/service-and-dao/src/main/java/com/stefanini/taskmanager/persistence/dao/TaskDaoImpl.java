@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ public class TaskDaoImpl implements TaskDao {
 
   private static TaskDao singleInstance = null;
   private Connection connection = DButil.connectToDb();
-  private static Logger logger = LogManager.getLogger(GroupDaoImpl.class);
+  private static Logger logger = LogManager.getLogger(TaskDaoImpl.class);
 
   private TaskDaoImpl() {
     logger.info("TaskDao instantiated");
@@ -30,30 +31,46 @@ public class TaskDaoImpl implements TaskDao {
   }
 
   @Override
-  public boolean addTask(Task task, User user) {
+  public Task addTask(Task task, User user) {
     String userName = user.getUserName();
     String taskTitle = task.getTaskTitle();
     String taskDescription = task.getDescription();
 
-    String query = "INSERT INTO task(title, description, user_Id) "
-        + "SELECT ?, ?, user.user_Id FROM user WHERE user.userName LIKE ?";
+    String query = "INSERT INTO task(task_title, task_description) VALUES(?, ?)";
+    String query2 = "INSERT INTO task_to_user(user_id, task_id)"
+        + "SELECT user_id, ? FROM user WHERE user.username LIKE ?";
 
     try {
-      PreparedStatement statement = connection.prepareStatement(query);
+      PreparedStatement statement =
+          connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       statement.setString(1, taskTitle);
       statement.setString(2, taskDescription);
-      statement.setString(3, userName);
+
+      statement.executeUpdate();
+
+      ResultSet rs = statement.getGeneratedKeys();
+      Long task_id = null;
+
+      if (rs.next()) {
+        task_id = rs.getLong(1);
+      } else {
+        return null;
+      }
+
+      statement = connection.prepareStatement(query2);
+      statement.setLong(1, task_id);
+      statement.setString(2, userName);
 
       int nrOfUpdates = statement.executeUpdate();
 
       if (nrOfUpdates == 0) {
-        return false;
+        return null;
       }
 
-      return true;
+      return new Task(task_id, taskTitle, taskDescription);
     } catch (SQLException e) {
       logger.error(e);
-      return false;
+      return null;
     }
   }
 
@@ -62,8 +79,9 @@ public class TaskDaoImpl implements TaskDao {
 
     String userName = selectedUser.getUserName();
 
-    final String query = "SELECT task.title, task.description \r\n"
-        + "FROM user JOIN task on user.user_Id=task.user_Id WHERE user.userName like ?";
+    final String query =
+        "SELECT task.task_title, task.task_description FROM ((user JOIN task_to_user ON user.user_id = task_to_user.user_id)"
+            + " JOIN task ON task_to_user.task_id = task.task_id) WHERE user.username LIKE ?";
 
     List<Task> tasks = new ArrayList<Task>();
 
@@ -74,8 +92,8 @@ public class TaskDaoImpl implements TaskDao {
       ResultSet rs = statement.executeQuery();
 
       while (rs.next()) {
-        String taskTitle = rs.getString("title");
-        String description = rs.getString("description");
+        String taskTitle = rs.getString("task_title");
+        String description = rs.getString("task_description");
 
         logger.info(taskTitle + " " + description);
 

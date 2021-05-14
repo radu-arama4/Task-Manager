@@ -18,7 +18,7 @@ public interface GroupDao {
    * @param group - the group to be added
    * @return boolean value - to show if the operation succeeded
    */
-  boolean createGroup(Group group);
+  Group createGroup(Group group);
 
   /**
    * Method for adding a specific user to an existing {@link Group}

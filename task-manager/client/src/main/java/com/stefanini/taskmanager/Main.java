@@ -30,6 +30,8 @@ public class Main {
     OperationExecutor operationExecutor = new OperationExecutor();
     logger.info("Operation executor created");
 
+    System.out.println(args[0]);
+
     switch (args[0]) {
       case "-createUser":
         logger.info("New operation: create user");
