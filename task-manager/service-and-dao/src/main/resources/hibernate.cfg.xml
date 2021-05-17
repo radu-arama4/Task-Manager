@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+   <!DOCTYPE hibernate-configuration PUBLIC  
+            "-//Hibernate/Hibernate Configuration DTD 5.3//EN"  
+            "http://www.hibernate.org/dtd/hibernate-configuration-5.3.dtd">
+<hibernate-configuration>
+	<session-factory>
+
+
+		<property name="hbm2ddl.auto">update</property>
+		<property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+		<!-- TODO: investigate if right SQL dialect -->
+		<property name="connection.url">jdbc:mysql://localhost:3306/taskmanager2?allowPublicKeyRetrieval=true&amp;useSSL=false</property>
+		<property name="connection.username">root</property>
+		<property name="connection.password">Udar#197869420radylet</property>
+		<property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+
+		<mapping
+			class="com.stefanini.taskmanager.persistence.entity.User" />
+	</session-factory>
+</hibernate-configuration>  
