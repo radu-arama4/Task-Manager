@@ -42,6 +42,7 @@ public class GroupDaoImpl implements GroupDao {
       statement.executeUpdate();
 
       ResultSet rs = statement.getGeneratedKeys();
+      // reformat
       Long group_id = null;
 
       if (rs.next()) {

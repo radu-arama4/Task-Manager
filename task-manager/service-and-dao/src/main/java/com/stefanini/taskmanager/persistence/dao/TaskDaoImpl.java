@@ -79,9 +79,10 @@ public class TaskDaoImpl implements TaskDao {
 
     String userName = selectedUser.getUserName();
 
+    // global private static final
     final String query =
         "SELECT task.task_title, task.task_description FROM ((user JOIN task_to_user ON user.user_id = task_to_user.user_id)"
-            + " JOIN task ON task_to_user.task_id = task.task_id) WHERE user.username LIKE ?";
+            + " JOIN task ON task_to_user.task_id = task.task_id) WHERE user.username = ?";
 
     List<Task> tasks = new ArrayList<Task>();
 

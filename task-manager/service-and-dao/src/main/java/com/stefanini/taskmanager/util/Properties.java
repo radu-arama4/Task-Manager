@@ -9,9 +9,11 @@ public class Properties {
   private String user;
   private String password;
 
-  private static Logger logger = LogManager.getLogger(ReadPropertyFile.class);
+  private static Logger logger = LogManager.getLogger(Properties.class);
 
   public Properties() {
+
+
 
   }
 
