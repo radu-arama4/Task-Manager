@@ -49,6 +49,7 @@ public class UserDaoImpl implements UserDao {
       ResultSet rs = statement.getGeneratedKeys();
       Long id = null;
 
+      // TODO catch duplicate key
       if (rs.next()) {
         id = rs.getLong(1);
         return new User(id, firstName, lastName, userName);

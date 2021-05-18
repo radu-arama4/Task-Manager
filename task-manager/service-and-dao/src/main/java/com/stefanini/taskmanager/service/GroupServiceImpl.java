@@ -126,8 +126,6 @@ public class GroupServiceImpl implements GroupService {
       return false;
     }
 
-    System.out.println(groupName + " " + taskTitle + " " + taskDescription);
-
     if (groupName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Information missing!");
     } else {
