@@ -14,7 +14,7 @@ public class UserParser {
     private static final String LN = CommandLineVariables.LAST_NAME.value;
     private static final String UN = CommandLineVariables.USER_NAME.value;
 
-    public User parseUser(String[] arguments) {
+    public static User parseUser(String[] arguments) {
 
         String firstName = null;
         String lastName = null;

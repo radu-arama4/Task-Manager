@@ -13,7 +13,7 @@ public class TaskParser {
     private static final String TT = CommandLineVariables.TASK_TITLE.value;
     private static final String TD = CommandLineVariables.TASK_DESCRIPTION.value;
 
-    public Task parseTask(String[] arguments) {
+    public static Task parseTask(String[] arguments) {
 
         String taskTitle = null;
         String taskDescription = null;

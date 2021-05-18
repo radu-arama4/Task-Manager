@@ -10,7 +10,7 @@ public class GroupParser {
 
     private final static String GN = CommandLineVariables.GROUP_NAME.value;
 
-    public Group parseGroup(String[] arguments) {
+    public static Group parseGroup(String[] arguments) {
 
         String groupName = null;
 
