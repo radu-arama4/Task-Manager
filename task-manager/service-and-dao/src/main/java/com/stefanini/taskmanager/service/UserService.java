@@ -19,10 +19,10 @@ public interface UserService {
    * Method which extracts and encapsulates the {@link User} data from the command line arguments in
    * order to be sent to the {@link UserDao} and introduced to the database.
    * 
-   * @param arguments - command line arguments
+   * @param user - user data transfer object
    * @return boolean value - to show if the operation succeeded
    */
-  boolean createUser(String[] arguments);
+  boolean createUser(User user);
 
   /**
    * 

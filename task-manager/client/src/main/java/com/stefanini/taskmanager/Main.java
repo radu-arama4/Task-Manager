@@ -16,11 +16,6 @@ import com.stefanini.taskmanager.operations.task.AddTaskOperation;
 import com.stefanini.taskmanager.operations.task.ShowTasksOperation;
 import com.stefanini.taskmanager.operations.user.CreateUserOperation;
 import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
-import com.stefanini.taskmanager.receivers.GroupReceiver;
-import com.stefanini.taskmanager.receivers.TaskReceiver;
-import com.stefanini.taskmanager.receivers.UserReceiver;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class Main {
@@ -39,7 +34,6 @@ public class Main {
         OperationExecutor operationExecutor = new OperationExecutor();
         logger.info("Operation executor created");
 
-        // TODO args[0] variable, args[1]-infinit flags and parse
         String command = args[0];
         String[] flags = Arrays.copyOfRange(args, 1, args.length);
 
@@ -48,52 +42,49 @@ public class Main {
         Group group = null;
 
         switch (command) {
-            // TODO call here 2 parsing methods
             case "-createUser":
                 logger.info("New operation: create user");
                 user = UserParser.parseUser(flags);
-                operationExecutor.executeOperation(new CreateUserOperation(new UserReceiver(args)));
+                operationExecutor.addOperation(new CreateUserOperation(user));
                 break;
             case "-showAllUsers":
                 logger.info("New operation: show all users");
-
-                operationExecutor.executeOperation(new ShowAllUsersOperation(new UserReceiver(args)));
+                operationExecutor.addOperation(new ShowAllUsersOperation());
                 break;
             case "-addTask":
                 logger.info("New operation: add task to user");
-
                 user = UserParser.parseUser(flags);
                 task = TaskParser.parseTask(flags);
-
-                operationExecutor.executeOperation(new AddTaskOperation(new TaskReceiver(args)));
+                operationExecutor.addOperation(new AddTaskOperation(task, user));
                 break;
             case "-showTasks":
                 logger.info("New operation: show tasks of given user");
-                // TODO Operation receives DTO, not Receiver
                 user = UserParser.parseUser(flags);
-                operationExecutor.executeOperation(new ShowTasksOperation(new TaskReceiver(args)));
+                operationExecutor.addOperation(new ShowTasksOperation(user));
                 break;
             case "-createGroup":
                 logger.info("New operation: create group");
                 group = GroupParser.parseGroup(args);
-                operationExecutor.executeOperation(new CreateGroupOperation(new GroupReceiver(args)));
+                operationExecutor.addOperation(new CreateGroupOperation(group));
                 break;
             case "-addUserToGroup":
                 logger.info("New operation: add user to group");
                 user = UserParser.parseUser(args);
                 group = GroupParser.parseGroup(args);
-                operationExecutor.executeOperation(new AddUserToGroupOperation(new GroupReceiver(args)));
+                operationExecutor.addOperation(new AddUserToGroupOperation(group, user));
                 break;
             case "-addTaskToGroup":
                 logger.info("New operation: add task to group");
                 task = TaskParser.parseTask(flags);
                 group = GroupParser.parseGroup(args);
-                operationExecutor.executeOperation(new AddTaskToGroupOperation(new GroupReceiver(args)));
+                operationExecutor.addOperation(new AddTaskToGroupOperation(group, task));
                 break;
             default:
                 logger.warn("Command not recognized: " + args[0]);
                 break;
         }
+
+        operationExecutor.executeOperations();
 
         logger.info("Program finished");
 

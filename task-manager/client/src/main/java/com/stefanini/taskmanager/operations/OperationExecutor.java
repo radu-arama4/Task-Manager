@@ -5,11 +5,16 @@ import java.util.List;
 
 public class OperationExecutor {
 
-  private final List<Operation> textFileOperations = new ArrayList<>();
+    private final List<Operation> textFileOperations = new ArrayList<>();
 
-  public void executeOperation(Operation operation) {
-    textFileOperations.add(operation);
-    operation.execute();
-  }
+    public void addOperation(Operation operation){
+        textFileOperations.add(operation);
+    }
+
+    public void executeOperations() {
+        for (Operation operation : textFileOperations){
+            operation.execute();
+        }
+    }
 
 }

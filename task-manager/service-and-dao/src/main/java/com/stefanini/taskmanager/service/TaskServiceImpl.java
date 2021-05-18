@@ -1,6 +1,7 @@
 package com.stefanini.taskmanager.service;
 
 import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.dto.Task;
@@ -10,105 +11,43 @@ import com.stefanini.taskmanager.persistence.dao.TaskDaoImpl;
 
 public class TaskServiceImpl implements TaskService {
 
-  TaskDao taskDao = TaskDaoImpl.getInstance();
-  private static Logger logger = LogManager.getLogger(TaskServiceImpl.class);
+    TaskDao taskDao = TaskDaoImpl.getInstance();
+    private static Logger logger = LogManager.getLogger(TaskServiceImpl.class);
 
-  @Override
-  public boolean addTask(String[] arguments) {
+    @Override
+    public boolean addTask(Task task, User user) {
 
-    logger.info("addTask method started");
+        logger.info("addTask method started");
 
-    String userName = null;
-    String taskTitle = null;
-    String taskDescription = null;
+        String userName = user.getUserName();
+        String taskTitle = task.getTaskTitle();
+        String taskDescription = task.getDescription();
 
-    StringBuilder taskT = new StringBuilder();
-    StringBuilder taskD = new StringBuilder();
-    String prev = "";
-
-    int count = 0;
-
-    for (String arg : arguments) {
-      if (arg.startsWith("-un='") && arg.endsWith("'")) {
-        userName = arg.substring(5, arg.length() - 1);
-        count++;
-      } else if (arg.startsWith("-tt='") && arg.endsWith("'")) {
-        taskTitle = arg.substring(5, arg.length() - 1);
-        count++;
-      } else if (arg.startsWith("-tt='")) {
-        prev = "-tt='";
-        taskT.append(arg, 5, arg.length());
-        taskT.append(" ");
-        count++;
-      } else if (prev.equals("-tt='")) {
-        if (arg.endsWith("'")) {
-          taskT.append(arg, 0, arg.length() - 1);
-          taskTitle = taskT.toString();
-          prev = "";
+        if (userName == null || taskTitle == null || taskDescription == null) {
+            logger.warn("Missing information!");
         } else {
-          taskT.append(arg).append(" ");
+            if (taskDao.addTask(new Task(taskTitle, taskDescription),
+                    new User(null, null, userName)) != null) {
+                logger.info("Task with [Title: " + taskTitle + "], " + "[Description: " + taskDescription
+                        + "] added to user: " + userName + ".");
+                return true;
+            }
+            logger.warn("No such user with username: " + userName);
         }
-      } else if (arg.startsWith("-td='") && arg.endsWith("'")) {
-        taskDescription = arg.substring(5, arg.length() - 1);
-        count++;
-      } else if (arg.startsWith("-td='")) {
-        prev = "-td='";
-        taskD.append(arg, 5, arg.length());
-        taskD.append(" ");
-        count++;
-      } else if (prev.equals("-td='")) {
-        if (arg.endsWith("'")) {
-          taskD.append(arg, 0, arg.length() - 1);
-          taskDescription = taskD.toString();
-          prev = "";
-        } else {
-          taskD.append(arg).append(" ");
+        return false;
+    }
+
+    @Override
+    public List<Task> showTasks(User user) {
+
+        String userName = user.getUserName();
+
+        List<Task> tasks = taskDao.showTasks(new User(null, null, userName));
+
+        if (tasks == null) {
+            logger.warn("No such user with username: " + userName);
         }
-      }
+
+        return tasks;
     }
-
-    if (count > 3) {
-      logger.warn("Too many arguments!");
-      return false;
-    }
-
-    if (userName == null || taskTitle == null || taskDescription == null) {
-      logger.warn("Missing information!");
-    } else {
-      if (taskDao.addTask(new Task(taskTitle, taskDescription),
-          new User(null, null, userName)) != null) {
-        logger.info("Task with [Title: " + taskTitle + "], " + "[Description: " + taskDescription
-            + "] added to user: " + userName + ".");
-        return true;
-      }
-      logger.warn("No such user with username: " + userName);
-    }
-    return false;
-  }
-
-  @Override
-  public List<Task> showTasks(String[] arguments) {
-
-    logger.info("showTasks method started");
-
-    if (arguments.length > 2) {
-      logger.warn("Too many arguments!");
-      return null;
-    }
-
-    String userName = null;
-    String arg = arguments[1];
-
-    if (arg.startsWith("-un='") && arg.endsWith("'")) {
-      userName = arg.substring(5, arg.length() - 1);
-    }
-
-    List<Task> tasks = taskDao.showTasks(new User(null, null, userName));
-
-    if (tasks == null) {
-      logger.warn("No such user with username: " + userName);
-    }
-
-    return tasks;
-  }
 }
