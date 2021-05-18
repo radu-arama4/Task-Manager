@@ -24,10 +24,10 @@ public class TaskParser {
 
         for (String arg : arguments) {
             if (arg.startsWith(TT) && arg.endsWith("'")) {
-                taskTitle = arg.substring(TT.length() + 1, arg.length() - 1);
+                taskTitle = arg.substring(TT.length(), arg.length() - 1);
             } else if (arg.startsWith(TT)) {
                 prev = TT;
-                taskT.append(arg, TT.length() + 1, arg.length());
+                taskT.append(arg, TT.length(), arg.length());
                 taskT.append(" ");
             } else if (prev.equals(TT)) {
                 if (arg.endsWith("'")) {
@@ -38,10 +38,10 @@ public class TaskParser {
                     taskT.append(arg).append(" ");
                 }
             } else if (arg.startsWith(TD) && arg.endsWith("'")) {
-                taskDescription = arg.substring(TD.length() + 1, arg.length() - 1);
+                taskDescription = arg.substring(TD.length(), arg.length() - 1);
             } else if (arg.startsWith(TD)) {
                 prev = TD;
-                taskD.append(arg, TD.length() + 1, arg.length());
+                taskD.append(arg, TD.length(), arg.length());
                 taskD.append(" ");
             } else if (prev.equals(TD)) {
                 if (arg.endsWith("'")) {
@@ -52,10 +52,6 @@ public class TaskParser {
                     taskD.append(arg).append(" ");
                 }
             }
-        }
-
-        if (taskTitle == null && taskDescription == null) {
-            return null;
         }
 
         return new Task(taskTitle, taskDescription);

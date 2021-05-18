@@ -22,16 +22,12 @@ public class UserParser {
 
         for (String arg : arguments) {
             if (arg.startsWith(FN) && arg.endsWith("'")) {
-                firstName = arg.substring(FN.length() + 1, arg.length() - 1);
+                firstName = arg.substring(FN.length(), arg.length() - 1);
             } else if (arg.startsWith(LN) && arg.endsWith("'")) {
-                lastName = arg.substring(LN.length() + 1, arg.length() - 1);
+                lastName = arg.substring(LN.length(), arg.length() - 1);
             } else if (arg.startsWith(UN) && arg.endsWith("'")) {
-                userName = arg.substring(UN.length() + 1, arg.length() - 1);
+                userName = arg.substring(UN.length(), arg.length() - 1);
             }
-        }
-
-        if (userName == null) {
-            return null;
         }
 
         return new User(firstName, lastName, userName);

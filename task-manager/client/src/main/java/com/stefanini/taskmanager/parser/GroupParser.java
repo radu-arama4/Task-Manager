@@ -20,10 +20,6 @@ public class GroupParser {
             }
         }
 
-        if (groupName == null) {
-            return null;
-        }
-
         return new Group(groupName);
     }
 
