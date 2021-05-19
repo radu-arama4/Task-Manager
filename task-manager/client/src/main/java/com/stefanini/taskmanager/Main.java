@@ -19,75 +19,71 @@ import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
 import java.util.Arrays;
 
 public class Main {
+  private static Logger logger = LogManager.getLogger(Main.class);
 
-    private static Logger logger = LogManager.getLogger(Main.class);
+  public static void main(String[] args) {
+    logger.info("Program started");
 
-    public static void main(String[] args) {
-
-        logger.info("Program started");
-
-        if (args.length == 0) {
-            logger.warn("No given arguments. Finish.");
-            return;
-        }
-
-        OperationExecutor operationExecutor = new OperationExecutor();
-        logger.info("Operation executor created");
-
-        String command = args[0];
-        String[] flags = Arrays.copyOfRange(args, 1, args.length);
-
-        User user = null;
-        Task task = null;
-        Group group = null;
-
-        switch (command) {
-            case "-createUser":
-                logger.info("New operation: create user");
-                user = UserParser.parseUser(flags);
-                operationExecutor.addOperation(new CreateUserOperation(user));
-                break;
-            case "-showAllUsers":
-                logger.info("New operation: show all users");
-                operationExecutor.addOperation(new ShowAllUsersOperation());
-                break;
-            case "-addTask":
-                logger.info("New operation: add task to user");
-                user = UserParser.parseUser(flags);
-                task = TaskParser.parseTask(flags);
-                operationExecutor.addOperation(new AddTaskOperation(task, user));
-                break;
-            case "-showTasks":
-                logger.info("New operation: show tasks of given user");
-                user = UserParser.parseUser(flags);
-                operationExecutor.addOperation(new ShowTasksOperation(user));
-                break;
-            case "-createGroup":
-                logger.info("New operation: create group");
-                group = GroupParser.parseGroup(args);
-                operationExecutor.addOperation(new CreateGroupOperation(group));
-                break;
-            case "-addUserToGroup":
-                logger.info("New operation: add user to group");
-                user = UserParser.parseUser(args);
-                group = GroupParser.parseGroup(args);
-                operationExecutor.addOperation(new AddUserToGroupOperation(group, user));
-                break;
-            case "-addTaskToGroup":
-                logger.info("New operation: add task to group");
-                task = TaskParser.parseTask(flags);
-                group = GroupParser.parseGroup(args);
-                operationExecutor.addOperation(new AddTaskToGroupOperation(group, task));
-                break;
-            default:
-                logger.warn("Command not recognized: " + args[0]);
-                break;
-        }
-
-        operationExecutor.executeOperations();
-
-        logger.info("Program finished");
-
+    if (args.length == 0) {
+      logger.warn("No given arguments. Finish.");
+      return;
     }
 
+    OperationExecutor operationExecutor = new OperationExecutor();
+    logger.info("Operation executor created");
+
+    String command = args[0];
+    String[] flags = Arrays.copyOfRange(args, 1, args.length);
+
+    User user;
+    Task task;
+    Group group;
+
+    switch (command) {
+      case "-createUser":
+        logger.info("New operation: create user");
+        user = UserParser.parseUser(flags);
+        operationExecutor.addOperation(new CreateUserOperation(user));
+        break;
+      case "-showAllUsers":
+        logger.info("New operation: show all users");
+        operationExecutor.addOperation(new ShowAllUsersOperation());
+        break;
+      case "-addTask":
+        logger.info("New operation: add task to user");
+        user = UserParser.parseUser(flags);
+        task = TaskParser.parseTask(flags);
+        operationExecutor.addOperation(new AddTaskOperation(task, user));
+        break;
+      case "-showTasks":
+        logger.info("New operation: show tasks of given user");
+        user = UserParser.parseUser(flags);
+        operationExecutor.addOperation(new ShowTasksOperation(user));
+        break;
+      case "-createGroup":
+        logger.info("New operation: create group");
+        group = GroupParser.parseGroup(flags);
+        operationExecutor.addOperation(new CreateGroupOperation(group));
+        break;
+      case "-addUserToGroup":
+        logger.info("New operation: add user to group");
+        user = UserParser.parseUser(flags);
+        group = GroupParser.parseGroup(flags);
+        operationExecutor.addOperation(new AddUserToGroupOperation(group, user));
+        break;
+      case "-addTaskToGroup":
+        logger.info("New operation: add task to group");
+        task = TaskParser.parseTask(flags);
+        group = GroupParser.parseGroup(flags);
+        operationExecutor.addOperation(new AddTaskToGroupOperation(group, task));
+        break;
+      default:
+        logger.warn("Command not recognized: " + args[0]);
+        break;
+    }
+
+    operationExecutor.executeOperations();
+
+    logger.info("Program finished");
+  }
 }

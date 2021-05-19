@@ -11,11 +11,7 @@ public class Properties {
 
   private static Logger logger = LogManager.getLogger(Properties.class);
 
-  public Properties() {
-
-
-
-  }
+  public Properties() {}
 
   public String getUrl() {
     return url;
@@ -28,5 +24,4 @@ public class Properties {
   public String getPassword() {
     return password;
   }
-
 }

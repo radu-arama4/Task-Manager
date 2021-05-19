@@ -1,35 +1,31 @@
 package com.stefanini.taskmanager.persistence.dao;
 
+import com.stefanini.taskmanager.dto.Group;
+import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
+import com.stefanini.taskmanager.persistence.dao.factory.JdbcDaoFactory;
+import org.junit.Test;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import org.junit.Test;
-import com.stefanini.taskmanager.dto.Group;
 
 public class GroupDaoTest {
 
-  GroupDao groupDao = GroupDaoImpl.getInstance();
+  DaoFactory daoFactory = new JdbcDaoFactory();
+  GroupDao groupDao = daoFactory.createGroupDao();
 
   @Test
   public void testCreateGroup() {
-
     Group testGroup = new Group("TestGroup");
-
     Group resultGroup = groupDao.createGroup(testGroup);
 
     assertNotNull(resultGroup.getId());
-
   }
 
   @Test
-  public void testAddUserToGroup() {
-
-
-
-  }
+  public void testAddUserToGroup() {}
 
   @Test
   public void testAddTaskToGroup() {
     fail("Not yet implemented");
   }
-
 }

@@ -1,18 +1,19 @@
 package com.stefanini.taskmanager.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class ReadPropertyFile {
 
-  private String user = null;
-  private String password = null;
-  private String url = null;
+  private final String user;
+  private final String password;
+  private final String url;
 
-  private static Logger logger = LogManager.getLogger(ReadPropertyFile.class);
+  private static final Logger logger = LogManager.getLogger(ReadPropertyFile.class);
 
   public ReadPropertyFile() {
 
@@ -23,7 +24,6 @@ public class ReadPropertyFile {
     url = properties.getProperty("url");
 
     logger.debug("Properties extracted successfully");
-
   }
 
   private Properties extractProperties() {
@@ -51,5 +51,4 @@ public class ReadPropertyFile {
   public String getUrl() {
     return url;
   }
-
 }

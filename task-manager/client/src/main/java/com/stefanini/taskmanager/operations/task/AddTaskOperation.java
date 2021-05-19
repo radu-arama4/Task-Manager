@@ -4,21 +4,22 @@ import com.stefanini.taskmanager.dto.Task;
 import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.TaskService;
-import com.stefanini.taskmanager.service.TaskServiceImpl;
+import com.stefanini.taskmanager.service.factory.ServiceFactory;
+import com.stefanini.taskmanager.service.factory.ServiceFactoryImpl;
 
 public class AddTaskOperation implements Operation {
+  private final Task task;
+  private final User user;
+  private final ServiceFactory serviceFactory = new ServiceFactoryImpl();
+  private final TaskService taskService = serviceFactory.getTaskService();
 
-    private Task task;
-    private User user;
-    private TaskService taskService = new TaskServiceImpl();
+  public AddTaskOperation(Task task, User user) {
+    this.task = task;
+    this.user = user;
+  }
 
-    public AddTaskOperation(Task task, User user) {
-        this.task = task;
-        this.user = user;
-    }
-
-    @Override
-    public void execute() {
-        taskService.addTask(task, user);
-    }
+  @Override
+  public void execute() {
+    taskService.addTask(task, user);
+  }
 }

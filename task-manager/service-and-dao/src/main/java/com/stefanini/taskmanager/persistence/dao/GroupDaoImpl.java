@@ -1,30 +1,39 @@
 package com.stefanini.taskmanager.persistence.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.dto.Group;
 import com.stefanini.taskmanager.dto.Task;
 import com.stefanini.taskmanager.dto.User;
-import com.stefanini.taskmanager.persistence.util.DButil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.sql.*;
 
 public class GroupDaoImpl implements GroupDao {
 
   private static GroupDao singleInstance = null;
-  private Connection connection = DButil.connectToDb();
-  private static Logger logger = LogManager.getLogger(GroupDaoImpl.class);
+  private final Connection connection;
+  private static final Logger logger = LogManager.getLogger(GroupDaoImpl.class);
 
-  private GroupDaoImpl() {
+  private static final String CREATE_GROUP_QUERY = "INSERT INTO group(group_name) VALUES(?)";
+  private static final String ADD_USER_TO_GROUP_QUERY =
+      "INSERT INTO user_to_group (user_id, group_id) "
+          + "SELECT (SELECT user.user_id FROM user"
+          + "WHERE user.username LIKE ?) AS user_id, (SELECT group.group_id FROM group"
+          + "WHERE group.group_name LIKE ?) as group_id";
+  private static final String INSERT_INTO_TASK_QUERY =
+      "INSERT INTO task(task_title, task_description) VALUES(?, ?)";
+  private static final String INSERT_INTO_TASK_TO_GROUP_QUERY =
+      "INSERT INTO task_to_group(task_id, group_id)"
+          + "SELECT ?, group_id FROM group WHERE group.group_name LIKE ?";
+
+  private GroupDaoImpl(Connection connection) {
+    this.connection = connection;
     logger.info("GroupDao instantiated");
   }
 
-  static public GroupDao getInstance() {
+  public static GroupDao getInstance(Connection connection) {
     if (singleInstance == null) {
-      singleInstance = new GroupDaoImpl();
+      singleInstance = new GroupDaoImpl(connection);
     }
     return singleInstance;
   }
@@ -33,25 +42,22 @@ public class GroupDaoImpl implements GroupDao {
   public Group createGroup(Group group) {
     try {
       String groupName = group.getGroupName();
-      String query = "INSERT INTO group(group_name) VALUES(?)";
 
       PreparedStatement statement =
-          connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+          connection.prepareStatement(CREATE_GROUP_QUERY, Statement.RETURN_GENERATED_KEYS);
       statement.setString(1, groupName);
-
       statement.executeUpdate();
 
       ResultSet rs = statement.getGeneratedKeys();
-      // reformat
-      Long group_id = null;
+      long groupId;
 
       if (rs.next()) {
-        group_id = rs.getLong(1);
+        groupId = rs.getLong(1);
       } else {
         return null;
       }
 
-      return new Group(group_id, groupName);
+      return new Group(groupId, groupName);
     } catch (SQLException e) {
       logger.error(e);
       return null;
@@ -64,21 +70,12 @@ public class GroupDaoImpl implements GroupDao {
       String groupName = group.getGroupName();
       String userName = user.getUserName();
 
-      String query =
-          "INSERT INTO user_to_group (user_id, group_id) SELECT (SELECT user.user_id FROM user"
-              + "WHERE user.username LIKE ?) AS user_id, (SELECT group.group_id FROM group"
-              + "WHERE group.group_name LIKE ?) as group_id";
-
-      PreparedStatement statement = connection.prepareStatement(query);
+      PreparedStatement statement = connection.prepareStatement(ADD_USER_TO_GROUP_QUERY);
       statement.setString(1, userName);
       statement.setString(2, groupName);
       int nrOfUpdates = statement.executeUpdate();
 
-      if (nrOfUpdates == 0) {
-        return false;
-      }
-
-      return true;
+      return nrOfUpdates != 0;
     } catch (SQLException e) {
       logger.error(e);
       return false;
@@ -92,42 +89,33 @@ public class GroupDaoImpl implements GroupDao {
     String taskDescription = task.getDescription();
     String groupName = group.getGroupName();
 
-    String query = "INSERT INTO task(task_title, task_description) VALUES(?, ?)";
-    String query2 = "INSERT INTO task_to_group(task_id, group_id)"
-        + "SELECT ?, group_id FROM group WHERE group.group_name LIKE ?";
-
     try {
       PreparedStatement statement =
-          connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+          connection.prepareStatement(INSERT_INTO_TASK_QUERY, Statement.RETURN_GENERATED_KEYS);
       statement.setString(1, taskTitle);
       statement.setString(2, taskDescription);
 
       statement.executeUpdate();
 
       ResultSet rs = statement.getGeneratedKeys();
-      Long task_id = null;
+      long taskId;
 
       if (rs.next()) {
-        task_id = rs.getLong(1);
+        taskId = rs.getLong(1);
       } else {
         return false;
       }
 
-      statement = connection.prepareStatement(query2);
-      statement.setLong(1, task_id);
+      statement = connection.prepareStatement(INSERT_INTO_TASK_TO_GROUP_QUERY);
+      statement.setLong(1, taskId);
       statement.setString(2, groupName);
 
       int nrOfUpdates = statement.executeUpdate();
 
-      if (nrOfUpdates == 0) {
-        return false;
-      }
-
-      return true;
+      return nrOfUpdates != 0;
     } catch (SQLException e) {
       logger.error(e);
       return false;
     }
-
   }
 }

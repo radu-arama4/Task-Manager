@@ -1,22 +1,23 @@
 package com.stefanini.taskmanager.persistence.util;
 
+import com.stefanini.taskmanager.util.ReadPropertyFile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import com.stefanini.taskmanager.util.ReadPropertyFile;
 
 public class DButil {
 
   static ReadPropertyFile props = new ReadPropertyFile();
   private static Logger logger = LogManager.getLogger(DButil.class);
 
-  static private final String url = props.getUrl();
-  static private final String user = props.getUser();
-  static private final String password = props.getPassword();
+  private static final String url = props.getUrl();
+  private static final String user = props.getUser();
+  private static final String password = props.getPassword();
 
-  static private Connection connection = null;
+  private static Connection connection = null;
 
   // Method for connecting to the database
   public static Connection connectToDb() {
@@ -41,5 +42,4 @@ public class DButil {
       return false;
     }
   }
-
 }
