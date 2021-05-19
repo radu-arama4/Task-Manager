@@ -17,10 +17,12 @@ public class GroupServiceImpl implements GroupService {
     public boolean createGroup(Group group) {
         logger.info("createGroup method started");
 
-        String groupName = null;
+        if(group.getGroupName()==null){
+            return false;
+        }
 
-        if (groupDao.createGroup(new Group(groupName)) != null) {
-            logger.info("New group " + groupName + " created!");
+        if (groupDao.createGroup(group) != null) {
+            logger.info("New group " + group.getGroupName() + " created!");
             return true;
         }
 
@@ -37,7 +39,7 @@ public class GroupServiceImpl implements GroupService {
 
         if (groupName != null || userName != null) {
 
-            if (groupDao.addUserToGroup(new User(null, null, userName), new Group(groupName))) {
+            if (groupDao.addUserToGroup(user, group)) {
                 logger.info("User " + userName + " added to group " + groupName);
                 return true;
             }
@@ -59,7 +61,7 @@ public class GroupServiceImpl implements GroupService {
         if (groupName == null || taskTitle == null || taskDescription == null) {
             logger.warn("Information missing!");
         } else {
-            if (groupDao.addTaskToGroup(new Task(taskTitle, taskDescription), new Group(groupName))) {
+            if (groupDao.addTaskToGroup(task, group)) {
                 logger.info("Task with [title: " + taskTitle + "], [description: " + taskDescription
                         + "] added to group " + groupName);
                 return true;

@@ -1,6 +1,5 @@
 package com.stefanini.taskmanager.service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,15 +23,13 @@ public class UserServiceImpl implements UserService {
         if (firstName == null || lastName == null || userName == null) {
             logger.warn("Missing information!");
             return false;
-        } else if (!checkDuplicatedUserNames(userName)) {
-            User createdUser = userDao.createUser(new User(firstName, lastName, userName));
+        } else {
+            User createdUser = userDao.createUser(user);
             if (createdUser != null) {
                 logger.info("New user with [first name: " + firstName + "], [last name: " + lastName
                         + "], [username: " + userName + "] added.");
                 return true;
             }
-        } else {
-            logger.warn("Duplicated username!");
         }
         return false;
     }
@@ -49,20 +46,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return users;
-    }
-
-    public boolean checkDuplicatedUserNames(String userName) {
-
-        List<User> users = null;
-        users = userDao.getUsers();
-
-        for (User user : users) {
-            if (user.getUserName().equals(userName)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }

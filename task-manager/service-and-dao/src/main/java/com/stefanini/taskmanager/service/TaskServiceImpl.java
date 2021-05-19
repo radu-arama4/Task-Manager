@@ -12,11 +12,10 @@ import com.stefanini.taskmanager.persistence.dao.TaskDaoImpl;
 public class TaskServiceImpl implements TaskService {
 
     TaskDao taskDao = TaskDaoImpl.getInstance();
-    private static Logger logger = LogManager.getLogger(TaskServiceImpl.class);
+    private static final Logger logger = LogManager.getLogger(TaskServiceImpl.class);
 
     @Override
     public boolean addTask(Task task, User user) {
-
         logger.info("addTask method started");
 
         String userName = user.getUserName();
@@ -26,8 +25,7 @@ public class TaskServiceImpl implements TaskService {
         if (userName == null || taskTitle == null || taskDescription == null) {
             logger.warn("Missing information!");
         } else {
-            if (taskDao.addTask(new Task(taskTitle, taskDescription),
-                    new User(null, null, userName)) != null) {
+            if (taskDao.addTask(task, user) != null) {
                 logger.info("Task with [Title: " + taskTitle + "], " + "[Description: " + taskDescription
                         + "] added to user: " + userName + ".");
                 return true;
@@ -39,13 +37,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> showTasks(User user) {
+        if(user.getUserName()==null){
+            logger.warn("Missing information!");
+        }
 
-        String userName = user.getUserName();
-
-        List<Task> tasks = taskDao.showTasks(new User(null, null, userName));
+        List<Task> tasks = taskDao.showTasks(user);
 
         if (tasks == null) {
-            logger.warn("No such user with username: " + userName);
+            logger.warn("No such user with username: " + user.getUserName());
         }
 
         return tasks;
