@@ -19,7 +19,7 @@ import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
 import java.util.Arrays;
 
 public class Main {
-  private static Logger logger = LogManager.getLogger(Main.class);
+  private static final Logger logger = LogManager.getLogger(Main.class);
 
   public static void main(String[] args) {
     logger.info("Program started");
@@ -78,7 +78,7 @@ public class Main {
         operationExecutor.addOperation(new AddTaskToGroupOperation(group, task));
         break;
       default:
-        logger.warn("Command not recognized: " + args[0]);
+        logger.warn("Command not recognized: " + command);
         break;
     }
 

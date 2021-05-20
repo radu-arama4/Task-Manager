@@ -14,17 +14,17 @@ public class GroupDaoImpl implements GroupDao {
   private final Connection connection;
   private static final Logger logger = LogManager.getLogger(GroupDaoImpl.class);
 
-  private static final String CREATE_GROUP_QUERY = "INSERT INTO group(group_name) VALUES(?)";
+  private static final String CREATE_GROUP_QUERY = "INSERT INTO `group`(`group_name`) VALUES(?)";
   private static final String ADD_USER_TO_GROUP_QUERY =
-      "INSERT INTO user_to_group (user_id, group_id) "
-          + "SELECT (SELECT user.user_id FROM user"
-          + "WHERE user.username LIKE ?) AS user_id, (SELECT group.group_id FROM group"
-          + "WHERE group.group_name LIKE ?) as group_id";
+      "INSERT INTO `user_to_group` (`user_id`, `group_id`) "
+          + "SELECT (SELECT user.user_id FROM `user` "
+          + "WHERE user.username = ?) AS `user_id`, (SELECT group.group_id FROM `group` "
+          + "WHERE group.group_name = ?) as `group_id`";
   private static final String INSERT_INTO_TASK_QUERY =
       "INSERT INTO task(task_title, task_description) VALUES(?, ?)";
   private static final String INSERT_INTO_TASK_TO_GROUP_QUERY =
-      "INSERT INTO task_to_group(task_id, group_id)"
-          + "SELECT ?, group_id FROM group WHERE group.group_name LIKE ?";
+      "INSERT INTO `task_to_group` (`task_id`, `group_id`)"
+          + "SELECT ?, group_id FROM `group` WHERE group.group_name LIKE ?";
 
   private GroupDaoImpl(Connection connection) {
     this.connection = connection;

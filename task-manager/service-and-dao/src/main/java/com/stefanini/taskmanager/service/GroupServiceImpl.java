@@ -41,14 +41,12 @@ public class GroupServiceImpl implements GroupService {
     String userName = user.getUserName();
 
     if (groupName != null || userName != null) {
-
       if (groupDao.addUserToGroup(user, group)) {
         logger.info("User " + userName + " added to group " + groupName);
         return true;
       }
-      logger.warn("No such group or user!");
     } else {
-      logger.warn("Missing information!");
+      logger.warn("Incorrect information!");
     }
     return false;
   }
