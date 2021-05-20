@@ -3,8 +3,8 @@ package com.stefanini.taskmanager.dto;
 public class Task {
 
   private Long id;
-  private String taskTitle;
-  private String taskDescription;
+  private final String taskTitle;
+  private final String taskDescription;
 
   public Task(String taskTitle, String description) {
     this.taskTitle = taskTitle;
@@ -40,5 +40,4 @@ public class Task {
     return obj2.getDescription().equals(this.taskDescription)
         && obj2.getTaskTitle().equals(this.taskTitle);
   }
-
 }

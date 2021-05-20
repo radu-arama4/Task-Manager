@@ -24,5 +24,4 @@ public class Group {
   public String getGroupName() {
     return groupName;
   }
-
 }

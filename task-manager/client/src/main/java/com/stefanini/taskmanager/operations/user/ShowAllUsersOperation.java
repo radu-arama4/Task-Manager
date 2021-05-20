@@ -1,18 +1,24 @@
 package com.stefanini.taskmanager.operations.user;
 
 import com.stefanini.taskmanager.operations.Operation;
-import com.stefanini.taskmanager.receivers.UserReceiver;
+import com.stefanini.taskmanager.service.factory.ServiceType;
+import com.stefanini.taskmanager.service.UserService;
+import com.stefanini.taskmanager.service.factory.ServiceFactory;
+import com.stefanini.taskmanager.service.factory.ServiceFactoryProduction;
 
 public class ShowAllUsersOperation implements Operation {
+  private final ServiceFactory serviceFactory = ServiceFactoryProduction.createServiceFactory(ServiceType.SERVICE_TYPE.value);
+  private final UserService userService;
 
-  UserReceiver user;
-
-  public ShowAllUsersOperation(UserReceiver user) {
-    this.user = user;
+  {
+    assert serviceFactory != null;
+    userService = serviceFactory.getUserService();
   }
+
+  public ShowAllUsersOperation() {}
 
   @Override
   public void execute() {
-    user.showAllUsers();
+    userService.showAllUsers();
   }
 }

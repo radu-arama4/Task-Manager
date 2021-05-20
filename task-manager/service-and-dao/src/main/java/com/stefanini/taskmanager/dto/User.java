@@ -3,9 +3,9 @@ package com.stefanini.taskmanager.dto;
 public class User {
 
   private Long id;
-  private String firstName;
-  private String lastName;
-  private String userName;
+  private final String firstName;
+  private final String lastName;
+  private final String userName;
 
   public User(String firstName, String lastName, String userName) {
     this.firstName = firstName;
@@ -43,10 +43,8 @@ public class User {
   @Override
   public boolean equals(Object obj) {
     User obj2 = (User) obj;
-    return obj2.getFirstName().equals(this.firstName) && obj2.getLastName().equals(this.lastName)
+    return obj2.getFirstName().equals(this.firstName)
+        && obj2.getLastName().equals(this.lastName)
         && obj2.getUserName().equals(this.userName);
   }
-
-
-
 }

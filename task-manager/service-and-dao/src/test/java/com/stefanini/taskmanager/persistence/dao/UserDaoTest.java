@@ -1,18 +1,20 @@
 package com.stefanini.taskmanager.persistence.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
+import com.stefanini.taskmanager.persistence.dao.factory.JdbcDaoFactory;
+import org.junit.Test;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Test;
-import com.stefanini.taskmanager.dto.User;
+
+import static org.junit.Assert.*;
 
 public class UserDaoTest {
 
-  UserDao userDao = UserDaoImpl.getInstance();
+  DaoFactory daoFactory = new JdbcDaoFactory();
+  UserDao userDao = daoFactory.createUserDao();
 
   @Test(expected = SQLException.class)
   public void testCreateUser() {
@@ -25,7 +27,6 @@ public class UserDaoTest {
     returnedTestUser = userDao.createUser(testUser);
 
     assertEquals(returnedTestUser, null);
-
   }
 
   // TODO comment
@@ -48,7 +49,5 @@ public class UserDaoTest {
     result = users.stream().filter(a -> a.equals(testUser)).findAny();
 
     assertTrue(result.isPresent());
-
   }
-
 }
