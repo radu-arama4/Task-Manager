@@ -6,6 +6,7 @@ import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.parser.GroupParser;
 import com.stefanini.taskmanager.parser.TaskParser;
 import com.stefanini.taskmanager.parser.UserParser;
+import com.stefanini.taskmanager.persistence.util.DButil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.operations.OperationExecutor;
@@ -83,6 +84,9 @@ public class Main {
     }
 
     operationExecutor.executeOperations();
+
+    //TODO move it somewhere else
+    DButil.disconnectFromDb();
 
     logger.info("Program finished");
   }

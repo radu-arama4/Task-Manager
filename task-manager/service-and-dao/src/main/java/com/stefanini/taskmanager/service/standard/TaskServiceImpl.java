@@ -1,9 +1,10 @@
-package com.stefanini.taskmanager.service;
+package com.stefanini.taskmanager.service.standard;
 
 import com.stefanini.taskmanager.dto.Task;
 import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
+import com.stefanini.taskmanager.service.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

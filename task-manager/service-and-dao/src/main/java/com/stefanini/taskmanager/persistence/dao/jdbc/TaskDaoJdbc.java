@@ -1,7 +1,8 @@
-package com.stefanini.taskmanager.persistence.dao;
+package com.stefanini.taskmanager.persistence.dao.jdbc;
 
 import com.stefanini.taskmanager.dto.Task;
 import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,11 +10,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskDaoImpl implements TaskDao {
+public class TaskDaoJdbc implements TaskDao {
 
   private static TaskDao singleInstance = null;
   private final Connection connection;
-  private static final Logger logger = LogManager.getLogger(TaskDaoImpl.class);
+  private static final Logger logger = LogManager.getLogger(TaskDaoJdbc.class);
 
   private static final String INSERT_INTO_TASK_QUERY =
       "INSERT INTO task(task_title, task_description) VALUES(?, ?)";
@@ -24,14 +25,14 @@ public class TaskDaoImpl implements TaskDao {
       "SELECT task.task_title, task.task_description FROM ((user JOIN task_to_user ON user.user_id = task_to_user.user_id)"
           + " JOIN task ON task_to_user.task_id = task.task_id) WHERE user.username = ?";
 
-  private TaskDaoImpl(Connection connection) {
+  private TaskDaoJdbc(Connection connection) {
     this.connection = connection;
     logger.info("TaskDao instantiated");
   }
 
   public static TaskDao getInstance(Connection connection) {
     if (singleInstance == null) {
-      singleInstance = new TaskDaoImpl(connection);
+      singleInstance = new TaskDaoJdbc(connection);
     }
     return singleInstance;
   }

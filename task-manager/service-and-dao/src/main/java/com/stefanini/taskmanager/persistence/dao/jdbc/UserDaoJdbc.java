@@ -1,6 +1,7 @@
-package com.stefanini.taskmanager.persistence.dao;
+package com.stefanini.taskmanager.persistence.dao.jdbc;
 
 import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.persistence.dao.UserDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,24 +9,24 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoImpl implements UserDao {
+public class UserDaoJdbc implements UserDao {
 
   private static UserDao singleInstance = null;
   private final Connection connection;
-  private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
+  private static final Logger logger = LogManager.getLogger(UserDaoJdbc.class);
 
   private static final String INSERT_USER_QUERY =
       "INSERT INTO user(first_name,last_name,username) VALUES(?, ?, ?)";
   private static final String SELECT_USERS_QUERY = "SELECT * FROM user";
 
-  private UserDaoImpl(Connection connection) {
+  private UserDaoJdbc(Connection connection) {
     this.connection = connection;
     logger.info("UserDao instantiated");
   }
 
   public static UserDao getInstance(Connection connection) {
     if (singleInstance == null) {
-      singleInstance = new UserDaoImpl(connection);
+      singleInstance = new UserDaoJdbc(connection);
     }
     return singleInstance;
   }
