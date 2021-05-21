@@ -10,6 +10,8 @@ public class UserParserTest {
 
   UserParser userParser = new UserParser();
 
+  //TODO fix static
+
   @Test
   public void testSuccessful() {
     String firstName = "Test1";

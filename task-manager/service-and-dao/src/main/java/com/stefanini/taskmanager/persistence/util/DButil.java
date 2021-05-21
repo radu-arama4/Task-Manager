@@ -9,7 +9,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DButil {
-
   static ReadPropertyFile props = new ReadPropertyFile();
   private static Logger logger = LogManager.getLogger(DButil.class);
 

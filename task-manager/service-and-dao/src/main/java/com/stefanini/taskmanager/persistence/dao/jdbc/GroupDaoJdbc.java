@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 
 public class GroupDaoJdbc implements GroupDao {
-
   private static GroupDao singleInstance = null;
   private final Connection connection;
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);

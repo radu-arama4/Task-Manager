@@ -2,15 +2,20 @@ package com.stefanini.taskmanager.operations.user;
 
 import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.operations.Operation;
-import com.stefanini.taskmanager.service.factory.ServiceType;
 import com.stefanini.taskmanager.service.UserService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
-import com.stefanini.taskmanager.service.factory.ServiceFactoryProduction;
+import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
 
+import static com.stefanini.taskmanager.service.factory.ServiceType.STANDARD;
+
+/**
+ * Implements {@link Operation}. Encapsulates {@link User} field. The execution consists of sending
+ * the encapsulated fields to {@link UserService#createUser(User)} implementation as parameters.
+ */
 public class CreateUserOperation implements Operation {
   private final User user;
   private final ServiceFactory serviceFactory =
-      ServiceFactoryProduction.createServiceFactory(ServiceType.SERVICE_TYPE.value);
+      ServiceFactoryProvider.createServiceFactory(STANDARD);
   private final UserService userService;
 
   {

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDaoJdbc implements TaskDao {
-
   private static TaskDao singleInstance = null;
   private final Connection connection;
   private static final Logger logger = LogManager.getLogger(TaskDaoJdbc.class);

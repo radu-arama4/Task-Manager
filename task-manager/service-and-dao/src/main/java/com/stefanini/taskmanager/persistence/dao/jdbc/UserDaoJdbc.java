@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJdbc implements UserDao {
-
   private static UserDao singleInstance = null;
   private final Connection connection;
   private static final Logger logger = LogManager.getLogger(UserDaoJdbc.class);

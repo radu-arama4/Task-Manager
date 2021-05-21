@@ -4,15 +4,21 @@ import com.stefanini.taskmanager.dto.Group;
 import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.GroupService;
-import com.stefanini.taskmanager.service.factory.ServiceType;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
-import com.stefanini.taskmanager.service.factory.ServiceFactoryProduction;
+import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
 
+import static com.stefanini.taskmanager.service.factory.ServiceType.STANDARD;
+
+/**
+ * Implements {@link Operation}. Encapsulates {@link Group} and {@link User} fields. The execution
+ * consists of sending the encapsulated fields to the {@link GroupService#addUserToGroup(Group,
+ * User)} method as parameters.
+ */
 public class AddUserToGroupOperation implements Operation {
   private final Group group;
   private final User user;
   private final ServiceFactory serviceFactory =
-      ServiceFactoryProduction.createServiceFactory(ServiceType.SERVICE_TYPE.value);
+      ServiceFactoryProvider.createServiceFactory(STANDARD);
   private final GroupService groupService;
 
   {
