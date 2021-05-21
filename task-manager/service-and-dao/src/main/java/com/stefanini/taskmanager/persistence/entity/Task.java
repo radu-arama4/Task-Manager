@@ -7,8 +7,8 @@ import javax.persistence.*;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long task_id;
     @Column
     private String taskTitle;
     @Column
@@ -26,8 +26,8 @@ public class Task {
         this.taskDescription = description;
     }
 
-    public Task(Long id, String taskTitle, String description) {
-        this.id = id;
+    public Task(Long task_id, String taskTitle, String description) {
+        this.task_id = task_id;
         this.taskTitle = taskTitle;
         this.taskDescription = description;
     }
@@ -40,20 +40,12 @@ public class Task {
         this.user = user;
     }
 
-    public Group getGroup() {
-        return group;
+    public Long getTask_id() {
+        return task_id;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setTask_id(Long task_id) {
+        this.task_id = task_id;
     }
 
     public String getTaskTitle() {
@@ -76,4 +68,11 @@ public class Task {
         this.taskDescription = taskDescription;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 }
