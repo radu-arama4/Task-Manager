@@ -1,11 +1,8 @@
 package com.stefanini.taskmanager.persistence.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -20,6 +17,10 @@ public class User {
   private String lastName;
   @Column
   private String userName;
+  @ManyToMany(mappedBy = "user")
+  private List<Task> tasks = new ArrayList<>();
+  @ManyToMany(mappedBy = "users")
+  private List<Group> groups = new ArrayList<>();
 
   public User() {
 
@@ -36,6 +37,22 @@ public class User {
     this.firstName = firstName;
     this.lastName = lastName;
     this.userName = userName;
+  }
+
+  public List<Task> getTasks() {
+    return tasks;
+  }
+
+  public void setTasks(List<Task> tasks) {
+    this.tasks = tasks;
+  }
+
+  public List<Group> getGroups() {
+    return groups;
+  }
+
+  public void setGroups(List<Group> groups) {
+    this.groups = groups;
   }
 
   public Long getId() {
@@ -69,14 +86,5 @@ public class User {
   public String getUserName() {
     return userName;
   }
-
-  @Override
-  public boolean equals(Object obj) {
-    User obj2 = (User) obj;
-    return obj2.getFirstName().equals(this.firstName) && obj2.getLastName().equals(this.lastName)
-        && obj2.getUserName().equals(this.userName);
-  }
-
-
 
 }
