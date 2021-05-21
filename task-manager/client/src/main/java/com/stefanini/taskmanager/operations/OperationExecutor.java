@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.operations;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  *
  */
 public class OperationExecutor {
-  private final List<Operation> textFileOperations = new ArrayList<>();
+  private final List<Operation> textFileOperations = new LinkedList<>();
 
   /**
    *
