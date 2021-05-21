@@ -1,7 +1,7 @@
 package com.stefanini.taskmanager.persistence.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -9,8 +9,8 @@ import java.util.List;
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long user_id;
   @Column
   private String firstName;
   @Column
@@ -18,9 +18,9 @@ public class User {
   @Column
   private String userName;
   @ManyToMany(mappedBy = "user")
-  private List<Task> tasks = new ArrayList<>();
-  @ManyToMany(mappedBy = "users")
-  private List<Group> groups = new ArrayList<>();
+  private List<Task> tasks = new LinkedList<>();
+  @ManyToMany
+  private List<Group> groups = new LinkedList<>();
 
   public User() {
 
@@ -32,11 +32,20 @@ public class User {
     this.userName = userName;
   }
 
-  public User(Long id, String firstName, String lastName, String userName) {
-    this.id = id;
+  public User(Long user_id, String firstName, String lastName, String userName) {
+    this.user_id = user_id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.userName = userName;
+  }
+
+  public void addTask(Task task){
+    this.tasks.add(task);
+    task.setUser(this);
+  }
+
+  public void addGroup(Group group){
+    this.groups.add(group);
   }
 
   public List<Task> getTasks() {
@@ -47,20 +56,12 @@ public class User {
     this.tasks = tasks;
   }
 
-  public List<Group> getGroups() {
-    return groups;
+  public Long getUser_id() {
+    return user_id;
   }
 
-  public void setGroups(List<Group> groups) {
-    this.groups = groups;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
+  public void setUser_id(Long user_id) {
+    this.user_id = user_id;
   }
 
   public void setFirstName(String firstName) {
@@ -87,4 +88,11 @@ public class User {
     return userName;
   }
 
+  public List<Group> getGroups() {
+    return groups;
+  }
+
+  public void setGroups(List<Group> groups) {
+    this.groups = groups;
+  }
 }
