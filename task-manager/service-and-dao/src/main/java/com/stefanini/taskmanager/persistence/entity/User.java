@@ -7,24 +7,29 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 public class User {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long user_id;
-  @Column
+  @Column(name = "user_id", unique = true, nullable = false)
+  private Long userId;
+
+  @Column(name = "first_name")
   private String firstName;
-  @Column
+
+  @Column(name = "last_name")
   private String lastName;
-  @Column
+
+  @Column(name = "user_name")
   private String userName;
+
   @ManyToMany(mappedBy = "user")
+  @Column(name = "task_id")
   private List<Task> tasks = new LinkedList<>();
+
   @ManyToMany
+  @Column(name = "group_id")
   private List<Group> groups = new LinkedList<>();
 
-  public User() {
-
-  }
+  public User() {}
 
   public User(String firstName, String lastName, String userName) {
     this.firstName = firstName;
@@ -32,19 +37,19 @@ public class User {
     this.userName = userName;
   }
 
-  public User(Long user_id, String firstName, String lastName, String userName) {
-    this.user_id = user_id;
+  public User(Long userId, String firstName, String lastName, String userName) {
+    this.userId = userId;
     this.firstName = firstName;
     this.lastName = lastName;
     this.userName = userName;
   }
 
-  public void addTask(Task task){
+  public void addTask(Task task) {
     this.tasks.add(task);
     task.setUser(this);
   }
 
-  public void addGroup(Group group){
+  public void addGroup(Group group) {
     this.groups.add(group);
   }
 
@@ -56,12 +61,12 @@ public class User {
     this.tasks = tasks;
   }
 
-  public Long getUser_id() {
-    return user_id;
+  public Long getUserId() {
+    return userId;
   }
 
-  public void setUser_id(Long user_id) {
-    this.user_id = user_id;
+  public void setUserId(Long userId) {
+    this.userId = userId;
   }
 
   public void setFirstName(String firstName) {

@@ -1,78 +1,85 @@
 package com.stefanini.taskmanager.persistence.entity;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "task")
 public class Task {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "task_id", unique = true, nullable = false)
+  private Long taskId;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long task_id;
-    @Column
-    private String taskTitle;
-    @Column
-    private String taskDescription;
-    @OneToOne
-    private User user;
-    @OneToOne
-    private Group group;
+  @Column(name = "task_title")
+  private String taskTitle;
 
-    public Task() {
-    }
+  @Column(name = "task_description")
+  private String taskDescription;
 
-    public Task(String taskTitle, String description) {
-        this.taskTitle = taskTitle;
-        this.taskDescription = description;
-    }
+  @ManyToMany
+  @Column(name = "user_id")
+  private List<User> user = new LinkedList<>();
 
-    public Task(Long task_id, String taskTitle, String description) {
-        this.task_id = task_id;
-        this.taskTitle = taskTitle;
-        this.taskDescription = description;
-    }
+  @ManyToMany
+  @Column(name = "group_id")
+  private List<Group> group = new LinkedList<>();
 
-    public User getUser() {
-        return user;
-    }
+  public Task() {}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+  public Task(String taskTitle, String description) {
+    this.taskTitle = taskTitle;
+    this.taskDescription = description;
+  }
 
-    public Long getTask_id() {
-        return task_id;
-    }
+  public Task(Long taskId, String taskTitle, String description) {
+    this.taskId = taskId;
+    this.taskTitle = taskTitle;
+    this.taskDescription = description;
+  }
 
-    public void setTask_id(Long task_id) {
-        this.task_id = task_id;
-    }
+  public List<User> getUser() {
+    return user;
+  }
 
-    public String getTaskTitle() {
-        return taskTitle;
-    }
+  public void setUser(User user) {
+    this.user.add(user);
+  }
 
-    public String getDescription() {
-        return taskDescription;
-    }
+  public List<Group> getGroup() {
+    return group;
+  }
 
-    public String getTaskDescription() {
-        return taskDescription;
-    }
+  public void setGroup(Group group) {
+    this.group.add(group);
+  }
 
-    public void setTaskTitle(String taskTitle) {
-        this.taskTitle = taskTitle;
-    }
+  public Long getTaskId() {
+    return taskId;
+  }
 
-    public void setTaskDescription(String taskDescription) {
-        this.taskDescription = taskDescription;
-    }
+  public void setTaskId(Long taskId) {
+    this.taskId = taskId;
+  }
 
-    public Group getGroup() {
-        return group;
-    }
+  public String getTaskTitle() {
+    return taskTitle;
+  }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
+  public String getDescription() {
+    return taskDescription;
+  }
+
+  public String getTaskDescription() {
+    return taskDescription;
+  }
+
+  public void setTaskTitle(String taskTitle) {
+    this.taskTitle = taskTitle;
+  }
+
+  public void setTaskDescription(String taskDescription) {
+    this.taskDescription = taskDescription;
+  }
 }
