@@ -2,7 +2,7 @@ package com.stefanini.taskmanager.dto;
 
 public class Group {
   private Long id;
-  private String groupName = null;
+  private String groupName;
 
   public Group(String groupName) {
     this.groupName = groupName;

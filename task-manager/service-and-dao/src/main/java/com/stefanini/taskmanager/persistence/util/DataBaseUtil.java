@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.persistence.util;
 
-import com.stefanini.taskmanager.util.ReadPropertyFile;
+import com.stefanini.taskmanager.util.ApplicationProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,9 +8,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DButil {
-  static ReadPropertyFile props = new ReadPropertyFile();
-  private static Logger logger = LogManager.getLogger(DButil.class);
+/**
+ * Class which provides methods for connecting(also disconnecting) to a database depending on the
+ * properties extracted from the config.properties.
+ */
+public class DataBaseUtil {
+  static ApplicationProperties props = ApplicationProperties.getInstance();
+  private static final Logger logger = LogManager.getLogger(DataBaseUtil.class);
 
   private static final String url = props.getUrl();
   private static final String user = props.getUser();

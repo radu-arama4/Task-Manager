@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.service.standard;
+package com.stefanini.taskmanager.service.impl;
 
 import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-
   private final UserDao userDao;
   private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
@@ -45,14 +44,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> showAllUsers() {
-    List<User> users = null;
-    users = userDao.getUsers();
-
-    for (User user : users) {
-      logger.info(user.getFirstName() + " " + user.getLastName() + " " + user.getUserName());
-    }
-
-    return users;
+  public List<User> getAllUsers() {
+    return userDao.getUsers();
   }
 }

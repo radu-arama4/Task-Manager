@@ -13,15 +13,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class TaskDaoTest {
-
   DaoFactory daoFactory = new JdbcDaoFactory();
   TaskDao taskDao = daoFactory.createTaskDao();
-
   User testUser = new User(null, null, "jora");
 
   @Test
   public void testAddTask() {
-
     Task testTask = new Task("Test", "dudsadasd");
 
     Task returnedTestTask = taskDao.addTask(testTask, testUser);
@@ -31,12 +28,11 @@ public class TaskDaoTest {
 
   @Test
   public void testShowTasks() {
-
     Task testTask = new Task("Test", "TestTest2");
 
     taskDao.addTask(testTask, testUser);
 
-    List<Task> tasks = taskDao.showTasks(testUser);
+    List<Task> tasks = taskDao.getTasks(testUser);
 
     Optional<Task> result = tasks.stream().filter(task -> task.equals(testTask)).findAny();
 

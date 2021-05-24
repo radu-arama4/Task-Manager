@@ -5,8 +5,8 @@ import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.UserService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
 import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
-
-import static com.stefanini.taskmanager.service.factory.ServiceType.STANDARD;
+import com.stefanini.taskmanager.service.factory.ServiceType;
+import com.stefanini.taskmanager.util.ApplicationProperties;
 
 /**
  * Implements {@link Operation}. Encapsulates {@link User} field. The execution consists of sending
@@ -14,14 +14,18 @@ import static com.stefanini.taskmanager.service.factory.ServiceType.STANDARD;
  */
 public class CreateUserOperation implements Operation {
   private final User user;
-  private final ServiceFactory serviceFactory =
-      ServiceFactoryProvider.createServiceFactory(STANDARD);
-  private final UserService userService;
+  private ServiceFactory serviceFactory = null;
+  private final ServiceType serviceType = ApplicationProperties.getInstance().getServiceType();
 
   {
-    assert serviceFactory != null;
-    userService = serviceFactory.getUserService();
+    try {
+      serviceFactory = ServiceFactoryProvider.createServiceFactory(serviceType);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
+
+  private final UserService userService = serviceFactory.getUserService();
 
   public CreateUserOperation(User user) {
     this.user = user;

@@ -1,0 +1,54 @@
+CREATE TABLE `group` (
+  `group_id` int NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`group_id`),
+  UNIQUE KEY `group_id_UNIQUE` (`group_id`),
+  UNIQUE KEY `group_name_UNIQUE` (`group_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE `task` (
+  `task_id` int NOT NULL AUTO_INCREMENT,
+  `task_title` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `task_description` varchar(90) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`task_id`),
+  UNIQUE KEY `task_id_UNIQUE` (`task_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE `task_to_group` (
+  `task_id` int NOT NULL,
+  `group_id` int NOT NULL,
+  PRIMARY KEY (`task_id`,`group_id`),
+  UNIQUE KEY `task_id_UNIQUE` (`task_id`),
+  KEY `group_receiving_task_idx` (`group_id`),
+  CONSTRAINT `added_task_to_group` FOREIGN KEY (`task_id`) REFERENCES `task` (`task_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `group_receiving_task` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE `task_to_user` (
+  `user_id` int NOT NULL,
+  `task_id` int NOT NULL,
+  PRIMARY KEY (`user_id`,`task_id`),
+  UNIQUE KEY `task_id_UNIQUE` (`task_id`),
+  KEY `task_id_idx` (`task_id`),
+  CONSTRAINT `task_id` FOREIGN KEY (`task_id`) REFERENCES `task` (`task_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE `user` (
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(45) NOT NULL,
+  `last_name` varchar(45) NOT NULL,
+  `username` varchar(45) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `userId_UNIQUE` (`user_id`),
+  UNIQUE KEY `userName_UNIQUE` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE `user_to_group` (
+  `user_id` int NOT NULL,
+  `group_id` int NOT NULL,
+  PRIMARY KEY (`group_id`,`user_id`),
+  KEY `added_user_id` (`user_id`),
+  CONSTRAINT `added_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `to_group_id` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;

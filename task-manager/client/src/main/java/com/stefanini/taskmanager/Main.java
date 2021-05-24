@@ -6,7 +6,7 @@ import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.parser.GroupParser;
 import com.stefanini.taskmanager.parser.TaskParser;
 import com.stefanini.taskmanager.parser.UserParser;
-import com.stefanini.taskmanager.persistence.util.DButil;
+import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.operations.OperationExecutor;
@@ -39,11 +39,6 @@ public class Main {
     User user;
     Task task;
     Group group;
-
-//    while(true){
-//      logger.info("Press:\n1 - New user\n2 - Show all users\n3 - Add task\n4 - Show tasks of user\n5 - Create group\n6" +
-//              "Add user to group\n7-Add task to group");
-//    }
 
     switch (command) {
       case "-createUser":
@@ -91,7 +86,7 @@ public class Main {
     operationExecutor.executeOperations();
 
     //TODO move it somewhere else
-    DButil.disconnectFromDb();
+    DataBaseUtil.disconnectFromDb();
 
     logger.info("Program finished");
   }

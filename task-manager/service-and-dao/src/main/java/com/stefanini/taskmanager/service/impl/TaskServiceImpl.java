@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.service.standard;
+package com.stefanini.taskmanager.service.impl;
 
 import com.stefanini.taskmanager.dto.Task;
 import com.stefanini.taskmanager.dto.User;
@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 public class TaskServiceImpl implements TaskService {
-
   private final TaskDao taskDao;
   private static final Logger logger = LogManager.getLogger(TaskServiceImpl.class);
 
@@ -42,21 +41,21 @@ public class TaskServiceImpl implements TaskService {
                 + ".");
         return true;
       }
-      logger.warn("No such user with username: " + userName);
+      logger.warn("No user with such username: " + userName);
     }
     return false;
   }
 
   @Override
-  public List<Task> showTasks(User user) {
+  public List<Task> getTasksOfUser(User user) {
     if (user.getUserName() == null) {
       logger.warn("Missing information!");
     }
 
-    List<Task> tasks = taskDao.showTasks(user);
+    List<Task> tasks = taskDao.getTasks(user);
 
     if (tasks == null) {
-      logger.warn("No such user with username: " + user.getUserName());
+      logger.warn("No user with such username: " + user.getUserName());
     }
 
     return tasks;

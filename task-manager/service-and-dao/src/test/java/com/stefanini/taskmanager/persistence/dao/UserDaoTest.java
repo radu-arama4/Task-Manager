@@ -12,7 +12,6 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 public class UserDaoTest {
-
   DaoFactory daoFactory = new JdbcDaoFactory();
   UserDao userDao = daoFactory.createUserDao();
 
@@ -26,14 +25,13 @@ public class UserDaoTest {
 
     returnedTestUser = userDao.createUser(testUser);
 
-    assertEquals(returnedTestUser, null);
+    assertNull(returnedTestUser);
   }
 
   // TODO comment
 
   @Test
   public void testGetUsers() {
-
     User testUser = new User("Test", "Test", "dummyasdd");
 
     List<User> users = userDao.getUsers();

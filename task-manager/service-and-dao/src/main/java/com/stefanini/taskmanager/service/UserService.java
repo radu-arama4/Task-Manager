@@ -26,5 +26,5 @@ public interface UserService {
    *
    * @return list of users - the existing users in the database
    */
-  List<User> showAllUsers();
+  List<User> getAllUsers();
 }

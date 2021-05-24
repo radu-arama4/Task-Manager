@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.service.standard;
+package com.stefanini.taskmanager.service.impl;
 
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.service.GroupService;

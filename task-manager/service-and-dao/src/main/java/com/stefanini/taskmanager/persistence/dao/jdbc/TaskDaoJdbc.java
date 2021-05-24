@@ -77,7 +77,7 @@ public class TaskDaoJdbc implements TaskDao {
   }
 
   @Override
-  public List<Task> showTasks(User selectedUser) {
+  public List<Task> getTasks(User selectedUser) {
     String userName = selectedUser.getUserName();
     List<Task> tasks = new ArrayList<>();
 
@@ -89,9 +89,6 @@ public class TaskDaoJdbc implements TaskDao {
       while (rs.next()) {
         String taskTitle = rs.getString("task_title");
         String description = rs.getString("task_description");
-
-        logger.info(taskTitle + " " + description);
-
         tasks.add(new Task(taskTitle, description));
       }
 

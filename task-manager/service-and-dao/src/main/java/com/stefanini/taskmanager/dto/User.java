@@ -47,4 +47,14 @@ public class User {
         && obj2.getLastName().equals(this.lastName)
         && obj2.getUserName().equals(this.userName);
   }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", userName='" + userName + '\'' +
+            '}';
+  }
 }

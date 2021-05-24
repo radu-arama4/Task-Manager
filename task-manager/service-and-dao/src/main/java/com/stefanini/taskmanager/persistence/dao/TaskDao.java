@@ -27,5 +27,5 @@ public interface TaskDao {
    * @param selectedUser - the user of whom the tasks will be shown
    * @return List<Task> - the tasks of the specified user
    */
-  List<Task> showTasks(User selectedUser);
+  List<Task> getTasks(User selectedUser);
 }

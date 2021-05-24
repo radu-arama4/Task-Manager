@@ -9,15 +9,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 public class GroupDaoTest {
-
   DaoFactory daoFactory = new JdbcDaoFactory();
   GroupDao groupDao = daoFactory.createGroupDao();
 
   @Test
   public void testCreateGroup() {
-    Group testGroup = new Group("TestGroup");
+    Group testGroup = new Group("TestGroupp");
     Group resultGroup = groupDao.createGroup(testGroup);
-
     assertNotNull(resultGroup.getId());
   }
 

@@ -30,5 +30,5 @@ public interface TaskService {
    * @param user user data transfer object
    * @return list of users - the existing users in the database
    */
-  List<Task> showTasks(User user);
+  List<Task> getTasksOfUser(User user);
 }

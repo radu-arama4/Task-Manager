@@ -6,8 +6,8 @@ import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.TaskService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
 import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
-
-import static com.stefanini.taskmanager.service.factory.ServiceType.STANDARD;
+import com.stefanini.taskmanager.service.factory.ServiceType;
+import com.stefanini.taskmanager.util.ApplicationProperties;
 
 /**
  * Implements {@link Operation}. Encapsulates {@link User} and {@link Task} fields. The execution
@@ -17,14 +17,18 @@ import static com.stefanini.taskmanager.service.factory.ServiceType.STANDARD;
 public class AddTaskOperation implements Operation {
   private final Task task;
   private final User user;
-  private final ServiceFactory serviceFactory =
-      ServiceFactoryProvider.createServiceFactory(STANDARD);
-  private final TaskService taskService;
+  private ServiceFactory serviceFactory = null;
+  private final ServiceType serviceType = ApplicationProperties.getInstance().getServiceType();
 
   {
-    assert serviceFactory != null;
-    taskService = serviceFactory.getTaskService();
+    try {
+      serviceFactory = ServiceFactoryProvider.createServiceFactory(serviceType);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
+
+  private final TaskService taskService = serviceFactory.getTaskService();
 
   public AddTaskOperation(Task task, User user) {
     this.task = task;

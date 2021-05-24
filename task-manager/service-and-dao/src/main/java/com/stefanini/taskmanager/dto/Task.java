@@ -40,4 +40,13 @@ public class Task {
     return obj2.getDescription().equals(this.taskDescription)
         && obj2.getTaskTitle().equals(this.taskTitle);
   }
+
+  @Override
+  public String toString() {
+    return "Task{" +
+            "id=" + id +
+            ", taskTitle='" + taskTitle + '\'' +
+            ", taskDescription='" + taskDescription + '\'' +
+            '}';
+  }
 }
