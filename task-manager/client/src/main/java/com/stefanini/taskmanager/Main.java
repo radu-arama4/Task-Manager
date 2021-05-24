@@ -40,6 +40,11 @@ public class Main {
     Task task;
     Group group;
 
+//    while(true){
+//      logger.info("Press:\n1 - New user\n2 - Show all users\n3 - Add task\n4 - Show tasks of user\n5 - Create group\n6" +
+//              "Add user to group\n7-Add task to group");
+//    }
+
     switch (command) {
       case "-createUser":
         logger.info("New operation: create user");

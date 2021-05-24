@@ -28,5 +28,6 @@ public class OperationExecutor {
    */
   public void executeOperations() {
     textFileOperations.forEach(Operation::execute);
+    textFileOperations.clear();
   }
 }
