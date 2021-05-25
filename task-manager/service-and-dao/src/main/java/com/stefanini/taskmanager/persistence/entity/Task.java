@@ -19,11 +19,9 @@ public class Task {
   private String taskDescription;
 
   @ManyToMany
-  @Column(name = "user_id")
   private List<User> user = new LinkedList<>();
 
   @ManyToMany
-  @Column(name = "group_id")
   private List<Group> group = new LinkedList<>();
 
   public Task() {}

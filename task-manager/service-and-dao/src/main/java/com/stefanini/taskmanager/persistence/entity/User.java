@@ -18,15 +18,23 @@ public class User {
   @Column(name = "last_name")
   private String lastName;
 
-  @Column(name = "user_name")
+  @Column(name = "username", unique = true)
   private String userName;
 
-  @ManyToMany(mappedBy = "user")
-  @Column(name = "task_id")
+  @ManyToMany()
+  @JoinTable(
+          name = "task_to_user",
+          joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") },
+          inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id") }
+  )
   private List<Task> tasks = new LinkedList<>();
 
   @ManyToMany
-  @Column(name = "group_id")
+  @JoinTable(
+          name = "user_to_group",
+          joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") },
+          inverseJoinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") }
+  )
   private List<Group> groups = new LinkedList<>();
 
   public User() {}
@@ -46,7 +54,7 @@ public class User {
 
   public void addTask(Task task) {
     this.tasks.add(task);
-    task.setUser(this);
+    //task.setUser(this);
   }
 
   public void addGroup(Group group) {

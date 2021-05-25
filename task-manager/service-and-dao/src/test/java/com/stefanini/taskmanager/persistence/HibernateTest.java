@@ -58,5 +58,4 @@ public class HibernateTest {
     factory.close();
     session.close();
   }
-
 }

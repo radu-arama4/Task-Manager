@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
-@Entity(name = "some_group")
+@Entity(name = "group_")
 public class Group {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +15,14 @@ public class Group {
   private String groupName;
 
   @ManyToMany(mappedBy = "groups")
-  @Column(name = "user_id")
   private List<User> users = new LinkedList<>();
 
-  @ManyToMany(mappedBy = "group")
-  @Column(name = "task_id")
+  @ManyToMany()
+  @JoinTable(
+          name = "task_to_group",
+          joinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") },
+          inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id") }
+  )
   private List<Task> tasks = new LinkedList<>();
 
   public Group() {}
@@ -35,12 +38,12 @@ public class Group {
 
   public void addTask(Task task) {
     this.tasks.add(task);
-    task.setGroup(this);
+    //task.setGroup(this);
   }
 
   public void addUser(User user) {
     this.users.add(user);
-    user.addGroup(this);
+    //user.addGroup(this);
   }
 
   public void setGroupName(String groupName) {
