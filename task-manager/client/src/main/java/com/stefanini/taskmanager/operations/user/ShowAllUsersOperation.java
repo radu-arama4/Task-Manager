@@ -5,8 +5,6 @@ import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.UserService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
 import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
-import com.stefanini.taskmanager.service.factory.ServiceType;
-import com.stefanini.taskmanager.util.ApplicationProperties;
 
 import java.util.List;
 
@@ -15,17 +13,7 @@ import java.util.List;
  * {@link UserService#getAllUsers()}
  */
 public class ShowAllUsersOperation implements Operation {
-  private ServiceFactory serviceFactory = null;
-  private final ServiceType serviceType = ApplicationProperties.getInstance().getServiceType();
-
-  {
-    try {
-      serviceFactory = ServiceFactoryProvider.createServiceFactory(serviceType);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
+  private final ServiceFactory serviceFactory = ServiceFactoryProvider.createServiceFactory();
   private final UserService userService = serviceFactory.getUserService();
 
   public ShowAllUsersOperation() {}

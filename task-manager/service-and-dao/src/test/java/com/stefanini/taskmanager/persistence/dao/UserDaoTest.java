@@ -17,14 +17,12 @@ public class UserDaoTest {
 
   @Test(expected = SQLException.class)
   public void testCreateUser() {
-
     User testUser = new User("Test", "Test", "dudsadasd");
     User returnedTestUser = userDao.createUser(testUser);
 
     assertNotNull(returnedTestUser.getId());
 
     returnedTestUser = userDao.createUser(testUser);
-
     assertNull(returnedTestUser);
   }
 
@@ -33,17 +31,13 @@ public class UserDaoTest {
   @Test
   public void testGetUsers() {
     User testUser = new User("Test", "Test", "dummyasdd");
-
     List<User> users = userDao.getUsers();
-
     Optional<User> result = users.stream().filter(a -> a.equals(testUser)).findAny();
 
     assertFalse(result.isPresent());
 
     userDao.createUser(testUser);
-
     users = userDao.getUsers();
-
     result = users.stream().filter(a -> a.equals(testUser)).findAny();
 
     assertTrue(result.isPresent());

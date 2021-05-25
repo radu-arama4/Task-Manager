@@ -19,6 +19,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public boolean createUser(User user) {
+    logger.info("createUser method started");
+
     String firstName = user.getFirstName();
     String lastName = user.getLastName();
     String userName = user.getUserName();
@@ -45,6 +47,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> getAllUsers() {
+    logger.info("getAllUsers method started");
     return userDao.getUsers();
   }
 }

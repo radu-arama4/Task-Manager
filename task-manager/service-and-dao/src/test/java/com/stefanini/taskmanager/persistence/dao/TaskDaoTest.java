@@ -20,22 +20,16 @@ public class TaskDaoTest {
   @Test
   public void testAddTask() {
     Task testTask = new Task("Test", "dudsadasd");
-
     Task returnedTestTask = taskDao.addTask(testTask, testUser);
-
     assertNotNull(returnedTestTask.getId());
   }
 
   @Test
   public void testShowTasks() {
     Task testTask = new Task("Test", "TestTest2");
-
     taskDao.addTask(testTask, testUser);
-
     List<Task> tasks = taskDao.getTasks(testUser);
-
     Optional<Task> result = tasks.stream().filter(task -> task.equals(testTask)).findAny();
-
     assertTrue(result.isPresent());
   }
 }

@@ -21,7 +21,7 @@ public class ApplicationProperties {
 
   private static final Logger logger = LogManager.getLogger(ApplicationProperties.class);
 
-  static ApplicationProperties instance = null;
+  private static ApplicationProperties instance = null;
 
   private ApplicationProperties() {
     Properties properties = extractProperties();
@@ -38,7 +38,6 @@ public class ApplicationProperties {
   public static ApplicationProperties getInstance() {
     if (instance == null) {
       instance = new ApplicationProperties();
-      return instance;
     }
     return instance;
   }
@@ -51,7 +50,7 @@ public class ApplicationProperties {
     try {
       prop.load(ip);
     } catch (IOException e) {
-      logger.error(e.getMessage());
+      logger.error(e);
     }
 
     return prop;

@@ -12,17 +12,9 @@ import com.stefanini.taskmanager.service.impl.UserServiceImpl;
 import com.stefanini.taskmanager.util.ApplicationProperties;
 
 public class ServiceFactoryImpl implements ServiceFactory {
-  ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
-  DaoType daoType = applicationProperties.getDaoType();
-  private DaoFactory daoFactory = null;
-
-  {
-    try {
-      daoFactory = DaoFactoryProvider.createDaoFactory(daoType);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+  private final ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
+  private final DaoType daoType = applicationProperties.getDaoType();
+  private final DaoFactory daoFactory = DaoFactoryProvider.createDaoFactory(daoType);
 
   @Override
   public UserService getUserService() {

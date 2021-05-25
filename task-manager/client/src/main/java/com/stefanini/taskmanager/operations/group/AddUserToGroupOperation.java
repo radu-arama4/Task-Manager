@@ -6,8 +6,6 @@ import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.GroupService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
 import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
-import com.stefanini.taskmanager.service.factory.ServiceType;
-import com.stefanini.taskmanager.util.ApplicationProperties;
 
 /**
  * Implements {@link Operation}. Encapsulates {@link Group} and {@link User} fields. The execution
@@ -17,18 +15,7 @@ import com.stefanini.taskmanager.util.ApplicationProperties;
 public class AddUserToGroupOperation implements Operation {
   private final Group group;
   private final User user;
-  private ServiceFactory serviceFactory = null;
-  private final ServiceType serviceType = ApplicationProperties.getInstance().getServiceType();
-
-  {
-    try {
-      serviceFactory =
-          ServiceFactoryProvider.createServiceFactory(serviceType);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
+  private final ServiceFactory serviceFactory = ServiceFactoryProvider.createServiceFactory();
   private final GroupService groupService = serviceFactory.getGroupService();
 
   public AddUserToGroupOperation(Group group, User user) {
