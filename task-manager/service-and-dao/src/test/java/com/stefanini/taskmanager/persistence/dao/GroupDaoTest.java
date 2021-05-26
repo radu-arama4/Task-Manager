@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.persistence.dao;
 
-import com.stefanini.taskmanager.dto.Group;
+import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.persistence.dao.factory.JdbcDaoFactory;
 import org.junit.Test;
@@ -14,8 +14,8 @@ public class GroupDaoTest {
 
   @Test
   public void testCreateGroup() {
-    Group testGroup = new Group("TestGroupp");
-    Group resultGroup = groupDao.createGroup(testGroup);
+    GroupTO testGroup = new GroupTO("TestGroupp");
+    GroupTO resultGroup = groupDao.createGroup(testGroup);
     assertNotNull(resultGroup.getId());
   }
 

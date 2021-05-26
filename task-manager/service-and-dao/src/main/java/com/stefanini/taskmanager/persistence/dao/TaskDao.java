@@ -1,12 +1,12 @@
 package com.stefanini.taskmanager.persistence.dao;
 
-import com.stefanini.taskmanager.dto.Task;
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.TaskTO;
+import com.stefanini.taskmanager.dto.UserTO;
 
 import java.util.List;
 
 /**
- * Interface TaskDao provides methods for performing some CRUD operations on {@link Task} entities.
+ * Interface TaskDao provides methods for performing some CRUD operations on {@link TaskTO} entities.
  *
  * @author rarama
  */
@@ -19,7 +19,7 @@ public interface TaskDao {
    * @param user - the user to whom the task will be added
    * @return boolean value - to show if the operation succeeded
    */
-  Task addTask(Task task, User user);
+  TaskTO addTask(TaskTO task, UserTO user);
 
   /**
    * Method used for extracting all existing Task entities from the database in form of list
@@ -27,5 +27,5 @@ public interface TaskDao {
    * @param selectedUser - the user of whom the tasks will be shown
    * @return List<Task> - the tasks of the specified user
    */
-  List<Task> getTasks(User selectedUser);
+  List<TaskTO> getTasks(UserTO selectedUser);
 }

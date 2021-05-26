@@ -1,8 +1,6 @@
 package com.stefanini.taskmanager.persistence.entity;
 
 import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
 
 @Entity
 @Table(name = "task")
@@ -12,17 +10,11 @@ public class Task {
   @Column(name = "task_id", unique = true, nullable = false)
   private Long taskId;
 
-  @Column(name = "task_title")
+  @Column(name = "task_title", nullable = false)
   private String taskTitle;
 
-  @Column(name = "task_description")
+  @Column(name = "task_description", nullable = false)
   private String taskDescription;
-
-  @ManyToMany
-  private List<User> user = new LinkedList<>();
-
-  @ManyToMany
-  private List<Group> group = new LinkedList<>();
 
   public Task() {}
 
@@ -35,22 +27,6 @@ public class Task {
     this.taskId = taskId;
     this.taskTitle = taskTitle;
     this.taskDescription = description;
-  }
-
-  public List<User> getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user.add(user);
-  }
-
-  public List<Group> getGroup() {
-    return group;
-  }
-
-  public void setGroup(Group group) {
-    this.group.add(group);
   }
 
   public Long getTaskId() {

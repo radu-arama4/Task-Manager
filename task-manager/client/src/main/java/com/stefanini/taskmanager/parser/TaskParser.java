@@ -1,11 +1,11 @@
 package com.stefanini.taskmanager.parser;
 
-import com.stefanini.taskmanager.dto.Task;
+import com.stefanini.taskmanager.dto.TaskTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Contains the necessary method/methods for parsing {@link Task} related input.
+ * Contains the necessary method/methods for parsing {@link TaskTO} related input.
  */
 public class TaskParser {
   private static final Logger logger = LogManager.getLogger(TaskParser.class);
@@ -15,12 +15,12 @@ public class TaskParser {
 
   /**
    *
-   * Extracts and encapsulates the {@link Task} related data from the command line arguments
+   * Extracts and encapsulates the {@link TaskTO} related data from the command line arguments
    *
    * @param arguments - command line arguments
-   * @return object of type {@link Task}
+   * @return object of type {@link TaskTO}
    */
-  public static Task parseTask(String[] arguments) {
+  public static TaskTO parseTask(String[] arguments) {
     String taskTitle = null;
     String taskDescription = null;
 
@@ -60,6 +60,6 @@ public class TaskParser {
       }
     }
 
-    return new Task(taskTitle, taskDescription);
+    return new TaskTO(taskTitle, taskDescription);
   }
 }

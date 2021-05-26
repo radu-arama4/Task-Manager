@@ -1,21 +1,40 @@
 package com.stefanini.taskmanager.persistence.dao.factory;
 
-import com.stefanini.taskmanager.persistence.dao.*;
+import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.persistence.dao.TaskDao;
+import com.stefanini.taskmanager.persistence.dao.UserDao;
+import com.stefanini.taskmanager.persistence.dao.hibernate.GroupDaoHibernate;
+import com.stefanini.taskmanager.persistence.dao.hibernate.TaskDaoHibernate;
+import com.stefanini.taskmanager.persistence.dao.hibernate.UserDaoHibernate;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 /**
  * Implementation of {@link DaoFactory} for providing methods for producing single instances of
  * Hibernate Dao classes.
  */
 public class HibernateDaoFactory implements DaoFactory {
+  //TODO organize this shit
+  StandardServiceRegistry ssr =
+          new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+  Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
+
+  SessionFactory factory = meta.getSessionFactoryBuilder().build();
+  Session session = factory.openSession();
+
   public UserDao createUserDao() {
-    return null;
+    return new UserDaoHibernate(session);
   }
 
   public TaskDao createTaskDao() {
-    return null;
+    return new TaskDaoHibernate(session);
   }
 
   public GroupDao createGroupDao() {
-    return null;
+    return new GroupDaoHibernate(session);
   }
 }

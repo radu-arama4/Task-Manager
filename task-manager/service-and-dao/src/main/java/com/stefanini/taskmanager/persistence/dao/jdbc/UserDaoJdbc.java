@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.persistence.dao.jdbc;
 
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +31,7 @@ public class UserDaoJdbc implements UserDao {
   }
 
   @Override
-  public User createUser(User newUser) {
+  public UserTO createUser(UserTO newUser) {
     try {
       String firstName = newUser.getFirstName();
       String lastName = newUser.getLastName();
@@ -49,7 +49,7 @@ public class UserDaoJdbc implements UserDao {
 
       if (rs.next()) {
         userId = rs.getLong(1);
-        return new User(userId, firstName, lastName, userName);
+        return new UserTO(userId, firstName, lastName, userName);
       } else {
         return null;
       }
@@ -60,8 +60,8 @@ public class UserDaoJdbc implements UserDao {
   }
 
   @Override
-  public List<User> getUsers() {
-    List<User> users = new ArrayList<>();
+  public List<UserTO> getUsers() {
+    List<UserTO> users = new ArrayList<>();
 
     try {
       PreparedStatement statement = connection.prepareStatement(SELECT_USERS_QUERY);
@@ -73,7 +73,7 @@ public class UserDaoJdbc implements UserDao {
         String lastName = rs.getString("last_name");
         String userName = rs.getString("username");
 
-        User newUser = new User(userId, firstName, lastName, userName);
+        UserTO newUser = new UserTO(userId, firstName, lastName, userName);
         users.add(newUser);
       }
       rs.close();

@@ -1,8 +1,8 @@
 package com.stefanini.taskmanager.persistence.dao.jdbc;
 
-import com.stefanini.taskmanager.dto.Group;
-import com.stefanini.taskmanager.dto.Task;
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.GroupTO;
+import com.stefanini.taskmanager.dto.TaskTO;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +39,7 @@ public class GroupDaoJdbc implements GroupDao {
   }
 
   @Override
-  public Group createGroup(Group group) {
+  public GroupTO createGroup(GroupTO group) {
     try {
       String groupName = group.getGroupName();
 
@@ -57,7 +57,7 @@ public class GroupDaoJdbc implements GroupDao {
         return null;
       }
 
-      return new Group(groupId, groupName);
+      return new GroupTO(groupId, groupName);
     } catch (SQLException e) {
       logger.error(e);
       return null;
@@ -65,7 +65,7 @@ public class GroupDaoJdbc implements GroupDao {
   }
 
   @Override
-  public boolean addUserToGroup(User user, Group group) {
+  public boolean addUserToGroup(UserTO user, GroupTO group) {
     try {
       String groupName = group.getGroupName();
       String userName = user.getUserName();
@@ -83,7 +83,7 @@ public class GroupDaoJdbc implements GroupDao {
   }
 
   @Override
-  public boolean addTaskToGroup(Task task, Group group) {
+  public boolean addTaskToGroup(TaskTO task, GroupTO group) {
     String taskTitle = task.getTaskTitle();
     String taskDescription = task.getDescription();
     String groupName = group.getGroupName();

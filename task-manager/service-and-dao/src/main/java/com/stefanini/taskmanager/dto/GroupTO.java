@@ -1,14 +1,14 @@
 package com.stefanini.taskmanager.dto;
 
-public class Group {
+public class GroupTO {
   private Long id;
   private final String groupName;
 
-  public Group(String groupName) {
+  public GroupTO(String groupName) {
     this.groupName = groupName;
   }
 
-  public Group(Long id, String groupName) {
+  public GroupTO(Long id, String groupName) {
     this.id = id;
     this.groupName = groupName;
   }

@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.parser;
 
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.UserTO;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -26,7 +26,7 @@ public class UserParserTest {
           "-un='" + userName + "'"
         };
 
-    User user = userParser.parseUser(arguments);
+    UserTO user = userParser.parseUser(arguments);
 
     assertEquals(firstName, user.getFirstName());
     assertEquals(lastName, user.getLastName());
@@ -41,7 +41,7 @@ public class UserParserTest {
     String[] arguments =
         new String[] {"-createUser", "-fn='" + firstName + "'", "-ln='" + lastName + "'"};
 
-    User user = userParser.parseUser(arguments);
+    UserTO user = userParser.parseUser(arguments);
 
     assertEquals(firstName, user.getFirstName());
     assertEquals(lastName, user.getLastName());

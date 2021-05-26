@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.persistence.dao;
 
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.persistence.dao.factory.JdbcDaoFactory;
 import org.junit.Test;
@@ -17,10 +17,10 @@ public class UserDaoTest {
 
   @Test(expected = SQLException.class)
   public void testCreateUser() {
-    User testUser = new User("Test", "Test", "dudsadasd");
-    User returnedTestUser = userDao.createUser(testUser);
+    UserTO testUser = new UserTO("Test", "Test", "dudsadasd");
+    UserTO returnedTestUser = userDao.createUser(testUser);
 
-    assertNotNull(returnedTestUser.getId());
+    assertNotNull(returnedTestUser.getUserId());
 
     returnedTestUser = userDao.createUser(testUser);
     assertNull(returnedTestUser);
@@ -30,9 +30,9 @@ public class UserDaoTest {
 
   @Test
   public void testGetUsers() {
-    User testUser = new User("Test", "Test", "dummyasdd");
-    List<User> users = userDao.getUsers();
-    Optional<User> result = users.stream().filter(a -> a.equals(testUser)).findAny();
+    UserTO testUser = new UserTO("Test", "Test", "dummyasdd");
+    List<UserTO> users = userDao.getUsers();
+    Optional<UserTO> result = users.stream().filter(a -> a.equals(testUser)).findAny();
 
     assertFalse(result.isPresent());
 

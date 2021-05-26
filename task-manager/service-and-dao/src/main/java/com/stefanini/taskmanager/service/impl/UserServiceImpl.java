@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.service.impl;
 
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.service.UserService;
@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean createUser(User user) {
+  public boolean createUser(UserTO user) {
     logger.info("createUser method started");
 
     String firstName = user.getFirstName();
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
       logger.warn("Missing information!");
       return false;
     } else {
-      User createdUser = userDao.createUser(user);
+      UserTO createdUser = userDao.createUser(user);
       if (createdUser != null) {
         logger.info(
             "New user with [first name: "
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> getAllUsers() {
+  public List<UserTO> getAllUsers() {
     logger.info("getAllUsers method started");
     return userDao.getUsers();
   }

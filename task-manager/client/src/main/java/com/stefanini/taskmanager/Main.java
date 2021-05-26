@@ -1,14 +1,8 @@
 package com.stefanini.taskmanager;
 
-import com.stefanini.taskmanager.dto.Group;
-import com.stefanini.taskmanager.dto.Task;
-import com.stefanini.taskmanager.dto.User;
-import com.stefanini.taskmanager.parser.GroupParser;
-import com.stefanini.taskmanager.parser.TaskParser;
-import com.stefanini.taskmanager.parser.UserParser;
-import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.stefanini.taskmanager.dto.GroupTO;
+import com.stefanini.taskmanager.dto.TaskTO;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.OperationExecutor;
 import com.stefanini.taskmanager.operations.group.AddTaskToGroupOperation;
 import com.stefanini.taskmanager.operations.group.AddUserToGroupOperation;
@@ -17,6 +11,12 @@ import com.stefanini.taskmanager.operations.task.AddTaskOperation;
 import com.stefanini.taskmanager.operations.task.ShowTasksOperation;
 import com.stefanini.taskmanager.operations.user.CreateUserOperation;
 import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
+import com.stefanini.taskmanager.parser.GroupParser;
+import com.stefanini.taskmanager.parser.TaskParser;
+import com.stefanini.taskmanager.parser.UserParser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Arrays;
 
 public class Main {
@@ -36,9 +36,9 @@ public class Main {
     String command = args[0];
     String[] flags = Arrays.copyOfRange(args, 1, args.length);
 
-    User user;
-    Task task;
-    Group group;
+    UserTO user;
+    TaskTO task;
+    GroupTO group;
 
     switch (command) {
       case "-createUser":
@@ -86,7 +86,7 @@ public class Main {
     operationExecutor.executeOperations();
 
     //TODO move it somewhere else
-    DataBaseUtil.disconnectFromDb();
+    //DataBaseUtil.disconnectFromDb();
 
     logger.info("Program finished");
   }

@@ -1,7 +1,7 @@
 package com.stefanini.taskmanager.service.impl;
 
-import com.stefanini.taskmanager.dto.Task;
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.TaskTO;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.service.TaskService;
@@ -19,7 +19,7 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public boolean addTask(Task task, User user) {
+  public boolean addTask(TaskTO task, UserTO user) {
     logger.info("addTask method started");
 
     String userName = user.getUserName();
@@ -47,12 +47,12 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public List<Task> getTasksOfUser(User user) {
+  public List<TaskTO> getTasksOfUser(UserTO user) {
     if (user.getUserName() == null) {
       logger.warn("Missing information!");
     }
 
-    List<Task> tasks = taskDao.getTasks(user);
+    List<TaskTO> tasks = taskDao.getTasks(user);
 
     if (tasks == null) {
       logger.warn("No user with such username: " + user.getUserName());

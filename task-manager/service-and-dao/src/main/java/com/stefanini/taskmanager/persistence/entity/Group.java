@@ -11,17 +11,22 @@ public class Group {
   @Column(name = "group_id", unique = true, nullable = false)
   private Long groupId;
 
-  @Column(name = "group_name")
+  @Column(name = "group_name", nullable = false)
   private String groupName;
 
-  @ManyToMany(mappedBy = "groups")
+  @ManyToMany
+  @JoinTable(
+          name = "user_to_group",
+          joinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") },
+          inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") }
+  )
   private List<User> users = new LinkedList<>();
 
-  @ManyToMany()
+  @ManyToMany
   @JoinTable(
           name = "task_to_group",
           joinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") },
-          inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id") }
+          inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id", unique = true) }
   )
   private List<Task> tasks = new LinkedList<>();
 
@@ -38,12 +43,10 @@ public class Group {
 
   public void addTask(Task task) {
     this.tasks.add(task);
-    //task.setGroup(this);
   }
 
   public void addUser(User user) {
     this.users.add(user);
-    //user.addGroup(this);
   }
 
   public void setGroupName(String groupName) {

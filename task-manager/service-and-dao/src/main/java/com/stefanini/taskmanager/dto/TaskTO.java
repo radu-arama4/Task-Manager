@@ -1,17 +1,17 @@
 package com.stefanini.taskmanager.dto;
 
-public class Task {
+public class TaskTO {
 
   private Long id;
   private final String taskTitle;
   private final String taskDescription;
 
-  public Task(String taskTitle, String description) {
+  public TaskTO(String taskTitle, String description) {
     this.taskTitle = taskTitle;
     this.taskDescription = description;
   }
 
-  public Task(Long id, String taskTitle, String description) {
+  public TaskTO(Long id, String taskTitle, String description) {
     this.id = id;
     this.taskTitle = taskTitle;
     this.taskDescription = description;
@@ -35,7 +35,7 @@ public class Task {
 
   @Override
   public boolean equals(Object obj) {
-    Task obj2 = (Task) obj;
+    TaskTO obj2 = (TaskTO) obj;
 
     return obj2.getDescription().equals(this.taskDescription)
         && obj2.getTaskTitle().equals(this.taskTitle);

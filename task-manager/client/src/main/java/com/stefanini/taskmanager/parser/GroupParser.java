@@ -1,11 +1,11 @@
 package com.stefanini.taskmanager.parser;
 
-import com.stefanini.taskmanager.dto.Group;
+import com.stefanini.taskmanager.dto.GroupTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Contains the necessary method/methods for parsing {@link Group} related input.
+ * Contains the necessary method/methods for parsing {@link GroupTO} related input.
  */
 public class GroupParser {
   private static final Logger logger = LogManager.getLogger(TaskParser.class);
@@ -14,12 +14,12 @@ public class GroupParser {
 
   /**
    *
-   * Extracts and encapsulates the {@link Group} related data from the command line arguments
+   * Extracts and encapsulates the {@link GroupTO} related data from the command line arguments
    *
    * @param arguments - command line arguments
-   * @return object of type {@link Group}
+   * @return object of type {@link GroupTO}
    */
-  public static Group parseGroup(String[] arguments) {
+  public static GroupTO parseGroup(String[] arguments) {
     String groupName = null;
 
     for (String arg : arguments) {
@@ -28,6 +28,6 @@ public class GroupParser {
       }
     }
 
-    return new Group(groupName);
+    return new GroupTO(groupName);
   }
 }

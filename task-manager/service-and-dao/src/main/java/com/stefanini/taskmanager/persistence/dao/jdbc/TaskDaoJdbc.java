@@ -1,7 +1,7 @@
 package com.stefanini.taskmanager.persistence.dao.jdbc;
 
-import com.stefanini.taskmanager.dto.Task;
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.TaskTO;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +37,7 @@ public class TaskDaoJdbc implements TaskDao {
   }
 
   @Override
-  public Task addTask(Task task, User user) {
+  public TaskTO addTask(TaskTO task, UserTO user) {
     String userName = user.getUserName();
     String taskTitle = task.getTaskTitle();
     String taskDescription = task.getDescription();
@@ -69,7 +69,7 @@ public class TaskDaoJdbc implements TaskDao {
         return null;
       }
 
-      return new Task(taskId, taskTitle, taskDescription);
+      return new TaskTO(taskId, taskTitle, taskDescription);
     } catch (SQLException e) {
       logger.error(e);
       return null;
@@ -77,9 +77,9 @@ public class TaskDaoJdbc implements TaskDao {
   }
 
   @Override
-  public List<Task> getTasks(User selectedUser) {
+  public List<TaskTO> getTasks(UserTO selectedUser) {
     String userName = selectedUser.getUserName();
-    List<Task> tasks = new ArrayList<>();
+    List<TaskTO> tasks = new ArrayList<>();
 
     try {
       PreparedStatement statement = connection.prepareStatement(SELECT_FROM_TASK_QUERY);
@@ -89,7 +89,7 @@ public class TaskDaoJdbc implements TaskDao {
       while (rs.next()) {
         String taskTitle = rs.getString("task_title");
         String description = rs.getString("task_description");
-        tasks.add(new Task(taskTitle, description));
+        tasks.add(new TaskTO(taskTitle, description));
       }
 
       rs.close();

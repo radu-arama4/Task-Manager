@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.parser;
 
-import com.stefanini.taskmanager.dto.Task;
+import com.stefanini.taskmanager.dto.TaskTO;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -15,7 +15,7 @@ public class TaskParserTest {
     String taskDescription = "Test2";
     String[] arguments = new String[] {"-tt='" + taskTitle + "'", "-td='" + taskDescription + "'"};
 
-    Task task = taskParser.parseTask(arguments);
+    TaskTO task = taskParser.parseTask(arguments);
 
     assertEquals(taskTitle, task.getTaskTitle());
     assertEquals(taskDescription, task.getDescription());
@@ -26,7 +26,7 @@ public class TaskParserTest {
     String taskDescription = "Test2";
     String[] arguments = new String[] {"-td='" + taskDescription + "'"};
 
-    Task task = taskParser.parseTask(arguments);
+    TaskTO task = taskParser.parseTask(arguments);
 
     assertNull(task.getTaskTitle());
     assertEquals(taskDescription, task.getDescription());

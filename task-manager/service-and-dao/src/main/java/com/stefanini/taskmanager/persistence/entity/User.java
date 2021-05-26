@@ -12,30 +12,22 @@ public class User {
   @Column(name = "user_id", unique = true, nullable = false)
   private Long userId;
 
-  @Column(name = "first_name")
+  @Column(name = "first_name", nullable = false)
   private String firstName;
 
-  @Column(name = "last_name")
+  @Column(name = "last_name", nullable = false)
   private String lastName;
 
-  @Column(name = "username", unique = true)
+  @Column(name = "username", unique = true, nullable = false)
   private String userName;
-
-  @ManyToMany()
-  @JoinTable(
-          name = "task_to_user",
-          joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") },
-          inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id") }
-  )
-  private List<Task> tasks = new LinkedList<>();
 
   @ManyToMany
   @JoinTable(
-          name = "user_to_group",
+          name = "task_to_user",
           joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") },
-          inverseJoinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") }
+          inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id", unique = true) }
   )
-  private List<Group> groups = new LinkedList<>();
+  private List<Task> tasks = new LinkedList<>();
 
   public User() {}
 
@@ -54,11 +46,6 @@ public class User {
 
   public void addTask(Task task) {
     this.tasks.add(task);
-    //task.setUser(this);
-  }
-
-  public void addGroup(Group group) {
-    this.groups.add(group);
   }
 
   public List<Task> getTasks() {
@@ -101,11 +88,4 @@ public class User {
     return userName;
   }
 
-  public List<Group> getGroups() {
-    return groups;
-  }
-
-  public void setGroups(List<Group> groups) {
-    this.groups = groups;
-  }
 }
