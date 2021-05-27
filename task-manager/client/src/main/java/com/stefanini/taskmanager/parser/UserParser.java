@@ -1,15 +1,11 @@
 package com.stefanini.taskmanager.parser;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.stefanini.taskmanager.dto.User;
 
 /**
  * Contains the necessary method/methods for parsing {@link User} related input.
  */
 public class UserParser {
-  private static final Logger logger = LogManager.getLogger(UserParser.class);
-
   private static final String FN = CommandLineVariables.FIRST_NAME.value;
   private static final String LN = CommandLineVariables.LAST_NAME.value;
   private static final String UN = CommandLineVariables.USER_NAME.value;

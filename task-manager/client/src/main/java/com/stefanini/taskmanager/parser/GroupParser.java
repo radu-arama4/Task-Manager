@@ -1,15 +1,11 @@
 package com.stefanini.taskmanager.parser;
 
 import com.stefanini.taskmanager.dto.Group;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Contains the necessary method/methods for parsing {@link Group} related input.
  */
 public class GroupParser {
-  private static final Logger logger = LogManager.getLogger(TaskParser.class);
-
   private static final String GN = CommandLineVariables.GROUP_NAME.value;
 
   /**

@@ -1,15 +1,11 @@
 package com.stefanini.taskmanager.parser;
 
 import com.stefanini.taskmanager.dto.Task;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Contains the necessary method/methods for parsing {@link Task} related input.
  */
 public class TaskParser {
-  private static final Logger logger = LogManager.getLogger(TaskParser.class);
-
   private static final String TT = CommandLineVariables.TASK_TITLE.value;
   private static final String TD = CommandLineVariables.TASK_DESCRIPTION.value;
 
