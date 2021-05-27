@@ -1,8 +1,8 @@
 package com.stefanini.taskmanager.persistence.entity;
 
 import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -21,13 +21,13 @@ public class User {
   @Column(name = "username", unique = true, nullable = false)
   private String userName;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.REMOVE)
   @JoinTable(
           name = "task_to_user",
           joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") },
           inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id", unique = true) }
   )
-  private List<Task> tasks = new LinkedList<>();
+  private Set<Task> tasks = new HashSet<>();
 
   public User() {}
 
@@ -44,16 +44,16 @@ public class User {
     this.userName = userName;
   }
 
-  public void addTask(Task task) {
-    this.tasks.add(task);
-  }
-
-  public List<Task> getTasks() {
+  public Set<Task> getTasks() {
     return tasks;
   }
 
-  public void setTasks(List<Task> tasks) {
+  public void setTasks(Set<Task> tasks) {
     this.tasks = tasks;
+  }
+
+  public void addTask(Task task) {
+    this.tasks.add(task);
   }
 
   public Long getUserId() {

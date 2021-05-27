@@ -1,8 +1,8 @@
 package com.stefanini.taskmanager.persistence.entity;
 
 import javax.persistence.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "group_")
 public class Group {
@@ -14,21 +14,21 @@ public class Group {
   @Column(name = "group_name", nullable = false)
   private String groupName;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.DETACH)
   @JoinTable(
           name = "user_to_group",
           joinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") },
           inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") }
   )
-  private List<User> users = new LinkedList<>();
+  private Set<User> users = new HashSet<>();
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.REMOVE)
   @JoinTable(
           name = "task_to_group",
           joinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") },
           inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id", unique = true) }
   )
-  private List<Task> tasks = new LinkedList<>();
+  private Set<Task> tasks = new HashSet<>();
 
   public Group() {}
 
@@ -41,6 +41,22 @@ public class Group {
     this.groupName = groupName;
   }
 
+  public Set<User> getUsers() {
+    return users;
+  }
+
+  public void setUsers(Set<User> users) {
+    this.users = users;
+  }
+
+  public Set<Task> getTasks() {
+    return tasks;
+  }
+
+  public void setTasks(Set<Task> tasks) {
+    this.tasks = tasks;
+  }
+
   public void addTask(Task task) {
     this.tasks.add(task);
   }
@@ -51,22 +67,6 @@ public class Group {
 
   public void setGroupName(String groupName) {
     this.groupName = groupName;
-  }
-
-  public List<User> getUsers() {
-    return users;
-  }
-
-  public void setUsers(List<User> users) {
-    this.users = users;
-  }
-
-  public List<Task> getTasks() {
-    return tasks;
-  }
-
-  public void setTasks(List<Task> tasks) {
-    this.tasks = tasks;
   }
 
   public Long getGroupId() {
