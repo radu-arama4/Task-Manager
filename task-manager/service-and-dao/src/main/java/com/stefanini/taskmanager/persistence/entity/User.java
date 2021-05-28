@@ -21,13 +21,11 @@ public class User {
   @Column(name = "username", unique = true, nullable = false)
   private String userName;
 
-  @ManyToMany(cascade = CascadeType.REMOVE)
-  @JoinTable(
-          name = "task_to_user",
-          joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") },
-          inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id", unique = true) }
-  )
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private Set<Task> tasks = new HashSet<>();
+
+  @ManyToMany(mappedBy = "users", cascade = CascadeType.DETACH)
+  private Set<Group> groups = new HashSet<>();
 
   public User() {}
 
@@ -42,6 +40,14 @@ public class User {
     this.firstName = firstName;
     this.lastName = lastName;
     this.userName = userName;
+  }
+
+  public Set<Group> getGroups() {
+    return groups;
+  }
+
+  public void setGroups(Set<Group> groups) {
+    this.groups = groups;
   }
 
   public Set<Task> getTasks() {
@@ -87,5 +93,4 @@ public class User {
   public String getUserName() {
     return userName;
   }
-
 }

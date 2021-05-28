@@ -16,6 +16,25 @@ public class Task {
   @Column(name = "task_description", nullable = false)
   private String taskDescription;
 
+  /*
+    Currently there can be the same task id in both intermediate tables and this should be solved.
+    TODO solve this
+   */
+
+  @ManyToOne(cascade = CascadeType.DETACH)
+  @JoinTable(
+      name = "task_to_user",
+      inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+      joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "task_id")})
+  User user;
+
+  @ManyToOne(cascade = CascadeType.DETACH)
+  @JoinTable(
+      name = "task_to_group",
+      inverseJoinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "group_id")},
+      joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "task_id")})
+  Group group;
+
   public Task() {}
 
   public Task(String taskTitle, String description) {
@@ -27,6 +46,22 @@ public class Task {
     this.taskId = taskId;
     this.taskTitle = taskTitle;
     this.taskDescription = description;
+  }
+
+  public Group getGroup() {
+    return group;
+  }
+
+  public void setGroup(Group group) {
+    this.group = group;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 
   public Long getTaskId() {

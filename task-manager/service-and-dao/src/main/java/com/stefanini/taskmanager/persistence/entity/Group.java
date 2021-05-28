@@ -16,18 +16,12 @@ public class Group {
 
   @ManyToMany(cascade = CascadeType.DETACH)
   @JoinTable(
-          name = "user_to_group",
-          joinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") },
-          inverseJoinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "user_id") }
-  )
+      name = "user_to_group",
+      joinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "group_id")},
+      inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")})
   private Set<User> users = new HashSet<>();
 
-  @ManyToMany(cascade = CascadeType.REMOVE)
-  @JoinTable(
-          name = "task_to_group",
-          joinColumns = { @JoinColumn(name = "group_id", referencedColumnName = "group_id") },
-          inverseJoinColumns = { @JoinColumn(name = "task_id", referencedColumnName = "task_id", unique = true) }
-  )
+  @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
   private Set<Task> tasks = new HashSet<>();
 
   public Group() {}
