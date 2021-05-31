@@ -1,10 +1,13 @@
 package com.stefanini.taskmanager.persistence.entity;
 
+import com.stefanini.taskmanager.util.email.Email;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "group_")
+@Email
 public class Group {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,9 +1,12 @@
 package com.stefanini.taskmanager.persistence.entity;
 
+import com.stefanini.taskmanager.util.email.Email;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "task")
+@Email
 public class Task {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +29,14 @@ public class Task {
       name = "task_to_user",
       inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
       joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "task_id")})
-  User user;
+  private User user;
 
   @ManyToOne(cascade = CascadeType.DETACH)
   @JoinTable(
       name = "task_to_group",
       inverseJoinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "group_id")},
       joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "task_id")})
-  Group group;
+  private Group group;
 
   public Task() {}
 

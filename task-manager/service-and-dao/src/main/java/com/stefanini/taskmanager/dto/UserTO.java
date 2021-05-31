@@ -1,10 +1,16 @@
 package com.stefanini.taskmanager.dto;
 
-public class UserTO {
+import com.stefanini.taskmanager.util.email.EmailField;
+import com.stefanini.taskmanager.util.email.Email;
 
+@Email(emailMessage = "User {firstName} / {lastName} identified by {userName} has been created")
+public class UserTO {
   private Long userId;
+  @EmailField(fieldName = "firstName")
   private String firstName;
+  @EmailField(fieldName = "lastName")
   private String lastName;
+  @EmailField(fieldName = "userName")
   private String userName;
 
   public UserTO() {

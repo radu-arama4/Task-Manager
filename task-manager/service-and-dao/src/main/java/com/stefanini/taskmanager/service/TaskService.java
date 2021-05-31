@@ -3,6 +3,7 @@ package com.stefanini.taskmanager.service;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
+import com.stefanini.taskmanager.util.email.EmailGenerator;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public interface TaskService {
    * @param user user data transfer object
    * @return boolean value - to show if the operation succeeded
    */
+  @EmailGenerator
   boolean addTask(TaskTO task, UserTO user);
 
   /**

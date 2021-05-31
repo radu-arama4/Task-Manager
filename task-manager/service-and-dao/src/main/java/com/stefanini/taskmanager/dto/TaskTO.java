@@ -1,9 +1,14 @@
 package com.stefanini.taskmanager.dto;
 
-public class TaskTO {
+import com.stefanini.taskmanager.util.email.EmailField;
+import com.stefanini.taskmanager.util.email.Email;
 
+@Email(emailMessage = "Task {task title} {task description} has been assigned to {username}")
+public class TaskTO {
   private Long id;
+  @EmailField(fieldName = "taskTitle")
   private final String taskTitle;
+  @EmailField(fieldName = "taskDescription")
   private final String taskDescription;
 
   public TaskTO(String taskTitle, String description) {

@@ -4,6 +4,7 @@ import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.util.email.EmailGenerator;
 
 /**
  * Interface that provides business logic for {@link GroupTO} entity.
@@ -19,6 +20,7 @@ public interface GroupService {
    * @param group group data transfer object
    * @return boolean value - to show if the operation succeeded
    */
+  @EmailGenerator
   boolean createGroup(GroupTO group);
 
   /**

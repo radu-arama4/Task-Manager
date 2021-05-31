@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean createUser(UserTO user) {
+  public UserTO createUser(UserTO user) {
     logger.info("createUser method started");
 
     String firstName = user.getFirstName();
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     if (firstName == null || lastName == null || userName == null) {
       logger.warn("Missing information!");
-      return false;
+      return null;
     } else {
       UserTO createdUser = userDao.createUser(user);
       if (createdUser != null) {
@@ -39,10 +39,10 @@ public class UserServiceImpl implements UserService {
                 + "], [username: "
                 + userName
                 + "] added.");
-        return true;
+        return createdUser;
       }
     }
-    return false;
+    return null;
   }
 
   @Override

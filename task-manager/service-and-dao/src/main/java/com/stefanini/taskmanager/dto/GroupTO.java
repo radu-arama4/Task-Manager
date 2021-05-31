@@ -1,7 +1,12 @@
 package com.stefanini.taskmanager.dto;
 
+import com.stefanini.taskmanager.util.email.EmailField;
+import com.stefanini.taskmanager.util.email.Email;
+
+@Email(emailMessage = "Group with name {groupName} created")
 public class GroupTO {
   private Long id;
+  @EmailField(fieldName = "groupName")
   private final String groupName;
 
   public GroupTO(String groupName) {

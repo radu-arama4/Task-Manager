@@ -39,7 +39,15 @@ public class UserDaoHibernate implements UserDao {
     session.save(user);
     transaction.commit();
 
-    return null;
+    UserTO returnedUser = new UserTO();
+
+    try {
+      BeanUtils.copyProperties(returnedUser, user);
+    } catch (IllegalAccessException | InvocationTargetException e) {
+      logger.error(e);
+    }
+
+    return returnedUser;
   }
 
   @Override

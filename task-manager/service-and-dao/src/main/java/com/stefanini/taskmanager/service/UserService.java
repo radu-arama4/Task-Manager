@@ -2,6 +2,7 @@ package com.stefanini.taskmanager.service;
 
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
+import com.stefanini.taskmanager.util.email.EmailGenerator;
 
 import java.util.List;
 
@@ -19,7 +20,8 @@ public interface UserService {
    * @param user user data transfer object
    * @return boolean value - to show if the operation succeeded
    */
-  boolean createUser(UserTO user);
+  @EmailGenerator
+  UserTO createUser(UserTO user);
 
   /**
    * Method which returns the list of existing users in the database from the {@link UserDao}
