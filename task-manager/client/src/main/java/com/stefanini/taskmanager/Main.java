@@ -40,6 +40,11 @@ public class Main {
     Task task;
     Group group;
 
+    while(true){
+      System.out.println("c");
+      break;
+    }
+
     switch (command) {
       case "-createUser":
         logger.info("New operation: create user");
