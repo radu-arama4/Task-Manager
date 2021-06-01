@@ -9,8 +9,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Class(singleton) which provides methods for extracting properties from config.properties and encapsulates
- * them.
+ * Class(singleton) which provides methods for extracting properties from config.properties and
+ * encapsulates them.
  */
 public class ApplicationProperties {
   private final String user;

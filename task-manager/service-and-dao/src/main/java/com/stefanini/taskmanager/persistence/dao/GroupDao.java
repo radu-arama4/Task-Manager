@@ -26,7 +26,7 @@ public interface GroupDao {
    * @param group - the group in which the user will be added
    * @return boolean value - to show if the operation succeeded
    */
-  boolean addUserToGroup(UserTO user, GroupTO group);
+  UserTO addUserToGroup(UserTO user, GroupTO group);
 
   /**
    * Method for adding a specific task to all the members of a {@link GroupTO}
@@ -35,5 +35,5 @@ public interface GroupDao {
    * @param group - the group to which the task will be added
    * @return boolean value - to show if the operation succeeded
    */
-  boolean addTaskToGroup(TaskTO task, GroupTO group);
+  TaskTO addTaskToGroup(TaskTO task, GroupTO group);
 }

@@ -24,7 +24,7 @@ public class Task {
     TODO solve this
    */
 
-  @ManyToOne(cascade = CascadeType.DETACH)
+  @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
   @JoinTable(
       name = "task_to_user",
       inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},

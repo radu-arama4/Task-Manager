@@ -18,9 +18,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  * Hibernate Dao classes.
  */
 public class HibernateDaoFactory implements DaoFactory {
-  //TODO organize this shit
+  // TODO organize this
   StandardServiceRegistry ssr =
-          new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+      new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
   Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
 
   SessionFactory factory = meta.getSessionFactoryBuilder().build();

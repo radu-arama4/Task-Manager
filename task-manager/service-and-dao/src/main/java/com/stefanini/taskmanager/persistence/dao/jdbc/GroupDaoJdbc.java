@@ -65,7 +65,7 @@ public class GroupDaoJdbc implements GroupDao {
   }
 
   @Override
-  public boolean addUserToGroup(UserTO user, GroupTO group) {
+  public UserTO addUserToGroup(UserTO user, GroupTO group) {
     try {
       String groupName = group.getGroupName();
       String userName = user.getUserName();
@@ -75,15 +75,19 @@ public class GroupDaoJdbc implements GroupDao {
       statement.setString(2, groupName);
       int nrOfUpdates = statement.executeUpdate();
 
-      return nrOfUpdates != 0;
+      if(nrOfUpdates!=0){
+        return user;
+      }else {
+        return null;
+      }
     } catch (SQLException e) {
       logger.error(e);
-      return false;
+      return null;
     }
   }
 
   @Override
-  public boolean addTaskToGroup(TaskTO task, GroupTO group) {
+  public TaskTO addTaskToGroup(TaskTO task, GroupTO group) {
     String taskTitle = task.getTaskTitle();
     String taskDescription = task.getDescription();
     String groupName = group.getGroupName();
@@ -102,7 +106,7 @@ public class GroupDaoJdbc implements GroupDao {
       if (rs.next()) {
         taskId = rs.getLong(1);
       } else {
-        return false;
+        return null;
       }
 
       statement = connection.prepareStatement(INSERT_INTO_TASK_TO_GROUP_QUERY);
@@ -111,10 +115,14 @@ public class GroupDaoJdbc implements GroupDao {
 
       int nrOfUpdates = statement.executeUpdate();
 
-      return nrOfUpdates != 0;
+      if(nrOfUpdates!=0){
+        return task;
+      }else {
+        return null;
+      }
     } catch (SQLException e) {
       logger.error(e);
-      return false;
+      return null;
     }
   }
 }

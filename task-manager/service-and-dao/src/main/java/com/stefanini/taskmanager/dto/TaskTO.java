@@ -7,9 +7,12 @@ import com.stefanini.taskmanager.util.email.Email;
 public class TaskTO {
   private Long id;
   @EmailField(fieldName = "taskTitle")
-  private final String taskTitle;
+  private String taskTitle;
   @EmailField(fieldName = "taskDescription")
-  private final String taskDescription;
+  private String taskDescription;
+
+  public TaskTO() {
+  }
 
   public TaskTO(String taskTitle, String description) {
     this.taskTitle = taskTitle;
@@ -28,6 +31,18 @@ public class TaskTO {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public void setTaskTitle(String taskTitle) {
+    this.taskTitle = taskTitle;
+  }
+
+  public String getTaskDescription() {
+    return taskDescription;
+  }
+
+  public void setTaskDescription(String taskDescription) {
+    this.taskDescription = taskDescription;
   }
 
   public String getTaskTitle() {

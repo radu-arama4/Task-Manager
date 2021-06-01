@@ -21,7 +21,7 @@ public class User {
   @Column(name = "username", unique = true, nullable = false)
   private String userName;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<Task> tasks = new HashSet<>();
 
   @ManyToMany(mappedBy = "users", cascade = CascadeType.DETACH)

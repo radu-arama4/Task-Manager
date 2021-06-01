@@ -7,7 +7,10 @@ import com.stefanini.taskmanager.util.email.Email;
 public class GroupTO {
   private Long id;
   @EmailField(fieldName = "groupName")
-  private final String groupName;
+  private String groupName;
+
+  public GroupTO() {
+  }
 
   public GroupTO(String groupName) {
     this.groupName = groupName;

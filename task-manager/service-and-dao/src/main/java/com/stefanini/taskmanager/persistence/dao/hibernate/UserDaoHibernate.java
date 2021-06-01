@@ -36,8 +36,14 @@ public class UserDaoHibernate implements UserDao {
       logger.error(e);
     }
 
-    session.save(user);
-    transaction.commit();
+    try {
+      session.save(user);
+      transaction.commit();
+    } catch (Exception e) {
+      transaction.rollback();
+      logger.error(e);
+      return null;
+    }
 
     UserTO returnedUser = new UserTO();
 
@@ -46,7 +52,6 @@ public class UserDaoHibernate implements UserDao {
     } catch (IllegalAccessException | InvocationTargetException e) {
       logger.error(e);
     }
-
     return returnedUser;
   }
 
@@ -66,7 +71,6 @@ public class UserDaoHibernate implements UserDao {
         logger.error(e);
       }
     }
-
     return returnedUsers;
   }
 }

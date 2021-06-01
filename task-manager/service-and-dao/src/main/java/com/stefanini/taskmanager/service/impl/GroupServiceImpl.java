@@ -42,7 +42,7 @@ public class GroupServiceImpl implements GroupService {
     String userName = user.getUserName();
 
     if (groupName != null || userName != null) {
-      if (groupDao.addUserToGroup(user, group)) {
+      if (groupDao.addUserToGroup(user, group)!=null) {
         logger.info("User " + userName + " added to group " + groupName);
         return true;
       }
@@ -63,7 +63,7 @@ public class GroupServiceImpl implements GroupService {
     if (groupName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Information missing!");
     } else {
-      if (groupDao.addTaskToGroup(task, group)) {
+      if (groupDao.addTaskToGroup(task, group)!=null) {
         logger.info(
             "Task with [title: "
                 + taskTitle
