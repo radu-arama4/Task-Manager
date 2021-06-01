@@ -46,11 +46,10 @@ public class EmailUtil implements InvocationHandler {
                 (String) field.get(object));
       } catch (IllegalAccessException e) {
         field.setAccessible(false);
-        e.printStackTrace();
+        logger.error(e);
       }
       field.setAccessible(false);
     }
-
     logger.info("Sent email: " + message);
   }
 
@@ -66,9 +65,8 @@ public class EmailUtil implements InvocationHandler {
   public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
     Object result;
     try {
-      result = m.invoke(obj, args);
-
       logger.info("Entered proxy");
+      result = m.invoke(obj, args);
 
       if (m.isAnnotationPresent(EmailGenerator.class)) {
         if (result.getClass().isAnnotationPresent(Email.class)) {
@@ -79,7 +77,7 @@ public class EmailUtil implements InvocationHandler {
     } catch (InvocationTargetException e) {
       throw e.getTargetException();
     } catch (Exception e) {
-      throw new RuntimeException("unexpected invocation exception: " + e.getMessage());
+      throw new RuntimeException("Unexpected invocation exception: " + e.getMessage());
     }
     return result;
   }
