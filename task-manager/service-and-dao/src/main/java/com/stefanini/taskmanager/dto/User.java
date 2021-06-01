@@ -3,9 +3,16 @@ package com.stefanini.taskmanager.dto;
 public class User {
 
   private Long id;
-  private final String firstName;
-  private final String lastName;
-  private final String userName;
+  private String firstName;
+  private String lastName;
+  private String userName;
+
+  public User() {
+  }
+
+  public User(String userName) {
+    this.userName = userName;
+  }
 
   public User(String firstName, String lastName, String userName) {
     this.firstName = firstName;

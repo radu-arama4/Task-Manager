@@ -21,4 +21,15 @@ public class OperationExecutor {
     textFileOperations.forEach(Operation::execute);
     textFileOperations.clear();
   }
+
+  public void printOperations() {
+    if (textFileOperations.size() == 0) {
+      System.out.println("Empty!");
+      return;
+    }
+    textFileOperations.forEach(
+        operation -> {
+          System.out.println(operation.getClass().getSimpleName());
+        });
+  }
 }
