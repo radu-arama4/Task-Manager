@@ -1,15 +1,15 @@
 package com.stefanini.taskmanager.util.email;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class EmailUtil implements InvocationHandler {
-  private static final org.apache.logging.log4j.Logger logger =
-      LogManager.getLogger(EmailUtil.class);
+public class EmailProxy implements InvocationHandler {
+  private static final Logger logger = LogManager.getLogger(EmailProxy.class);
   private final Object obj;
 
   private boolean isAnnotated(Object object) {
@@ -29,11 +29,12 @@ public class EmailUtil implements InvocationHandler {
       return;
     }
 
-    String message = object.getClass().getAnnotation(Email.class).emailMessage();
-    Field[] fields = object.getClass().getDeclaredFields();
+    Class<?> objectClass = object.getClass();
+
+    String message = objectClass.getAnnotation(Email.class).emailMessage();
+    Field[] fields = objectClass.getDeclaredFields();
 
     // TODO optimize with streams
-
     for (Field field : fields) {
       if (!field.isAnnotationPresent(EmailField.class)) {
         continue;
@@ -45,20 +46,20 @@ public class EmailUtil implements InvocationHandler {
                 wrap(field.getAnnotation(EmailField.class).fieldName()),
                 (String) field.get(object));
       } catch (IllegalAccessException e) {
-        field.setAccessible(false);
         logger.error(e);
+      } finally {
+        field.setAccessible(false);
       }
-      field.setAccessible(false);
     }
     logger.info("Sent email: " + message);
   }
 
   public static Object newInstance(Object obj) {
     return java.lang.reflect.Proxy.newProxyInstance(
-        obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), new EmailUtil(obj));
+        obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), new EmailProxy(obj));
   }
 
-  private EmailUtil(Object obj) {
+  private EmailProxy(Object obj) {
     this.obj = obj;
   }
 

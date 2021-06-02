@@ -10,7 +10,7 @@ import com.stefanini.taskmanager.service.impl.GroupServiceImpl;
 import com.stefanini.taskmanager.service.impl.TaskServiceImpl;
 import com.stefanini.taskmanager.service.impl.UserServiceImpl;
 import com.stefanini.taskmanager.util.ApplicationProperties;
-import com.stefanini.taskmanager.util.email.EmailUtil;
+import com.stefanini.taskmanager.util.email.EmailProxy;
 
 public class ServiceFactoryImpl2 implements ServiceFactory {
   private final ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
@@ -19,16 +19,16 @@ public class ServiceFactoryImpl2 implements ServiceFactory {
 
   @Override
   public UserService getUserService() {
-    return (UserService) EmailUtil.newInstance(new UserServiceImpl(daoFactory));
+    return (UserService) EmailProxy.newInstance(new UserServiceImpl(daoFactory));
   }
 
   @Override
   public TaskService getTaskService() {
-    return (TaskService) EmailUtil.newInstance(new TaskServiceImpl(daoFactory));
+    return (TaskService) EmailProxy.newInstance(new TaskServiceImpl(daoFactory));
   }
 
   @Override
   public GroupService getGroupService() {
-    return (GroupService) EmailUtil.newInstance(new GroupServiceImpl(daoFactory));
+    return (GroupService) EmailProxy.newInstance(new GroupServiceImpl(daoFactory));
   }
 }

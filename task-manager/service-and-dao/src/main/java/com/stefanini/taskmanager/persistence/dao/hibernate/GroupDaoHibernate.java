@@ -26,7 +26,6 @@ public class GroupDaoHibernate implements GroupDao {
   public GroupDaoHibernate(Session session) {
     this.session = session;
   }
-
   @Override
   public GroupTO createGroup(GroupTO group) {
     Group newGroup = new Group();
@@ -48,7 +47,6 @@ public class GroupDaoHibernate implements GroupDao {
     }
 
     GroupTO returnedGroup = new GroupTO();
-
     try {
       BeanUtils.copyProperties(newGroup, returnedGroup);
     } catch (InvocationTargetException | IllegalAccessException e) {
@@ -67,20 +65,14 @@ public class GroupDaoHibernate implements GroupDao {
             session
                 .createQuery(GET_USER_BY_USERNAME)
                 .setParameter("username", user.getUserName())
-                .list()
-                .get(0);
+                .getSingleResult();
 
     Group selectedGroup =
         (Group)
             session
                 .createQuery(GET_GROUP_BY_GROUP_NAME)
                 .setParameter("groupName", group.getGroupName())
-                .list()
-                .get(0);
-
-    if (selectedGroup.getUsers().contains(selectedUser)) {
-      return null;
-    }
+                .getSingleResult();
 
     try {
       selectedGroup.addUser(selectedUser);
@@ -115,7 +107,6 @@ public class GroupDaoHibernate implements GroupDao {
 
     try {
       task.setGroup(selectedGroup);
-      session.update(selectedGroup);
       session.save(task);
       transaction.commit();
     } catch (Exception e) {

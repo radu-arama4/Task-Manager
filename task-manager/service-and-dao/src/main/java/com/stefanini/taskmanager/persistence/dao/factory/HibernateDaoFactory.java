@@ -6,25 +6,15 @@ import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.dao.hibernate.GroupDaoHibernate;
 import com.stefanini.taskmanager.persistence.dao.hibernate.TaskDaoHibernate;
 import com.stefanini.taskmanager.persistence.dao.hibernate.UserDaoHibernate;
+import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 /**
  * Implementation of {@link DaoFactory} for providing methods for producing single instances of
  * Hibernate Dao classes.
  */
 public class HibernateDaoFactory implements DaoFactory {
-  // TODO organize this
-  StandardServiceRegistry ssr =
-      new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-  Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-
-  SessionFactory factory = meta.getSessionFactoryBuilder().build();
-  Session session = factory.openSession();
+  Session session = DataBaseUtil.connectToHibernate();
 
   public UserDao createUserDao() {
     return new UserDaoHibernate(session);

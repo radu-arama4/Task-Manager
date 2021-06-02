@@ -56,7 +56,6 @@ public class TaskTO {
   @Override
   public boolean equals(Object obj) {
     TaskTO obj2 = (TaskTO) obj;
-
     return obj2.getDescription().equals(this.taskDescription)
         && obj2.getTaskTitle().equals(this.taskTitle);
   }

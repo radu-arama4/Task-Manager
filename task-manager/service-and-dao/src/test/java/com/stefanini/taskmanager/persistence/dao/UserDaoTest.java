@@ -26,8 +26,6 @@ public class UserDaoTest {
     assertNull(returnedTestUser);
   }
 
-  // TODO comment
-
   @Test
   public void testGetUsers() {
     UserTO testUser = new UserTO("Test", "Test", "dummyasdd");

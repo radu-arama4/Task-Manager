@@ -7,11 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class UserParserTest {
-
-  UserParser userParser = new UserParser();
-
-  //TODO fix static
-
   @Test
   public void testSuccessful() {
     String firstName = "Test1";
@@ -26,7 +21,7 @@ public class UserParserTest {
           "-un='" + userName + "'"
         };
 
-    UserTO user = userParser.parseUser(arguments);
+    UserTO user = UserParser.parseUser(arguments);
 
     assertEquals(firstName, user.getFirstName());
     assertEquals(lastName, user.getLastName());
@@ -41,7 +36,7 @@ public class UserParserTest {
     String[] arguments =
         new String[] {"-createUser", "-fn='" + firstName + "'", "-ln='" + lastName + "'"};
 
-    UserTO user = userParser.parseUser(arguments);
+    UserTO user = UserParser.parseUser(arguments);
 
     assertEquals(firstName, user.getFirstName());
     assertEquals(lastName, user.getLastName());

@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Email {
-    String emailMessage() default "Email sent!";
+    String emailMessage() default "Default body.";
 }

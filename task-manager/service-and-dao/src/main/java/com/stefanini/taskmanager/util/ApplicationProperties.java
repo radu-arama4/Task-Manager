@@ -4,6 +4,8 @@ import com.stefanini.taskmanager.persistence.dao.factory.DaoType;
 import com.stefanini.taskmanager.service.factory.ServiceType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.cfg.Configuration;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -18,6 +20,9 @@ public class ApplicationProperties {
   private final String url;
   private final String daoType;
   private final String serviceType;
+  private final String driverClass;
+  private final String dialect;
+  private final String hbm2ddl;
 
   private static final Logger logger = LogManager.getLogger(ApplicationProperties.class);
 
@@ -26,9 +31,13 @@ public class ApplicationProperties {
   private ApplicationProperties() {
     Properties properties = extractProperties();
 
-    user = properties.getProperty("user");
-    password = properties.getProperty("password");
-    url = properties.getProperty("url");
+    user = properties.getProperty("connection.username");
+    password = properties.getProperty("connection.password");
+    url = properties.getProperty("connection.url");
+    driverClass = properties.getProperty("connection.driver_class");
+    dialect = properties.getProperty("dialect");
+    hbm2ddl = properties.getProperty("hbm2ddl.auto");
+
     daoType = properties.getProperty("dao_type");
     serviceType = properties.getProperty("service_type");
 
@@ -40,6 +49,18 @@ public class ApplicationProperties {
       instance = new ApplicationProperties();
     }
     return instance;
+  }
+
+  public Configuration setHibernateProperties() {
+    Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
+    configuration
+        .setProperty("hibernate.connection.url", url)
+        .setProperty("hibernate.connection.username", user)
+        .setProperty("hibernate.connection.password", password)
+        .setProperty("hibernate.hbm2ddl.auto", hbm2ddl)
+        .setProperty("hibernate.dialect", dialect)
+        .setProperty("hibernate.connection.driver_class", driverClass);
+    return configuration;
   }
 
   private Properties extractProperties() {

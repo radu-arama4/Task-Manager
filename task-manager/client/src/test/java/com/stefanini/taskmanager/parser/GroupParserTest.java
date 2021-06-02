@@ -6,14 +6,11 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class GroupParserTest {
-
-  GroupParser groupParser = new GroupParser();
-
   @Test
   public void testSuccessful() {
     String groupName = "Test";
     String[] arguments = new String[] {"-gn='" + groupName + "'"};
-    GroupTO group = groupParser.parseGroup(arguments);
+    GroupTO group = GroupParser.parseGroup(arguments);
 
     assertEquals(groupName, group.getGroupName());
   }
@@ -21,7 +18,7 @@ public class GroupParserTest {
   @Test
   public void testTaskIncomplete() {
     String[] arguments = new String[] {""};
-    GroupTO group = groupParser.parseGroup(arguments);
+    GroupTO group = GroupParser.parseGroup(arguments);
 
     assertNull(group.getGroupName());
   }

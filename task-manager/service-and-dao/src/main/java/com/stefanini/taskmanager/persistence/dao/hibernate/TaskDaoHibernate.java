@@ -13,15 +13,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TaskDaoHibernate implements TaskDao {
   private final Session session;
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
 
   private static final String GET_USER_BY_USERNAME = "from User where username =: username";
+  private static final String GET_TASKS_BY_USER_USERNAME =
+      "from Task t where t.user.userName =: username";
 
   public TaskDaoHibernate(Session session) {
     this.session = session;
@@ -37,8 +38,7 @@ public class TaskDaoHibernate implements TaskDao {
             session
                 .createQuery(GET_USER_BY_USERNAME)
                 .setParameter("username", user.getUserName())
-                .list()
-                .get(0);
+                .getSingleResult();
 
     try {
       BeanUtils.copyProperties(task, newTask);
@@ -48,7 +48,6 @@ public class TaskDaoHibernate implements TaskDao {
 
     try {
       task.setUser(selectedUser);
-      session.update(selectedUser);
       session.save(task);
       transaction.commit();
     } catch (Exception e) {
@@ -57,6 +56,10 @@ public class TaskDaoHibernate implements TaskDao {
       return null;
     }
 
+    return toTaskTO(task);
+  }
+
+  private TaskTO toTaskTO(Task task) {
     TaskTO returnedTask = new TaskTO();
 
     try {
@@ -64,34 +67,18 @@ public class TaskDaoHibernate implements TaskDao {
     } catch (InvocationTargetException | IllegalAccessException e) {
       logger.error(e);
     }
-
     return returnedTask;
   }
 
   @Override
   public List<TaskTO> getTasks(UserTO selectedUser) {
-    User user =
-        (User)
+    List<Task> tasks =
+        (List<Task>)
             session
-                .createQuery(GET_USER_BY_USERNAME)
+                .createQuery(GET_TASKS_BY_USER_USERNAME)
                 .setParameter("username", selectedUser.getUserName())
-                .list()
-                .get(0);
+                .list();
 
-    Set<Task> userTasks = user.getTasks();
-    List<TaskTO> returnedTasks = new LinkedList<>();
-
-    userTasks.forEach(
-        task -> {
-          TaskTO task1 = new TaskTO();
-          try {
-            BeanUtils.copyProperties(task1, task);
-            returnedTasks.add(task1);
-          } catch (InvocationTargetException | IllegalAccessException e) {
-            logger.error(e);
-          }
-        });
-
-    return returnedTasks;
+    return tasks.stream().map(this::toTaskTO).collect(Collectors.toList());
   }
 }

@@ -21,7 +21,9 @@ public class Group {
   @JoinTable(
       name = "user_to_group",
       joinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "group_id")},
-      inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")})
+      inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+      uniqueConstraints = @UniqueConstraint(columnNames = {"group_id", "user_id"})
+  )
   private Set<User> users = new HashSet<>();
 
   @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)

@@ -3,6 +3,8 @@ package com.stefanini.taskmanager.persistence.util;
 import com.stefanini.taskmanager.util.ApplicationProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.cfg.Configuration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,6 +34,11 @@ public class DataBaseUtil {
       logger.error(e);
       return null;
     }
+  }
+
+  public static Session connectToHibernate() {
+    Configuration configuration = ApplicationProperties.getInstance().setHibernateProperties();
+    return configuration.buildSessionFactory().openSession();
   }
 
   // Method for disconnecting from the database

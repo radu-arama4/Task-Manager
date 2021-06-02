@@ -12,8 +12,8 @@ import org.hibernate.Transaction;
 
 import javax.persistence.Query;
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDaoHibernate implements UserDao {
   private final Session session;
@@ -45,8 +45,11 @@ public class UserDaoHibernate implements UserDao {
       return null;
     }
 
-    UserTO returnedUser = new UserTO();
+    return toUserTO(user);
+  }
 
+  private UserTO toUserTO(User user) {
+    UserTO returnedUser = new UserTO();
     try {
       BeanUtils.copyProperties(returnedUser, user);
     } catch (IllegalAccessException | InvocationTargetException e) {
@@ -57,20 +60,9 @@ public class UserDaoHibernate implements UserDao {
 
   @Override
   public List<UserTO> getUsers() {
-    List<UserTO> returnedUsers = new LinkedList<>();
-
     Query query = session.createQuery(GET_USERS);
-    List<User> users = query.getResultList();
+    List<User> users = (List<User>) query.getResultList();
 
-    for (User value : users) {
-      try {
-        UserTO user = new UserTO();
-        BeanUtils.copyProperties(user, value);
-        returnedUsers.add(user);
-      } catch (IllegalAccessException | InvocationTargetException e) {
-        logger.error(e);
-      }
-    }
-    return returnedUsers;
+    return users.stream().map(this::toUserTO).collect(Collectors.toList());
   }
 }

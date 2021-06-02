@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface EmailField {
-    public String fieldName() default "";
+    String fieldName() default "";
 }
