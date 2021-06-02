@@ -16,6 +16,10 @@ public class UserTO {
   public UserTO() {
   }
 
+  public UserTO(String userName) {
+    this.userName = userName;
+  }
+
   public UserTO(String firstName, String lastName, String userName) {
     this.firstName = firstName;
     this.lastName = lastName;
