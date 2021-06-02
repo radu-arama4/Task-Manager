@@ -15,7 +15,8 @@ public enum Messages {
           + "5 - Create group\n"
           + "6 - Add user to group\n"
           + "7 - Add task to group\n"
-          + "8 - Go back"),
+          + "8 - Add user with tasks \n"
+          + "9 - Go back"),
   NEW_USER("Introduce the first name, the last name and the username:"),
   ADD_TASK("Introduce the username, the task title and the task description:"),
   SHOW_TASKS_OF_USER("Introduce the username:"),

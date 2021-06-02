@@ -14,7 +14,8 @@ import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.stefanini.taskmanager.Messages.*;
@@ -33,9 +34,6 @@ public class Main {
     OperationExecutor operationExecutor = new OperationExecutor();
     logger.info("Operation executor created");
 
-    String command = args[0];
-    String[] flags = Arrays.copyOfRange(args, 1, args.length);
-
     UserTO user;
     TaskTO task;
     GroupTO group;
@@ -45,7 +43,6 @@ public class Main {
     boolean mainShouldContinue = true;
 
     // TODO organize
-
     while (mainShouldContinue) {
       System.out.println(MAIN.message);
       int choice1 = scanner.nextInt();
@@ -67,13 +64,13 @@ public class Main {
                     user = new UserTO(firstName, lastName, username);
                     System.out.println("wai");
                     operationExecutor.addOperation(new CreateUserOperation(user));
-                    logger.info("New operation: create user"); //TODO print
+                    System.out.println("New operation: create user");
                     break;
                   }
                 case 2:
                   {
                     operationExecutor.addOperation(new ShowAllUsersOperation());
-                    logger.info("New operation: show all users");
+                    System.out.println("New operation: show all users");
                     break;
                   }
                 case 3:
@@ -86,7 +83,7 @@ public class Main {
                     task = new TaskTO(taskTitle, taskDescription);
                     user = new UserTO(username);
                     operationExecutor.addOperation(new AddTaskOperation(task, user));
-                    logger.info("New operation: add task to user");
+                    System.out.println("New operation: add task to user");
                     break;
                   }
                 case 4:
@@ -96,7 +93,7 @@ public class Main {
                     scanner.nextLine();
                     user = new UserTO(userName);
                     operationExecutor.addOperation(new ShowTasksOperation(user));
-                    logger.info("New operation: show tasks of given user");
+                    System.out.println("New operation: show tasks of given user");
                     break;
                   }
                 case 5:
@@ -106,7 +103,7 @@ public class Main {
                     scanner.nextLine();
                     group = new GroupTO(groupName);
                     operationExecutor.addOperation(new CreateGroupOperation(group));
-                    logger.info("New operation: create group");
+                    System.out.println("New operation: create group");
                     break;
                   }
                 case 6:
@@ -118,7 +115,7 @@ public class Main {
                     user = new UserTO(userName);
                     group = new GroupTO(groupName);
                     operationExecutor.addOperation(new AddUserToGroupOperation(group, user));
-                    logger.info("New operation: add user to group");
+                    System.out.println("New operation: add user to group");
                     break;
                   }
                 case 7:
@@ -131,10 +128,25 @@ public class Main {
                     task = new TaskTO(taskTitle, taskDescription);
                     group = new GroupTO(groupName);
                     operationExecutor.addOperation(new AddTaskToGroupOperation(group, task));
-                    logger.info("New operation: add task to group");
+                    System.out.println("New operation: add task to group");
                     break;
                   }
                 case 8:
+                  {
+                    System.out.println(NEW_USER.message);
+                    String firstName = scanner.nextLine();
+                    String lastName = scanner.nextLine();
+                    String username = scanner.nextLine();
+                    user = new UserTO(firstName, lastName, username);
+                    List<TaskTO> tasks = new LinkedList<>();
+                    while (scanner.hasNext()) {
+                      System.out.println(ADD_TASK.message);
+                      String taskTitle = scanner.nextLine();
+                      String taskDescription = scanner.nextLine();
+                      tasks.add(new TaskTO(taskTitle, taskDescription));
+                    }
+                  }
+                case 9:
                   {
                     operationsShouldContinue = false;
                     break;
@@ -166,8 +178,8 @@ public class Main {
       System.out.println("-------------------------------");
     }
 
-    //TODO move it somewhere else
-    //DataBaseUtil.disconnectFromDb();
+    // TODO move it somewhere else
+    // DataBaseUtil.disconnectFromDb();
 
     logger.info("Program finished");
   }
