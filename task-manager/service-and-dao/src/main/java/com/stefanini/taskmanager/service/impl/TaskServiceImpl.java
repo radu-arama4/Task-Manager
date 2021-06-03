@@ -47,6 +47,23 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
+  public boolean addMultipleTasks(List<TaskTO> tasks, UserTO user) {
+    String userName = user.getUserName();
+
+    if (tasks.size() == 0 || userName == null) {
+      logger.warn("Missing information!");
+    } else {
+      if (taskDao.addMultipleTasks(tasks, user) != null) {
+        logger.info(tasks.size() + " tasks added to user: " + userName);
+        return true;
+      } else {
+        logger.warn("No user with such username: " + userName);
+      }
+    }
+    return false;
+  }
+
+  @Override
   public List<TaskTO> getTasksOfUser(UserTO user) {
     if (user.getUserName() == null) {
       logger.warn("Missing information!");

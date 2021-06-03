@@ -34,7 +34,6 @@ public class EmailProxy implements InvocationHandler {
     String message = objectClass.getAnnotation(Email.class).emailMessage();
     Field[] fields = objectClass.getDeclaredFields();
 
-    // TODO optimize with streams
     for (Field field : fields) {
       if (!field.isAnnotationPresent(EmailField.class)) {
         continue;
@@ -45,6 +44,7 @@ public class EmailProxy implements InvocationHandler {
             message.replace(
                 wrap(field.getAnnotation(EmailField.class).fieldName()),
                 (String) field.get(object));
+        //String.valueOf()
       } catch (IllegalAccessException e) {
         logger.error(e);
       } finally {
@@ -54,6 +54,7 @@ public class EmailProxy implements InvocationHandler {
     logger.info("Sent email: " + message);
   }
 
+  //clean this
   public static Object newInstance(Object obj) {
     return java.lang.reflect.Proxy.newProxyInstance(
         obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), new EmailProxy(obj));

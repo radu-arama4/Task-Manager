@@ -77,6 +77,11 @@ public class TaskDaoJdbc implements TaskDao {
   }
 
   @Override
+  public List<TaskTO> addMultipleTasks(List<TaskTO> tasks, UserTO user) {
+    return null;
+  }
+
+  @Override
   public List<TaskTO> getTasks(UserTO selectedUser) {
     String userName = selectedUser.getUserName();
     List<TaskTO> tasks = new ArrayList<>();

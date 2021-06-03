@@ -2,13 +2,11 @@ package com.stefanini.taskmanager.persistence.dao.hibernate;
 
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
-import com.stefanini.taskmanager.persistence.dao.jdbc.GroupDaoJdbc;
 import com.stefanini.taskmanager.persistence.entity.User;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import javax.persistence.Query;
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class UserDaoHibernate implements UserDao {
   private final Session session;
-  private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
+  private static final Logger logger = LogManager.getLogger(UserDaoHibernate.class);
 
   private static final String GET_USERS = "from User";
 
@@ -28,7 +26,7 @@ public class UserDaoHibernate implements UserDao {
   @Override
   public UserTO createUser(UserTO newUser) {
     User user = new User();
-    Transaction transaction = session.beginTransaction();
+    //Transaction transaction = session.beginTransaction();
 
     try {
       BeanUtils.copyProperties(user, newUser);
@@ -38,9 +36,10 @@ public class UserDaoHibernate implements UserDao {
 
     try {
       session.save(user);
-      transaction.commit();
+      session.flush();
+      //transaction.commit();
     } catch (Exception e) {
-      transaction.rollback();
+      //transaction.rollback();
       logger.error(e);
       return null;
     }

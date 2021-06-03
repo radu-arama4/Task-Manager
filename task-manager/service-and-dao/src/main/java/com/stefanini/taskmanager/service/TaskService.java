@@ -4,6 +4,7 @@ import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.util.email.EmailGenerator;
+import com.stefanini.taskmanager.util.transaction.Transactional;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  *
  * @author rarama
  */
+@Transactional
 public interface TaskService {
 
   /**
@@ -25,9 +27,12 @@ public interface TaskService {
   @EmailGenerator
   boolean addTask(TaskTO task, UserTO user);
 
+  // TODO documentation
+  boolean addMultipleTasks(List<TaskTO> tasks, UserTO user);
+
   /**
-   * Method which receives an {@link UserTO} DTO and sends it to the {@link TaskDao} in order to get a
-   * list of {@link TaskTO} entities possessed by the {@link UserTO} with the received username.
+   * Method which receives an {@link UserTO} DTO and sends it to the {@link TaskDao} in order to get
+   * a list of {@link TaskTO} entities possessed by the {@link UserTO} with the received username.
    *
    * @param user user data transfer object
    * @return list of users - the existing users in the database

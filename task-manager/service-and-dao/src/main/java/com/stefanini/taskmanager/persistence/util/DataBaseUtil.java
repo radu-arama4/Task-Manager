@@ -14,6 +14,7 @@ import java.sql.SQLException;
  * Class which provides methods for connecting(also disconnecting) to a database depending on the
  * properties extracted from the config.properties.
  */
+//TODO another database util
 public class DataBaseUtil {
   static ApplicationProperties props = ApplicationProperties.getInstance();
   private static final Logger logger = LogManager.getLogger(DataBaseUtil.class);
@@ -23,10 +24,12 @@ public class DataBaseUtil {
   private static final String password = props.getPassword();
 
   private static Connection connection = null;
+  private static Session session = null;
 
   // Method for connecting to the database
   public static Connection connectToDb() {
     try {
+      //TODO singletone
       connection = DriverManager.getConnection(url, user, password);
       logger.info("Connected to DataBase " + url);
       return connection;
@@ -37,8 +40,11 @@ public class DataBaseUtil {
   }
 
   public static Session connectToHibernate() {
-    Configuration configuration = ApplicationProperties.getInstance().setHibernateProperties();
-    return configuration.buildSessionFactory().openSession();
+    if(session==null){
+      Configuration configuration = ApplicationProperties.getInstance().setHibernateProperties();
+      session = configuration.buildSessionFactory().openSession();
+    }
+    return session;
   }
 
   // Method for disconnecting from the database

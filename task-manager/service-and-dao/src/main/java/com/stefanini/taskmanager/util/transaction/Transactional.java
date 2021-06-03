@@ -1,13 +1,10 @@
-package com.stefanini.taskmanager.util.email;
+package com.stefanini.taskmanager.util.transaction;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-// TODO documentation
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Email {
-  String emailMessage() default "Default body.";
-}
+public @interface Transactional {}

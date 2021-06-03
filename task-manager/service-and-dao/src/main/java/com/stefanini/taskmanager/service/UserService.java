@@ -3,6 +3,7 @@ package com.stefanini.taskmanager.service;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.util.email.EmailGenerator;
+import com.stefanini.taskmanager.util.transaction.Transactional;
 
 import java.util.List;
 
@@ -11,6 +12,9 @@ import java.util.List;
  *
  * @author rarama
  */
+// transactional annotation
+// service singleton
+@Transactional
 public interface UserService {
 
   /**

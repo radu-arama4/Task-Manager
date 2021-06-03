@@ -1,5 +1,6 @@
 package com.stefanini.taskmanager.service.factory;
 
+import com.stefanini.taskmanager.service.ExtendedService;
 import com.stefanini.taskmanager.service.GroupService;
 import com.stefanini.taskmanager.service.TaskService;
 import com.stefanini.taskmanager.service.UserService;
@@ -14,4 +15,6 @@ public interface ServiceFactory {
   TaskService getTaskService();
 
   GroupService getGroupService();
+
+  ExtendedService getExtendedService();
 }

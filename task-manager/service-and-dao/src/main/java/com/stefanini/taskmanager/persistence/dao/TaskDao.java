@@ -21,6 +21,9 @@ public interface TaskDao {
    */
   TaskTO addTask(TaskTO task, UserTO user);
 
+  //TODO documentation
+  List<TaskTO> addMultipleTasks(List<TaskTO> tasks, UserTO user);
+
   /**
    * Method used for extracting all existing Task entities from the database in form of list
    *
