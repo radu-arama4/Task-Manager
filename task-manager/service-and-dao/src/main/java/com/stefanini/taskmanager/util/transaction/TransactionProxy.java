@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -26,13 +27,18 @@ public class TransactionProxy implements InvocationHandler {
   public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
     Object result = null;
     try {
-      Class<?> clazz = m.getClass();
-      if(clazz.isAnnotationPresent(Transactional.class)){
+      Class<?> clazz = m.getDeclaringClass();
+      if (clazz.isAnnotationPresent(Transactional.class)) {
+        //TODO new level of abstraction
         Session session = DataBaseUtil.connectToHibernate();
         Transaction transaction = session.beginTransaction();
         logger.info("Entered proxy");
         result = m.invoke(obj, args);
-        transaction.commit();
+        if(transaction.getStatus().equals(TransactionStatus.ACTIVE)){
+          transaction.commit();
+        }
+      }else {
+        result = m.invoke(obj, args);
       }
     } catch (InvocationTargetException e) {
       throw e.getTargetException();

@@ -131,13 +131,19 @@ public class Main {
                     System.out.println(NEW_USER.message);
                     String firstName = scanner.next();
                     String lastName = scanner.next();
-                    String username = scanner.nextLine();
+                    String username = scanner.next();
                     user = new UserTO(firstName, lastName, username);
                     List<TaskTO> tasks = new LinkedList<>();
-                    while (scanner.hasNext()) {
-                      System.out.println(ADD_TASK.message);
-                      String taskTitle = scanner.next();
-                      String taskDescription = scanner.nextLine();
+                    String taskTitle = ".";
+                    String taskDescription = ".";
+                    //!taskTitle.isEmpty() || !taskDescription.isEmpty()
+                    while (true) {
+                      System.out.println(ADD_TASK_WITHOUT_USER.message);
+                      taskTitle = scanner.next();
+                      taskDescription = scanner.next();
+                      if(taskTitle.equals("-") || taskDescription.equals("-")){
+                        break;
+                      }
                       tasks.add(new TaskTO(taskTitle, taskDescription));
                     }
                     operationExecutor.addOperation(new CreateUserWithTasks(user, tasks));

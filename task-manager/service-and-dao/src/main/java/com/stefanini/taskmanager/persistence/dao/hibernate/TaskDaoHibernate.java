@@ -60,21 +60,16 @@ public class TaskDaoHibernate implements TaskDao {
   }
 
   @Override
-  public List<TaskTO> addMultipleTasks(List<TaskTO> tasks, UserTO user) {
-    User selectedUser =
-        (User)
-            session
-                .createQuery(GET_USER_BY_USERNAME)
-                .setParameter("username", user.getUserName())
-                .getSingleResult();
-
+  public List<TaskTO> addMultipleTasks(List<TaskTO> tasks, User user) {
     tasks.forEach(
         taskTO -> {
           Task task = new Task();
           try {
-            BeanUtils.copyProperties(taskTO, task);
-            selectedUser.addTask(task);
+            BeanUtils.copyProperties(task, taskTO);
+            task.setUser(user);
+            session.save(task);
           } catch (InvocationTargetException | IllegalAccessException e) {
+            session.getTransaction().rollback();
             logger.error(e);
           }
         });

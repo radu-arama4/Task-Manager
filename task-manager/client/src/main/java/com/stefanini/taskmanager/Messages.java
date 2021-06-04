@@ -19,6 +19,7 @@ public enum Messages {
           + "9 - Go back"),
   NEW_USER("Introduce the first name, the last name and the username:"),
   ADD_TASK("Introduce the username, the task title and the task description:"),
+  ADD_TASK_WITHOUT_USER("Introduce the task title and the task description:"),
   SHOW_TASKS_OF_USER("Introduce the username:"),
   CREATE_GROUP("Introduce the group name:"),
   ADD_USER_TO_GROUP("Introduce the group name and the username:"),

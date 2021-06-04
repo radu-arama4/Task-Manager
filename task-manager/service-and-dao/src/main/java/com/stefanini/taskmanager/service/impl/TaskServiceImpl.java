@@ -4,6 +4,7 @@ import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
+import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.TaskService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +48,7 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public boolean addMultipleTasks(List<TaskTO> tasks, UserTO user) {
+  public boolean addMultipleTasks(List<TaskTO> tasks, User user) {
     String userName = user.getUserName();
 
     if (tasks.size() == 0 || userName == null) {

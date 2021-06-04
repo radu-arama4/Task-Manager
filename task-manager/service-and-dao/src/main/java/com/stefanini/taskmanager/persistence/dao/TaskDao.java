@@ -2,6 +2,7 @@ package com.stefanini.taskmanager.persistence.dao;
 
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
+import com.stefanini.taskmanager.persistence.entity.User;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface TaskDao {
   TaskTO addTask(TaskTO task, UserTO user);
 
   //TODO documentation
-  List<TaskTO> addMultipleTasks(List<TaskTO> tasks, UserTO user);
+  List<TaskTO> addMultipleTasks(List<TaskTO> tasks, User user);
 
   /**
    * Method used for extracting all existing Task entities from the database in form of list

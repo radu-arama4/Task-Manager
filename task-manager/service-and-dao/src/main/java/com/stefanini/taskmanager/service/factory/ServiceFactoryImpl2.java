@@ -15,8 +15,8 @@ import com.stefanini.taskmanager.util.ApplicationProperties;
 import com.stefanini.taskmanager.util.email.EmailProxy;
 import com.stefanini.taskmanager.util.transaction.TransactionProxy;
 
-//TODO rename
-//TODO read decorator design pattern
+// TODO rename
+// TODO read decorator design pattern
 public class ServiceFactoryImpl2 implements ServiceFactory {
   private final ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
   private final DaoType daoType = applicationProperties.getDaoType();
@@ -24,7 +24,8 @@ public class ServiceFactoryImpl2 implements ServiceFactory {
 
   @Override
   public UserService getUserService() {
-    return (UserService) TransactionProxy.newInstance(EmailProxy.newInstance(new UserServiceImpl(daoFactory)));
+    return (UserService)
+        TransactionProxy.newInstance(EmailProxy.newInstance(new UserServiceImpl(daoFactory)));
   }
 
   @Override
@@ -39,6 +40,6 @@ public class ServiceFactoryImpl2 implements ServiceFactory {
 
   @Override
   public ExtendedService getExtendedService() {
-    return (ExtendedService) TransactionProxy.newInstance(new ExtendedServiceImpl());
+    return (ExtendedService) TransactionProxy.newInstance(new ExtendedServiceImpl(daoFactory));
   }
 }

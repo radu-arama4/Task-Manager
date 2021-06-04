@@ -24,7 +24,7 @@ public class UserDaoHibernate implements UserDao {
   }
 
   @Override
-  public UserTO createUser(UserTO newUser) {
+  public User createUser(UserTO newUser) {
     User user = new User();
     //Transaction transaction = session.beginTransaction();
 
@@ -36,7 +36,7 @@ public class UserDaoHibernate implements UserDao {
 
     try {
       session.save(user);
-      session.flush();
+      //session.flush();
       //transaction.commit();
     } catch (Exception e) {
       //transaction.rollback();
@@ -44,7 +44,36 @@ public class UserDaoHibernate implements UserDao {
       return null;
     }
 
-    return toUserTO(user);
+    return user;
+    //return toUserTO(user);
+  }
+
+  public User createUser2(User newUser) {
+    try {
+      session.save(newUser);
+      //session.flush();
+      //transaction.commit();
+    } catch (Exception e) {
+      //transaction.rollback();
+      logger.error(e);
+      return null;
+    }
+
+    return newUser;
+    //return toUserTO(user);
+  }
+
+  public UserTO createUser1(UserTO newUser) {
+    User user = new User();
+    //Transaction transaction = session.beginTransaction();
+
+    try {
+      BeanUtils.copyProperties(user, newUser);
+    } catch (IllegalAccessException | InvocationTargetException e) {
+      logger.error(e);
+    }
+
+    return toUserTO(this.createUser2(user));
   }
 
   private UserTO toUserTO(User user) {

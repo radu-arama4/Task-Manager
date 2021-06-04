@@ -1,6 +1,7 @@
 package com.stefanini.taskmanager.persistence.dao;
 
 import com.stefanini.taskmanager.dto.UserTO;
+import com.stefanini.taskmanager.persistence.entity.User;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface UserDao {
    * @param newUser - the user that will be created
    * @return boolean value - to show if the operation succeeded
    */
-  UserTO createUser(UserTO newUser);
+  User createUser(UserTO newUser);
 
   /**
    * Method used for extracting all existing User entities from the database in form of list

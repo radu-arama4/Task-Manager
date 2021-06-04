@@ -3,6 +3,7 @@ package com.stefanini.taskmanager.persistence.dao.jdbc;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
+import com.stefanini.taskmanager.persistence.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -77,7 +78,7 @@ public class TaskDaoJdbc implements TaskDao {
   }
 
   @Override
-  public List<TaskTO> addMultipleTasks(List<TaskTO> tasks, UserTO user) {
+  public List<TaskTO> addMultipleTasks(List<TaskTO> tasks, User user) {
     return null;
   }
 
