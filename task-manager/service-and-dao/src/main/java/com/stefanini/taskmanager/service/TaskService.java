@@ -3,9 +3,8 @@ package com.stefanini.taskmanager.service;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
-import com.stefanini.taskmanager.persistence.entity.User;
-import com.stefanini.taskmanager.util.email.EmailGenerator;
-import com.stefanini.taskmanager.util.transaction.Transactional;
+import com.stefanini.taskmanager.service.proxy.email.EmailGenerator;
+import com.stefanini.taskmanager.service.proxy.transaction.Transactional;
 
 import java.util.List;
 
@@ -27,10 +26,7 @@ public interface TaskService {
    * @return boolean value - to show if the operation succeeded
    */
   @EmailGenerator
-  boolean addTask(TaskTO task, UserTO user);
-
-  // TODO documentation
-  boolean addMultipleTasks(List<TaskTO> tasks, User user);
+  TaskTO addTask(TaskTO task, UserTO user);
 
   /**
    * Method which receives an {@link UserTO} DTO and sends it to the {@link TaskDao} in order to get

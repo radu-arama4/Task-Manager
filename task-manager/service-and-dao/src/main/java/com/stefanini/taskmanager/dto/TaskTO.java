@@ -1,7 +1,7 @@
 package com.stefanini.taskmanager.dto;
 
-import com.stefanini.taskmanager.util.email.EmailField;
-import com.stefanini.taskmanager.util.email.Email;
+import com.stefanini.taskmanager.service.proxy.email.EmailField;
+import com.stefanini.taskmanager.service.proxy.email.Email;
 
 @Email(emailMessage = "Task {task title} {task description} has been assigned to {username}")
 public class TaskTO {

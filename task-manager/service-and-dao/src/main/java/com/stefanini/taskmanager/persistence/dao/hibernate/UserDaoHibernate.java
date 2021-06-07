@@ -1,17 +1,13 @@
 package com.stefanini.taskmanager.persistence.dao.hibernate;
 
-import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.entity.User;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
 import javax.persistence.Query;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserDaoHibernate implements UserDao {
   private final Session session;
@@ -24,73 +20,20 @@ public class UserDaoHibernate implements UserDao {
   }
 
   @Override
-  public User createUser(UserTO newUser) {
-    User user = new User();
-    //Transaction transaction = session.beginTransaction();
-
-    try {
-      BeanUtils.copyProperties(user, newUser);
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      logger.error(e);
-    }
-
-    try {
-      session.save(user);
-      //session.flush();
-      //transaction.commit();
-    } catch (Exception e) {
-      //transaction.rollback();
-      logger.error(e);
-      return null;
-    }
-
-    return user;
-    //return toUserTO(user);
-  }
-
-  public User createUser2(User newUser) {
+  public User createUser(User newUser) {
     try {
       session.save(newUser);
-      //session.flush();
-      //transaction.commit();
     } catch (Exception e) {
-      //transaction.rollback();
       logger.error(e);
       return null;
     }
-
     return newUser;
-    //return toUserTO(user);
-  }
-
-  public UserTO createUser1(UserTO newUser) {
-    User user = new User();
-    //Transaction transaction = session.beginTransaction();
-
-    try {
-      BeanUtils.copyProperties(user, newUser);
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      logger.error(e);
-    }
-
-    return toUserTO(this.createUser2(user));
-  }
-
-  private UserTO toUserTO(User user) {
-    UserTO returnedUser = new UserTO();
-    try {
-      BeanUtils.copyProperties(returnedUser, user);
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      logger.error(e);
-    }
-    return returnedUser;
   }
 
   @Override
-  public List<UserTO> getUsers() {
+  public List<User> getUsers() {
     Query query = session.createQuery(GET_USERS);
-    List<User> users = (List<User>) query.getResultList();
 
-    return users.stream().map(this::toUserTO).collect(Collectors.toList());
+    return (List<User>) query.getResultList();
   }
 }

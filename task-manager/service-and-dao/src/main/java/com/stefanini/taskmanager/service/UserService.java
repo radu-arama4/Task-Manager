@@ -2,9 +2,8 @@ package com.stefanini.taskmanager.service;
 
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
-import com.stefanini.taskmanager.persistence.entity.User;
-import com.stefanini.taskmanager.util.email.EmailGenerator;
-import com.stefanini.taskmanager.util.transaction.Transactional;
+import com.stefanini.taskmanager.service.proxy.email.EmailGenerator;
+import com.stefanini.taskmanager.service.proxy.transaction.Transactional;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public interface UserService {
    * @return boolean value - to show if the operation succeeded
    */
   @EmailGenerator
-  User createUser(UserTO user);
+  UserTO createUser(UserTO user);
 
   /**
    * Method which returns the list of existing users in the database from the {@link UserDao}

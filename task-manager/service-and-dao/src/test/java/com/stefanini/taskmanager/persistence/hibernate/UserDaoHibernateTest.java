@@ -1,9 +1,8 @@
 package com.stefanini.taskmanager.persistence.hibernate;
 
-import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.hibernate.UserDaoHibernate;
-import com.stefanini.taskmanager.persistence.entity.Task;
-import com.stefanini.taskmanager.persistence.entity.User;
+import com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate;
+import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -34,8 +33,8 @@ public class UserDaoHibernateTest {
 
   @Test
   public void createUserTest() {
-    UserTO user = new UserTO("bas", "sadas", "asdads");
-    userDaoHibernate.createUser(user);
+//    UserTO user = new UserTO("bas", "sadas", "asdads");
+//    userDaoHibernate.createUser(user);
   }
 
   @Test
@@ -45,8 +44,8 @@ public class UserDaoHibernateTest {
 
   @Test
   public void makeTransaction() {
-    User user = new User("jora", "jora", "Tesdst");
-    Task task = new Task("do smth", "something very serious");
+    UserHibernate user = new UserHibernate("jora", "jora", "Tesdst");
+    TaskHibernate task = new TaskHibernate("do smth", "something very serious");
 
     Transaction transaction = null;
 

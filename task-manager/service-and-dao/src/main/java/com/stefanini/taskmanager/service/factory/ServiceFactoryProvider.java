@@ -12,7 +12,7 @@ public abstract class ServiceFactoryProvider {
     public static ServiceFactory createServiceFactory(){
         switch (serviceType){
             case STANDARD: return new ServiceFactoryImpl();
-            case PROXY: return new ServiceFactoryImpl2(); //new proxy impl
+            case PROXY: return new ServiceFactoryImplProxy(); //new proxy impl
             default: throw new ServiceTypeException("Undefined service type!");
         }
     }

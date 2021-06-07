@@ -18,12 +18,12 @@ public interface UserDao {
    * @param newUser - the user that will be created
    * @return boolean value - to show if the operation succeeded
    */
-  User createUser(UserTO newUser);
+  User createUser(User newUser);
 
   /**
    * Method used for extracting all existing User entities from the database in form of list
    *
    * @return List<User> - all the existing users from the database
    */
-  List<UserTO> getUsers();
+  List<User> getUsers();
 }

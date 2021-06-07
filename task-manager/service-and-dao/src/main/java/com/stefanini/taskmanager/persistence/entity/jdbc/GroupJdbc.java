@@ -1,21 +1,21 @@
-package com.stefanini.taskmanager.dto;
+package com.stefanini.taskmanager.persistence.entity.jdbc;
 
-import com.stefanini.taskmanager.service.proxy.email.EmailField;
+import com.stefanini.taskmanager.persistence.entity.Group;
 import com.stefanini.taskmanager.service.proxy.email.Email;
-import lombok.AllArgsConstructor;
+import com.stefanini.taskmanager.service.proxy.email.EmailField;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Email(emailMessage = "Group with name {groupName} created")
-public class GroupTO {
+public class GroupJdbc implements Group {
   private Long id;
+
   @EmailField(fieldName = "groupName")
   private String groupName;
 
-  public GroupTO(String groupName) {
+  public GroupJdbc(String groupName) {
     this.groupName = groupName;
   }
 }

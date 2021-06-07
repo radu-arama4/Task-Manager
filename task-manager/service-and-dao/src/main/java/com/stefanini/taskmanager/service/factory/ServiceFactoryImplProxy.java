@@ -12,12 +12,12 @@ import com.stefanini.taskmanager.service.impl.GroupServiceImpl;
 import com.stefanini.taskmanager.service.impl.TaskServiceImpl;
 import com.stefanini.taskmanager.service.impl.UserServiceImpl;
 import com.stefanini.taskmanager.util.ApplicationProperties;
-import com.stefanini.taskmanager.util.email.EmailProxy;
-import com.stefanini.taskmanager.util.transaction.TransactionProxy;
+import com.stefanini.taskmanager.service.proxy.email.EmailProxy;
+import com.stefanini.taskmanager.service.proxy.transaction.TransactionProxy;
 
 // TODO rename
 // TODO read decorator design pattern
-public class ServiceFactoryImpl2 implements ServiceFactory {
+public class ServiceFactoryImplProxy implements ServiceFactory {
   private final ApplicationProperties applicationProperties = ApplicationProperties.getInstance();
   private final DaoType daoType = applicationProperties.getDaoType();
   private final DaoFactory daoFactory = DaoFactoryProvider.createDaoFactory(daoType);

@@ -1,15 +1,13 @@
-package com.stefanini.taskmanager.util.transaction;
+package com.stefanini.taskmanager.service.proxy.transaction;
 
-import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import static com.stefanini.taskmanager.persistence.util.DataBaseUtil.*;
+import static java.lang.reflect.Proxy.newProxyInstance;
 
 public class TransactionProxy implements InvocationHandler {
   private static final Logger logger = LogManager.getLogger(TransactionProxy.class);
@@ -20,29 +18,29 @@ public class TransactionProxy implements InvocationHandler {
   }
 
   public static Object newInstance(Object obj) {
-    return java.lang.reflect.Proxy.newProxyInstance(
+    return newProxyInstance(
         obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), new TransactionProxy(obj));
   }
 
   public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
-    Object result = null;
+    Object result;
     try {
       Class<?> clazz = m.getDeclaringClass();
       if (clazz.isAnnotationPresent(Transactional.class)) {
-        //TODO new level of abstraction
-        Session session = DataBaseUtil.connectToHibernate();
-        Transaction transaction = session.beginTransaction();
+        connectToDataBase();
+
         logger.info("Entered proxy");
         result = m.invoke(obj, args);
-        if(transaction.getStatus().equals(TransactionStatus.ACTIVE)){
-          transaction.commit();
-        }
-      }else {
+
+        commitTransaction();
+      } else {
         result = m.invoke(obj, args);
       }
     } catch (InvocationTargetException e) {
+      safeRollback();
       throw e.getTargetException();
     } catch (Exception e) {
+      safeRollback();
       throw new RuntimeException("Unexpected invocation exception: " + e.getMessage());
     }
     return result;

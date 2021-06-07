@@ -1,9 +1,9 @@
 package com.stefanini.taskmanager.persistence.dao.jdbc;
 
-import com.stefanini.taskmanager.dto.GroupTO;
-import com.stefanini.taskmanager.dto.TaskTO;
-import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.persistence.entity.Group;
+import com.stefanini.taskmanager.persistence.entity.Task;
+import com.stefanini.taskmanager.persistence.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +39,7 @@ public class GroupDaoJdbc implements GroupDao {
   }
 
   @Override
-  public GroupTO createGroup(GroupTO group) {
+  public Group createGroup(Group group) {
     try {
       String groupName = group.getGroupName();
 
@@ -57,7 +57,7 @@ public class GroupDaoJdbc implements GroupDao {
         return null;
       }
 
-      return new GroupTO(groupId, groupName);
+      return group;
     } catch (SQLException e) {
       logger.error(e);
       return null;
@@ -65,7 +65,7 @@ public class GroupDaoJdbc implements GroupDao {
   }
 
   @Override
-  public UserTO addUserToGroup(UserTO user, GroupTO group) {
+  public User addUserToGroup(User user, Group group) {
     try {
       String groupName = group.getGroupName();
       String userName = user.getUserName();
@@ -75,9 +75,9 @@ public class GroupDaoJdbc implements GroupDao {
       statement.setString(2, groupName);
       int nrOfUpdates = statement.executeUpdate();
 
-      if(nrOfUpdates!=0){
+      if (nrOfUpdates != 0) {
         return user;
-      }else {
+      } else {
         return null;
       }
     } catch (SQLException e) {
@@ -87,9 +87,9 @@ public class GroupDaoJdbc implements GroupDao {
   }
 
   @Override
-  public TaskTO addTaskToGroup(TaskTO task, GroupTO group) {
+  public Task addTaskToGroup(Task task, Group group) {
     String taskTitle = task.getTaskTitle();
-    String taskDescription = task.getDescription();
+    String taskDescription = task.getTaskDescription();
     String groupName = group.getGroupName();
 
     try {
@@ -115,9 +115,9 @@ public class GroupDaoJdbc implements GroupDao {
 
       int nrOfUpdates = statement.executeUpdate();
 
-      if(nrOfUpdates!=0){
+      if (nrOfUpdates != 0) {
         return task;
-      }else {
+      } else {
         return null;
       }
     } catch (SQLException e) {

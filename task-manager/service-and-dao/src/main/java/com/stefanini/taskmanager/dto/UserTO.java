@@ -1,7 +1,7 @@
 package com.stefanini.taskmanager.dto;
 
-import com.stefanini.taskmanager.util.email.EmailField;
-import com.stefanini.taskmanager.util.email.Email;
+import com.stefanini.taskmanager.service.proxy.email.EmailField;
+import com.stefanini.taskmanager.service.proxy.email.Email;
 
 @Email(emailMessage = "User {firstName} / {lastName} identified by {userName} has been created")
 public class UserTO {

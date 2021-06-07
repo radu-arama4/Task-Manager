@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.util.email;
+package com.stefanini.taskmanager.service.proxy.email;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

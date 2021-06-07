@@ -1,8 +1,9 @@
 package com.stefanini.taskmanager.persistence.dao.jdbc;
 
-import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.entity.User;
+import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
+import com.stefanini.taskmanager.persistence.entity.jdbc.UserJdbc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +33,7 @@ public class UserDaoJdbc implements UserDao {
   }
 
   @Override
-  public User createUser(UserTO newUser) {
+  public User createUser(User newUser) {
     try {
       String firstName = newUser.getFirstName();
       String lastName = newUser.getLastName();
@@ -50,7 +51,7 @@ public class UserDaoJdbc implements UserDao {
 
       if (rs.next()) {
         userId = rs.getLong(1);
-        return new User(userId, firstName, lastName, userName);
+        return new UserHibernate(userId, firstName, lastName, userName);
       } else {
         return null;
       }
@@ -61,8 +62,8 @@ public class UserDaoJdbc implements UserDao {
   }
 
   @Override
-  public List<UserTO> getUsers() {
-    List<UserTO> users = new ArrayList<>();
+  public List<User> getUsers() {
+    List<User> users = new ArrayList<>();
 
     try {
       PreparedStatement statement = connection.prepareStatement(SELECT_USERS_QUERY);
@@ -74,7 +75,7 @@ public class UserDaoJdbc implements UserDao {
         String lastName = rs.getString("last_name");
         String userName = rs.getString("username");
 
-        UserTO newUser = new UserTO(userId, firstName, lastName, userName);
+        User newUser = new UserJdbc(userId, firstName, lastName, userName);
         users.add(newUser);
       }
       rs.close();

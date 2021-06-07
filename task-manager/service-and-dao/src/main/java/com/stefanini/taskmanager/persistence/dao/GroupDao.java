@@ -1,8 +1,9 @@
 package com.stefanini.taskmanager.persistence.dao;
 
 import com.stefanini.taskmanager.dto.GroupTO;
-import com.stefanini.taskmanager.dto.TaskTO;
-import com.stefanini.taskmanager.dto.UserTO;
+import com.stefanini.taskmanager.persistence.entity.Group;
+import com.stefanini.taskmanager.persistence.entity.Task;
+import com.stefanini.taskmanager.persistence.entity.User;
 
 /**
  * Interface TaskDao provides methods for performing some CRUD operations on {@link GroupTO} entities.
@@ -17,7 +18,7 @@ public interface GroupDao {
    * @param group - the group to be added
    * @return boolean value - to show if the operation succeeded
    */
-  GroupTO createGroup(GroupTO group);
+  Group createGroup(Group group);
 
   /**
    * Method for adding a specific user to an existing {@link GroupTO}
@@ -26,7 +27,7 @@ public interface GroupDao {
    * @param group - the group in which the user will be added
    * @return boolean value - to show if the operation succeeded
    */
-  UserTO addUserToGroup(UserTO user, GroupTO group);
+  User addUserToGroup(User user, Group group);
 
   /**
    * Method for adding a specific task to all the members of a {@link GroupTO}
@@ -35,5 +36,5 @@ public interface GroupDao {
    * @param group - the group to which the task will be added
    * @return boolean value - to show if the operation succeeded
    */
-  TaskTO addTaskToGroup(TaskTO task, GroupTO group);
+  Task addTaskToGroup(Task task, Group group);
 }

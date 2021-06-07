@@ -1,11 +1,11 @@
 package com.stefanini.taskmanager.persistence.dao.hibernate;
 
-import com.stefanini.taskmanager.dto.TaskTO;
-import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.persistence.dao.jdbc.GroupDaoJdbc;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
+import com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate;
+import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +14,6 @@ import org.hibernate.Transaction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TaskDaoHibernate implements TaskDao {
   private final Session session;
@@ -29,12 +28,12 @@ public class TaskDaoHibernate implements TaskDao {
   }
 
   @Override
-  public TaskTO addTask(TaskTO newTask, UserTO user) {
-    Task task = new Task();
+  public Task addTask(Task newTask, User user) {
+    TaskHibernate task = new TaskHibernate();
     Transaction transaction = session.beginTransaction();
 
-    User selectedUser =
-        (User)
+    UserHibernate selectedUser =
+        (UserHibernate)
             session
                 .createQuery(GET_USER_BY_USERNAME)
                 .setParameter("username", user.getUserName())
@@ -56,17 +55,17 @@ public class TaskDaoHibernate implements TaskDao {
       return null;
     }
 
-    return toTaskTO(task);
+    return task;
   }
 
   @Override
-  public List<TaskTO> addMultipleTasks(List<TaskTO> tasks, User user) {
+  public List<Task> addMultipleTasks(List<Task> tasks, User user) {
     tasks.forEach(
         taskTO -> {
-          Task task = new Task();
+          TaskHibernate task = new TaskHibernate();
           try {
             BeanUtils.copyProperties(task, taskTO);
-            task.setUser(user);
+            task.setUser((UserHibernate) user);
             session.save(task);
           } catch (InvocationTargetException | IllegalAccessException e) {
             session.getTransaction().rollback();
@@ -77,26 +76,12 @@ public class TaskDaoHibernate implements TaskDao {
     return tasks;
   }
 
-  private TaskTO toTaskTO(Task task) {
-    TaskTO returnedTask = new TaskTO();
-
-    try {
-      BeanUtils.copyProperties(returnedTask, task);
-    } catch (InvocationTargetException | IllegalAccessException e) {
-      logger.error(e);
-    }
-    return returnedTask;
-  }
-
   @Override
-  public List<TaskTO> getTasks(UserTO selectedUser) {
-    List<Task> tasks =
-        (List<Task>)
-            session
-                .createQuery(GET_TASKS_BY_USER_USERNAME)
-                .setParameter("username", selectedUser.getUserName())
-                .list();
-
-    return tasks.stream().map(this::toTaskTO).collect(Collectors.toList());
+  public List<Task> getTasks(User selectedUser) {
+    return (List<Task>)
+        session
+            .createQuery(GET_TASKS_BY_USER_USERNAME)
+            .setParameter("username", selectedUser.getUserName())
+            .list();
   }
 }

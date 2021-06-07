@@ -1,12 +1,9 @@
-package com.stefanini.taskmanager.util.email;
+package com.stefanini.taskmanager.service.proxy.email;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
 public class EmailProxy implements InvocationHandler {
   private static final Logger logger = LogManager.getLogger(EmailProxy.class);
@@ -44,7 +41,7 @@ public class EmailProxy implements InvocationHandler {
             message.replace(
                 wrap(field.getAnnotation(EmailField.class).fieldName()),
                 (String) field.get(object));
-        //String.valueOf()
+        // String.valueOf()
       } catch (IllegalAccessException e) {
         logger.error(e);
       } finally {
@@ -54,9 +51,8 @@ public class EmailProxy implements InvocationHandler {
     logger.info("Sent email: " + message);
   }
 
-  //clean this
   public static Object newInstance(Object obj) {
-    return java.lang.reflect.Proxy.newProxyInstance(
+    return Proxy.newProxyInstance(
         obj.getClass().getClassLoader(), obj.getClass().getInterfaces(), new EmailProxy(obj));
   }
 

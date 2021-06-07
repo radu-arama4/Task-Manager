@@ -2,12 +2,18 @@ package com.stefanini.taskmanager.service;
 
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
-import com.stefanini.taskmanager.util.transaction.Transactional;
+import com.stefanini.taskmanager.service.proxy.transaction.Transactional;
 
 import java.util.List;
 
-//TODO documentation
+/** Interface that provides business logic for multiple entities. */
 @Transactional
 public interface ExtendedService {
-    void createUserWithTasks(UserTO user, List<TaskTO> tasks);
+  /**
+   * Method for creating a new {@link UserTO} with new {@link TaskTO}'s
+   *
+   * @param user - user data transfer object
+   * @param tasks - task data transfer object
+   */
+  void createUserWithTasks(UserTO user, List<TaskTO> tasks);
 }

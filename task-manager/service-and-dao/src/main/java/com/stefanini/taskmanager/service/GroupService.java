@@ -4,8 +4,8 @@ import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
-import com.stefanini.taskmanager.util.email.EmailGenerator;
-import com.stefanini.taskmanager.util.transaction.Transactional;
+import com.stefanini.taskmanager.service.proxy.email.EmailGenerator;
+import com.stefanini.taskmanager.service.proxy.transaction.Transactional;
 
 /**
  * Interface that provides business logic for {@link GroupTO} entity.
