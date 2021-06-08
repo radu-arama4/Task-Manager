@@ -30,7 +30,7 @@ public class TaskServiceImpl implements TaskService {
 
     String userName = user.getUserName();
     String taskTitle = task.getTaskTitle();
-    String taskDescription = task.getDescription();
+    String taskDescription = task.getTaskDescription();
 
     User newUser;
     Task newTask;

@@ -25,7 +25,7 @@ public class UserHibernate implements User {
   @Column(name = "username", unique = true, nullable = false)
   private String userName;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private Set<TaskHibernate> tasks = new HashSet<>();
 
   @ManyToMany(mappedBy = "users", cascade = CascadeType.DETACH)

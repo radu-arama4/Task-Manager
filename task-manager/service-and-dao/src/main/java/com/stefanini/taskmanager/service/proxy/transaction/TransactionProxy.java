@@ -1,12 +1,13 @@
 package com.stefanini.taskmanager.service.proxy.transaction;
 
+import com.stefanini.taskmanager.persistence.util.context.ContextProvider;
+import com.stefanini.taskmanager.persistence.util.context.TransactionContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static com.stefanini.taskmanager.persistence.util.DataBaseUtil.*;
 import static java.lang.reflect.Proxy.newProxyInstance;
 
 public class TransactionProxy implements InvocationHandler {
@@ -24,23 +25,25 @@ public class TransactionProxy implements InvocationHandler {
 
   public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
     Object result;
+    TransactionContext transactionContext = ContextProvider.createTransactionContext();
+    if (transactionContext == null) {
+      throw new Exception("Not supported!");
+    }
     try {
       Class<?> clazz = m.getDeclaringClass();
       if (clazz.isAnnotationPresent(Transactional.class)) {
-        connectToDataBase();
-
+        transactionContext.begin();
         logger.info("Entered proxy");
         result = m.invoke(obj, args);
-
-        commitTransaction();
+        transactionContext.commit();
       } else {
         result = m.invoke(obj, args);
       }
     } catch (InvocationTargetException e) {
-      safeRollback();
+      transactionContext.rollback();
       throw e.getTargetException();
     } catch (Exception e) {
-      safeRollback();
+      transactionContext.rollback();
       throw new RuntimeException("Unexpected invocation exception: " + e.getMessage());
     }
     return result;

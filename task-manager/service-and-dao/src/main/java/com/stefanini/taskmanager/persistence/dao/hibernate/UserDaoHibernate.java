@@ -33,7 +33,6 @@ public class UserDaoHibernate implements UserDao {
   @Override
   public List<User> getUsers() {
     Query query = session.createQuery(GET_USERS);
-
     return (List<User>) query.getResultList();
   }
 }

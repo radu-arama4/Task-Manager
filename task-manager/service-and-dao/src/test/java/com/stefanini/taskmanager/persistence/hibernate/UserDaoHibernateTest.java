@@ -28,7 +28,7 @@ public class UserDaoHibernateTest {
     this.factory = meta.getSessionFactoryBuilder().build();
     this.session = factory.openSession();
 
-    this.userDaoHibernate = new UserDaoHibernate(session);
+//    this.userDaoHibernate = new UserDaoHibernate();
   }
 
   @Test

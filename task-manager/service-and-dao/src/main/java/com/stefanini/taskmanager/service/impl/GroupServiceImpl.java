@@ -82,7 +82,7 @@ public class GroupServiceImpl implements GroupService {
 
     String groupName = group.getGroupName();
     String taskTitle = task.getTaskTitle();
-    String taskDescription = task.getDescription();
+    String taskDescription = task.getTaskDescription();
 
     if (groupName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Information missing!");

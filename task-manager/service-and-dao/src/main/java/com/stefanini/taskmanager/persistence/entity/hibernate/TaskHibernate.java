@@ -2,9 +2,11 @@ package com.stefanini.taskmanager.persistence.entity.hibernate;
 
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.service.proxy.email.Email;
+import lombok.Data;
 
 import javax.persistence.*;
 
+@Data
 @Entity(name = "Task")
 @Table(name = "task")
 @Email
@@ -25,7 +27,7 @@ public class TaskHibernate implements Task {
     TODO solve this
    */
 
-  @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+  @ManyToOne(cascade = CascadeType.DETACH)
   @JoinTable(
       name = "task_to_user",
       inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
@@ -50,45 +52,5 @@ public class TaskHibernate implements Task {
     this.taskId = taskId;
     this.taskTitle = taskTitle;
     this.taskDescription = description;
-  }
-
-  public GroupHibernate getGroup() {
-    return group;
-  }
-
-  public void setGroup(GroupHibernate group) {
-    this.group = group;
-  }
-
-  public UserHibernate getUser() {
-    return user;
-  }
-
-  public void setUser(UserHibernate user) {
-    this.user = user;
-  }
-
-  public Long getTaskId() {
-    return taskId;
-  }
-
-  public void setTaskId(Long taskId) {
-    this.taskId = taskId;
-  }
-
-  public String getTaskTitle() {
-    return taskTitle;
-  }
-
-  public String getTaskDescription() {
-    return taskDescription;
-  }
-
-  public void setTaskTitle(String taskTitle) {
-    this.taskTitle = taskTitle;
-  }
-
-  public void setTaskDescription(String taskDescription) {
-    this.taskDescription = taskDescription;
   }
 }

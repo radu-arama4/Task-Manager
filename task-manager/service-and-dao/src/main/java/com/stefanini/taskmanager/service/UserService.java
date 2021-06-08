@@ -12,8 +12,6 @@ import java.util.List;
  *
  * @author rarama
  */
-// transactional annotation
-// service singleton
 @Transactional
 public interface UserService {
 

@@ -15,7 +15,7 @@ public class TaskParserTest {
     TaskTO task = TaskParser.parseTask(arguments);
 
     assertEquals(taskTitle, task.getTaskTitle());
-    assertEquals(taskDescription, task.getDescription());
+    assertEquals(taskDescription, task.getTaskDescription());
   }
 
   @Test
@@ -26,6 +26,6 @@ public class TaskParserTest {
     TaskTO task = TaskParser.parseTask(arguments);
 
     assertNull(task.getTaskTitle());
-    assertEquals(taskDescription, task.getDescription());
+    assertEquals(taskDescription, task.getTaskDescription());
   }
 }
