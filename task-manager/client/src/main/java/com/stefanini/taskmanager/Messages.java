@@ -1,5 +1,9 @@
 package com.stefanini.taskmanager;
 
+/**
+ * Enum containing all the possible messages that the user can get when inserting data for the new
+ * created operations.
+ */
 public enum Messages {
   MAIN(
       "Press:\n"
@@ -7,7 +11,8 @@ public enum Messages {
           + "2 - View commands\n"
           + "3 - Execute commands\n"
           + "4 - Exit."),
-  OPERATIONS("Press:\n"
+  OPERATIONS(
+      "Press:\n"
           + "1 - New user\n"
           + "2 - Show all users\n"
           + "3 - Add task\n"

@@ -40,8 +40,7 @@ public class EmailProxy implements InvocationHandler {
         message =
             message.replace(
                 wrap(field.getAnnotation(EmailField.class).fieldName()),
-                (String) field.get(object));
-        // String.valueOf()
+                String.valueOf(field.get(object)));
       } catch (IllegalAccessException e) {
         logger.error(e);
       } finally {

@@ -42,4 +42,5 @@ public class ServiceFactoryImplProxy implements ServiceFactory {
   public ExtendedService getExtendedService() {
     return (ExtendedService) TransactionProxy.newInstance(new ExtendedServiceImpl(daoFactory));
   }
+  //TODO chaining the proxies
 }

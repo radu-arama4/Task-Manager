@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TaskDaoJdbc implements TaskDao {
@@ -80,7 +81,13 @@ public class TaskDaoJdbc implements TaskDao {
 
   @Override
   public List<Task> addMultipleTasks(List<Task> tasks, User user) {
-    return null;
+    List<Task> addedTasks = new LinkedList<>();
+    tasks.forEach(
+        task -> {
+          Task addedTask = addTask(task, user);
+          addedTasks.add(addedTask);
+        });
+    return addedTasks;
   }
 
   @Override

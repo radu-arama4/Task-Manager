@@ -1,12 +1,15 @@
 package com.stefanini.taskmanager.persistence.util.context;
 
 import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class JdbcTransactionContext implements TransactionContext {
   private final Connection connection = DataBaseUtil.connectToDb();
+  private static final Logger logger = LogManager.getLogger(JdbcTransactionContext.class);
 
   @Override
   public void begin() {
@@ -15,7 +18,7 @@ public class JdbcTransactionContext implements TransactionContext {
         connection.setAutoCommit(false);
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e);
     }
   }
 
@@ -26,7 +29,7 @@ public class JdbcTransactionContext implements TransactionContext {
         connection.commit();
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e);
     }
   }
 
@@ -37,7 +40,7 @@ public class JdbcTransactionContext implements TransactionContext {
         connection.rollback();
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error(e);
     }
   }
 }

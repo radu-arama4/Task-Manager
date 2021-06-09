@@ -27,7 +27,7 @@ public class TransactionProxy implements InvocationHandler {
     Object result;
     TransactionContext transactionContext = ContextProvider.createTransactionContext();
     if (transactionContext == null) {
-      throw new Exception("Not supported!");
+      throw new NotSupportedTypeException("Not supported type!");
     }
     try {
       Class<?> clazz = m.getDeclaringClass();
@@ -47,5 +47,11 @@ public class TransactionProxy implements InvocationHandler {
       throw new RuntimeException("Unexpected invocation exception: " + e.getMessage());
     }
     return result;
+  }
+
+  public static class NotSupportedTypeException extends Exception{
+    public NotSupportedTypeException(String errorMessage) {
+      super(errorMessage);
+    }
   }
 }

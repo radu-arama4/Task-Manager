@@ -112,8 +112,5 @@ public class Main {
       }
       System.out.println("-------------------------------");
     }
-
-    // TODO move it somewhere else
-    // DataBaseUtil.disconnectFromDb();
   }
 }

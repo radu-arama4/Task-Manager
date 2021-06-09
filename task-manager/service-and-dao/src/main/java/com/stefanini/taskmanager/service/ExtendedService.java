@@ -8,7 +8,7 @@ import java.util.List;
 
 /** Interface that provides business logic for multiple entities. */
 @Transactional
-public interface ExtendedService {
+public interface ExtendedService { //todo rename
   /**
    * Method for creating a new {@link UserTO} with new {@link TaskTO}'s
    *

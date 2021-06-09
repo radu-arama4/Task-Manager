@@ -10,14 +10,18 @@ import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.ExtendedService;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ExtendedServiceImpl implements ExtendedService {
-  UserDao userDao;
-  TaskDao taskDao;
+  private final UserDao userDao;
+  private final TaskDao taskDao;
+  private static final Logger logger = LogManager.getLogger(ExtendedServiceImpl.class);
+  //todo combine this service with already existing service
 
   public ExtendedServiceImpl(DaoFactory daoFactory) {
     this.userDao = daoFactory.createUserDao();
@@ -32,7 +36,7 @@ public class ExtendedServiceImpl implements ExtendedService {
     try {
       BeanUtils.copyProperties(newUser, user);
     } catch (IllegalAccessException | InvocationTargetException e) {
-      e.printStackTrace();
+      logger.error(e);
     }
 
     tasks.forEach(taskTO -> {
@@ -40,12 +44,12 @@ public class ExtendedServiceImpl implements ExtendedService {
       try {
         BeanUtils.copyProperties(task, taskTO);
       } catch (IllegalAccessException | InvocationTargetException e) {
-        e.printStackTrace();
+        logger.error(e);
       }
       newTasks.add(task);
     });
 
-    User user1 = userDao.createUser(newUser);
-    taskDao.addMultipleTasks(newTasks, user1);
+    User createdUser = userDao.createUser(newUser); //todo rename variables
+    taskDao.addMultipleTasks(newTasks, createdUser);
   }
 }
