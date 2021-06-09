@@ -53,6 +53,7 @@ public class GroupDaoJdbc implements GroupDao {
 
       if (rs.next()) {
         groupId = rs.getLong(1);
+        group.setGroupId(groupId);
       } else {
         return null;
       }
@@ -105,6 +106,7 @@ public class GroupDaoJdbc implements GroupDao {
 
       if (rs.next()) {
         taskId = rs.getLong(1);
+        task.setTaskId(taskId);
       } else {
         return null;
       }

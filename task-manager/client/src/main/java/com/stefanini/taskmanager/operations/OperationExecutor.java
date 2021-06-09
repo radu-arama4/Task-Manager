@@ -6,6 +6,16 @@ import java.util.List;
 /** Class for storing and executing all the given operations. */
 public class OperationExecutor {
   private final List<Operation> textFileOperations = new LinkedList<>();
+  private static OperationExecutor instance = null;
+
+  private OperationExecutor() {}
+
+  public static OperationExecutor getInstance() {
+    if (instance == null) {
+      instance = new OperationExecutor();
+    }
+    return instance;
+  }
 
   /**
    * Stores a given operation in the list.

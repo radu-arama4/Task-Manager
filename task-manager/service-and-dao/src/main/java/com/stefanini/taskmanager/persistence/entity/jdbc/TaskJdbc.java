@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Email(emailMessage = "Task {task title} {task description} has been assigned to {username}")
 public class TaskJdbc implements Task {
-  private Long id;
+  private Long taskId;
 
   @EmailField(fieldName = "taskTitle")
   private String taskTitle;

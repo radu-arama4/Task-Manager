@@ -10,7 +10,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -18,19 +17,26 @@ import java.util.List;
 public class TaskDaoHibernate implements TaskDao {
   private final Session session;
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
+  private static TaskDao singleInstance;
 
   private static final String GET_USER_BY_USERNAME = "from User where username =: username";
   private static final String GET_TASKS_BY_USER_USERNAME =
       "from Task t where t.user.userName =: username";
 
-  public TaskDaoHibernate(Session session) {
+  private TaskDaoHibernate(Session session) {
     this.session = session;
   }
 
+  public static TaskDao getInstance(Session session) {
+    if (singleInstance == null) {
+      singleInstance = new TaskDaoHibernate(session);
+    }
+    return singleInstance;
+  }
+
   @Override
-  public Task addTask(Task newTask, User user) {
-    TaskHibernate task = new TaskHibernate();
-    Transaction transaction = session.beginTransaction();
+  public Task addTask(Task task, User user) {
+    TaskHibernate newTask = new TaskHibernate();
 
     UserHibernate selectedUser =
         (UserHibernate)
@@ -39,38 +45,35 @@ public class TaskDaoHibernate implements TaskDao {
                 .setParameter("username", user.getUserName())
                 .getSingleResult();
 
-    try {
-      BeanUtils.copyProperties(task, newTask);
-    } catch (InvocationTargetException | IllegalAccessException e) {
-      logger.error(e);
-    }
+    copyTasks(newTask, task);
 
     try {
-      task.setUser(selectedUser);
-      session.save(task);
-      transaction.commit();
+      newTask.setUser(selectedUser);
+      session.save(newTask);
     } catch (Exception e) {
-      transaction.rollback();
       logger.error(e);
       return null;
     }
 
-    return task;
+    return newTask;
+  }
+
+  private void copyTasks(Task task1, Task task2) {
+    try {
+      BeanUtils.copyProperties(task1, task2);
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      logger.error(e);
+    }
   }
 
   @Override
   public List<Task> addMultipleTasks(List<Task> tasks, User user) {
     tasks.forEach(
-        taskTO -> {
-          TaskHibernate task = new TaskHibernate();
-          try {
-            BeanUtils.copyProperties(task, taskTO);
-            task.setUser((UserHibernate) user);
-            session.save(task);
-          } catch (InvocationTargetException | IllegalAccessException e) {
-            session.getTransaction().rollback();
-            logger.error(e);
-          }
+        task -> {
+          TaskHibernate newTask = new TaskHibernate();
+          copyTasks(newTask, task);
+          newTask.setUser((UserHibernate) user);
+          session.save(newTask);
         });
 
     return tasks;

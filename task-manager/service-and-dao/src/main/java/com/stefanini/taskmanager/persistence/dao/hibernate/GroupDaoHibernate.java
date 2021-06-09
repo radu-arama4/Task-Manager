@@ -12,30 +12,33 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.lang.reflect.InvocationTargetException;
 
 public class GroupDaoHibernate implements GroupDao {
   private final Session session;
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
+  private static GroupDao singleInstance;
 
   private static final String GET_USER_BY_USERNAME = "from User where username =: username";
   private static final String GET_GROUP_BY_GROUP_NAME = "from group_ where group_name =: groupName";
 
-  public GroupDaoHibernate(Session session) {
+  private GroupDaoHibernate(Session session) {
     this.session = session;
+  }
+
+  public static GroupDao getInstance(Session session) {
+    if (singleInstance == null) {
+      singleInstance = new GroupDaoHibernate(session);
+    }
+    return singleInstance;
   }
 
   @Override
   public Group createGroup(Group group) {
-    Transaction transaction = session.beginTransaction();
-
     try {
       session.save(group);
-      transaction.commit();
     } catch (Exception e) {
-      transaction.rollback();
       logger.error(e);
       return null;
     }
@@ -45,10 +48,8 @@ public class GroupDaoHibernate implements GroupDao {
 
   @Override
   public User addUserToGroup(User user, Group group) {
-    Transaction transaction = session.beginTransaction();
-
-    UserHibernate selectedUser = null;
-    GroupHibernate selectedGroup = null;
+    UserHibernate selectedUser;
+    GroupHibernate selectedGroup;
 
     try {
       selectedUser =
@@ -71,9 +72,7 @@ public class GroupDaoHibernate implements GroupDao {
 
     try {
       selectedGroup.addUser(selectedUser);
-      transaction.commit();
     } catch (Exception e) {
-      transaction.rollback();
       logger.error(e);
       return null;
     }
@@ -83,9 +82,8 @@ public class GroupDaoHibernate implements GroupDao {
 
   @Override
   public Task addTaskToGroup(Task newTask, Group newGroup) {
-    Transaction transaction = session.beginTransaction();
-
     TaskHibernate task = new TaskHibernate();
+
     try {
       BeanUtils.copyProperties(task, newTask);
     } catch (InvocationTargetException | IllegalAccessException e) {
@@ -103,9 +101,7 @@ public class GroupDaoHibernate implements GroupDao {
     try {
       task.setGroup(selectedGroup);
       session.save(task);
-      transaction.commit();
     } catch (Exception e) {
-      transaction.rollback();
       logger.error(e);
       return null;
     }

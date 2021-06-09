@@ -56,6 +56,7 @@ public class TaskDaoJdbc implements TaskDao {
 
       if (rs.next()) {
         taskId = rs.getLong(1);
+        task.setTaskId(taskId);
       } else {
         return null;
       }

@@ -9,6 +9,11 @@ import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
 
 import java.util.List;
 
+/**
+ * Implements {@link Operation}. Encapsulates the {@link UserTO} and {@link List<TaskTO>} fields.
+ * The execution consists of sending the encapsulated fields to the {@link
+ * ExtendedService#createUserWithTasks(UserTO, List)} method as parameters.
+ */
 public class CreateUserWithTasks implements Operation {
   private final UserTO user;
   private final List<TaskTO> tasks;

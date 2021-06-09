@@ -12,11 +12,19 @@ import java.util.List;
 public class UserDaoHibernate implements UserDao {
   private final Session session;
   private static final Logger logger = LogManager.getLogger(UserDaoHibernate.class);
+  private static UserDao singleInstance;
 
   private static final String GET_USERS = "from User";
 
-  public UserDaoHibernate(Session session) {
+  private UserDaoHibernate(Session session) {
     this.session = session;
+  }
+
+  public static UserDao getInstance(Session session) {
+    if (singleInstance == null) {
+      singleInstance = new UserDaoHibernate(session);
+    }
+    return singleInstance;
   }
 
   @Override

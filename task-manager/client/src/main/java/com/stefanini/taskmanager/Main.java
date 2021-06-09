@@ -1,25 +1,13 @@
 package com.stefanini.taskmanager;
 
-import com.stefanini.taskmanager.dto.GroupTO;
-import com.stefanini.taskmanager.dto.TaskTO;
-import com.stefanini.taskmanager.dto.UserTO;
-import com.stefanini.taskmanager.operations.OperationExecutor;
-import com.stefanini.taskmanager.operations.group.AddTaskToGroupOperation;
-import com.stefanini.taskmanager.operations.group.AddUserToGroupOperation;
-import com.stefanini.taskmanager.operations.group.CreateGroupOperation;
-import com.stefanini.taskmanager.operations.multiple.CreateUserWithTasks;
-import com.stefanini.taskmanager.operations.task.AddTaskOperation;
-import com.stefanini.taskmanager.operations.task.ShowTasksOperation;
-import com.stefanini.taskmanager.operations.user.CreateUserOperation;
-import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 
-import static com.stefanini.taskmanager.Messages.*;
+import static com.stefanini.taskmanager.Messages.MAIN;
+import static com.stefanini.taskmanager.Messages.OPERATIONS;
+import static com.stefanini.taskmanager.operations.DataExtractionUtil.*;
 
 public class Main {
   private static final Logger logger = LogManager.getLogger(Main.class);
@@ -32,16 +20,8 @@ public class Main {
       return;
     }
 
-    OperationExecutor operationExecutor = new OperationExecutor();
-    logger.info("Operation executor created");
-
-    UserTO user;
-    TaskTO task;
-    GroupTO group;
-
     Scanner scanner = new Scanner(System.in);
 
-    // TODO organize
     while (true) {
       System.out.println(MAIN.message);
       int choice1 = scanner.nextInt();
@@ -55,97 +35,51 @@ public class Main {
               switch (choice2) {
                 case 1:
                   {
-                    System.out.println(NEW_USER.message);
-                    String firstName = scanner.next();
-                    String lastName = scanner.next();
-                    String username = scanner.next();
-                    scanner.nextLine();
-                    user = new UserTO(firstName, lastName, username);
-                    operationExecutor.addOperation(new CreateUserOperation(user));
+                    initNewUser();
                     System.out.println("New operation: create user");
                     break;
                   }
                 case 2:
                   {
-                    operationExecutor.addOperation(new ShowAllUsersOperation());
+                    initShowUsers();
                     System.out.println("New operation: show all users");
                     break;
                   }
                 case 3:
                   {
-                    System.out.println(ADD_TASK.message);
-                    String username = scanner.next();
-                    String taskTitle = scanner.next();
-                    String taskDescription = scanner.next();
-                    scanner.nextLine();
-                    task = new TaskTO(taskTitle, taskDescription);
-                    user = new UserTO(username);
-                    operationExecutor.addOperation(new AddTaskOperation(task, user));
+                    initNewTask();
                     System.out.println("New operation: add task to user");
                     break;
                   }
                 case 4:
                   {
-                    System.out.println(SHOW_TASKS_OF_USER.message);
-                    String userName = scanner.next();
-                    user = new UserTO(userName);
-                    operationExecutor.addOperation(new ShowTasksOperation(user));
+                    initShowTasks();
                     System.out.println("New operation: show tasks of given user");
                     break;
                   }
                 case 5:
                   {
-                    System.out.println(CREATE_GROUP.message);
-                    String groupName = scanner.next();
-                    group = new GroupTO(groupName);
-                    operationExecutor.addOperation(new CreateGroupOperation(group));
+                    initCreateGroup();
                     System.out.println("New operation: create group");
                     break;
                   }
                 case 6:
                   {
-                    System.out.println(ADD_USER_TO_GROUP.message);
-                    String groupName = scanner.next();
-                    String userName = scanner.next();
-                    user = new UserTO(userName);
-                    group = new GroupTO(groupName);
-                    operationExecutor.addOperation(new AddUserToGroupOperation(group, user));
+                    initAddUserToGroup();
                     System.out.println("New operation: add user to group");
                     break;
                   }
                 case 7:
                   {
-                    System.out.println(ADD_TASK_TO_GROUP.message);
-                    String groupName = scanner.next();
-                    String taskTitle = scanner.next();
-                    String taskDescription = scanner.next();
-                    task = new TaskTO(taskTitle, taskDescription);
-                    group = new GroupTO(groupName);
-                    operationExecutor.addOperation(new AddTaskToGroupOperation(group, task));
+                    initAddTaskToGroup();
                     System.out.println("New operation: add task to group");
                     break;
                   }
                 case 8:
                   {
-                    System.out.println(NEW_USER.message);
-                    String firstName = scanner.next();
-                    String lastName = scanner.next();
-                    String username = scanner.next();
-                    user = new UserTO(firstName, lastName, username);
-                    List<TaskTO> tasks = new LinkedList<>();
-                    String taskTitle = ".";
-                    String taskDescription = ".";
-                    boolean shouldCollectTasks = true;
-                    while (shouldCollectTasks) {
-                      System.out.println(ADD_TASK_WITHOUT_USER.message);
-                      taskTitle = scanner.next();
-                      taskDescription = scanner.next();
-                      if(taskTitle.equals("-") || taskDescription.equals("-")){
-                        shouldCollectTasks = false;
-                      }
-                      tasks.add(new TaskTO(taskTitle, taskDescription));
-                    }
-                    operationExecutor.addOperation(new CreateUserWithTasks(user, tasks));
+                    initNewUserWithTasks();
+                    System.out.println("New operation: create user with tasks");
+                    break;
                   }
                 case 9:
                   {
@@ -162,12 +96,12 @@ public class Main {
           }
         case 2:
           {
-            operationExecutor.printOperations();
+            printOperations();
             break;
           }
         case 3:
           {
-            operationExecutor.executeOperations();
+            executeOperations();
             break;
           }
         case 4:
@@ -181,6 +115,5 @@ public class Main {
 
     // TODO move it somewhere else
     // DataBaseUtil.disconnectFromDb();
-
   }
 }

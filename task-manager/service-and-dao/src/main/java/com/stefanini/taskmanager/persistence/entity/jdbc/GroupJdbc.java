@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Email(emailMessage = "Group with name {groupName} created")
 public class GroupJdbc implements Group {
-  private Long id;
+  private Long groupId;
 
   @EmailField(fieldName = "groupName")
   private String groupName;

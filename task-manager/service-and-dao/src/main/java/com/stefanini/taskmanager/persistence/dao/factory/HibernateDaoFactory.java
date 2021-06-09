@@ -17,14 +17,14 @@ public class HibernateDaoFactory implements DaoFactory {
   Session session = DataBaseUtil.connectToHibernate();
 
   public UserDao createUserDao() {
-    return new UserDaoHibernate(session);
+    return UserDaoHibernate.getInstance(session);
   }
 
   public TaskDao createTaskDao() {
-    return new TaskDaoHibernate(session);
+    return TaskDaoHibernate.getInstance(session);
   }
 
   public GroupDao createGroupDao() {
-    return new GroupDaoHibernate(session);
+    return GroupDaoHibernate.getInstance(session);
   }
 }
