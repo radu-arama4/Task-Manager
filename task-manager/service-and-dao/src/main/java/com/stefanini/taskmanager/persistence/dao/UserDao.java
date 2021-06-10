@@ -1,11 +1,12 @@
 package com.stefanini.taskmanager.persistence.dao;
 
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.UserTO;
+import com.stefanini.taskmanager.persistence.entity.User;
 
 import java.util.List;
 
 /**
- * Interface UserDao provides methods for performing some CRUD operations on {@link User} entities.
+ * Interface UserDao provides methods for performing some CRUD operations on {@link UserTO} entities.
  *
  * @author rarama
  */

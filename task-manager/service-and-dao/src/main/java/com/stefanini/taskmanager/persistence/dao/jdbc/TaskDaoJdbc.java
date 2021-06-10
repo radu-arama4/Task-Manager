@@ -1,13 +1,15 @@
 package com.stefanini.taskmanager.persistence.dao.jdbc;
 
-import com.stefanini.taskmanager.dto.Task;
-import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
+import com.stefanini.taskmanager.persistence.entity.EntityFactory;
+import com.stefanini.taskmanager.persistence.entity.Task;
+import com.stefanini.taskmanager.persistence.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TaskDaoJdbc implements TaskDao {
@@ -40,7 +42,7 @@ public class TaskDaoJdbc implements TaskDao {
   public Task addTask(Task task, User user) {
     String userName = user.getUserName();
     String taskTitle = task.getTaskTitle();
-    String taskDescription = task.getDescription();
+    String taskDescription = task.getTaskDescription();
 
     try {
       PreparedStatement statement =
@@ -55,6 +57,7 @@ public class TaskDaoJdbc implements TaskDao {
 
       if (rs.next()) {
         taskId = rs.getLong(1);
+        task.setTaskId(taskId);
       } else {
         return null;
       }
@@ -69,11 +72,22 @@ public class TaskDaoJdbc implements TaskDao {
         return null;
       }
 
-      return new Task(taskId, taskTitle, taskDescription);
+      return task;
     } catch (SQLException e) {
       logger.error(e);
       return null;
     }
+  }
+
+  @Override
+  public List<Task> addMultipleTasks(List<Task> tasks, User user) {
+    List<Task> addedTasks = new LinkedList<>();
+    tasks.forEach(
+        task -> {
+          Task addedTask = addTask(task, user);
+          addedTasks.add(addedTask);
+        });
+    return addedTasks;
   }
 
   @Override
@@ -89,9 +103,14 @@ public class TaskDaoJdbc implements TaskDao {
       while (rs.next()) {
         String taskTitle = rs.getString("task_title");
         String description = rs.getString("task_description");
-        tasks.add(new Task(taskTitle, description));
-      }
+        Task task = EntityFactory.createTask();
 
+        if (task != null) {
+          task.setTaskTitle(taskTitle);
+          task.setTaskDescription(description);
+          tasks.add(task);
+        }
+      }
       rs.close();
 
     } catch (SQLException e) {

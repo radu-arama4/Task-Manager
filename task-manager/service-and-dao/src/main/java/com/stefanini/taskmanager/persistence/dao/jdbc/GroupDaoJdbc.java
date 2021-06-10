@@ -1,9 +1,9 @@
 package com.stefanini.taskmanager.persistence.dao.jdbc;
 
-import com.stefanini.taskmanager.dto.Group;
-import com.stefanini.taskmanager.dto.Task;
-import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.persistence.entity.Group;
+import com.stefanini.taskmanager.persistence.entity.Task;
+import com.stefanini.taskmanager.persistence.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,17 +14,17 @@ public class GroupDaoJdbc implements GroupDao {
   private final Connection connection;
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
 
-  private static final String CREATE_GROUP_QUERY = "INSERT INTO `group`(`group_name`) VALUES(?)";
+  private static final String CREATE_GROUP_QUERY = "INSERT INTO `group_`(`group_name`) VALUES(?)";
   private static final String ADD_USER_TO_GROUP_QUERY =
       "INSERT INTO `user_to_group` (`user_id`, `group_id`) "
           + "SELECT (SELECT user.user_id FROM `user` "
-          + "WHERE user.username = ?) AS `user_id`, (SELECT group.group_id FROM `group` "
-          + "WHERE group.group_name = ?) as `group_id`";
+          + "WHERE user.username = ?) AS `user_id`, (SELECT group_.group_id FROM `group_` "
+          + "WHERE group_.group_name = ?) as `group_id`";
   private static final String INSERT_INTO_TASK_QUERY =
       "INSERT INTO task(task_title, task_description) VALUES(?, ?)";
   private static final String INSERT_INTO_TASK_TO_GROUP_QUERY =
       "INSERT INTO `task_to_group` (`task_id`, `group_id`)"
-          + "SELECT ?, group_id FROM `group` WHERE group.group_name LIKE ?";
+          + "SELECT ?, group_id FROM `group_` WHERE group_.group_name LIKE ?";
 
   private GroupDaoJdbc(Connection connection) {
     this.connection = connection;
@@ -53,11 +53,12 @@ public class GroupDaoJdbc implements GroupDao {
 
       if (rs.next()) {
         groupId = rs.getLong(1);
+        group.setGroupId(groupId);
       } else {
         return null;
       }
 
-      return new Group(groupId, groupName);
+      return group;
     } catch (SQLException e) {
       logger.error(e);
       return null;
@@ -65,7 +66,7 @@ public class GroupDaoJdbc implements GroupDao {
   }
 
   @Override
-  public boolean addUserToGroup(User user, Group group) {
+  public User addUserToGroup(User user, Group group) {
     try {
       String groupName = group.getGroupName();
       String userName = user.getUserName();
@@ -75,17 +76,21 @@ public class GroupDaoJdbc implements GroupDao {
       statement.setString(2, groupName);
       int nrOfUpdates = statement.executeUpdate();
 
-      return nrOfUpdates != 0;
+      if (nrOfUpdates != 0) {
+        return user;
+      } else {
+        return null;
+      }
     } catch (SQLException e) {
       logger.error(e);
-      return false;
+      return null;
     }
   }
 
   @Override
-  public boolean addTaskToGroup(Task task, Group group) {
+  public Task addTaskToGroup(Task task, Group group) {
     String taskTitle = task.getTaskTitle();
-    String taskDescription = task.getDescription();
+    String taskDescription = task.getTaskDescription();
     String groupName = group.getGroupName();
 
     try {
@@ -101,8 +106,9 @@ public class GroupDaoJdbc implements GroupDao {
 
       if (rs.next()) {
         taskId = rs.getLong(1);
+        task.setTaskId(taskId);
       } else {
-        return false;
+        return null;
       }
 
       statement = connection.prepareStatement(INSERT_INTO_TASK_TO_GROUP_QUERY);
@@ -111,10 +117,14 @@ public class GroupDaoJdbc implements GroupDao {
 
       int nrOfUpdates = statement.executeUpdate();
 
-      return nrOfUpdates != 0;
+      if (nrOfUpdates != 0) {
+        return task;
+      } else {
+        return null;
+      }
     } catch (SQLException e) {
       logger.error(e);
-      return false;
+      return null;
     }
   }
 }

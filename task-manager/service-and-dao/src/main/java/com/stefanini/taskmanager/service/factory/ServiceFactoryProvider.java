@@ -11,7 +11,8 @@ public abstract class ServiceFactoryProvider {
 
     public static ServiceFactory createServiceFactory(){
         switch (serviceType){
-            case STANDARD: return new ServiceFactoryImpl();
+            case STANDARD: return new ServiceFactoryImpl(); //todo @Transactional forces us to use proxy
+            case PROXY: return new ServiceFactoryImplProxy();
             default: throw new ServiceTypeException("Undefined service type!");
         }
     }

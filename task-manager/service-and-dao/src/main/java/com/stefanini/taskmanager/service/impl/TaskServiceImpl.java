@@ -1,13 +1,19 @@
 package com.stefanini.taskmanager.service.impl;
 
-import com.stefanini.taskmanager.dto.Task;
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.TaskTO;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
+import com.stefanini.taskmanager.persistence.entity.EntityFactory;
+import com.stefanini.taskmanager.persistence.entity.Task;
+import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.TaskService;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TaskServiceImpl implements TaskService {
@@ -19,17 +25,32 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public boolean addTask(Task task, User user) {
+  public TaskTO addTask(TaskTO task, UserTO user) {
     logger.info("addTask method started");
 
     String userName = user.getUserName();
     String taskTitle = task.getTaskTitle();
-    String taskDescription = task.getDescription();
+    String taskDescription = task.getTaskDescription();
+
+    User newUser;
+    Task newTask;
 
     if (userName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Missing information!");
     } else {
-      if (taskDao.addTask(task, user) != null) {
+      newUser = EntityFactory.createUser();
+      newTask = EntityFactory.createTask();
+      try {
+        BeanUtils.copyProperties(newUser, user);
+        BeanUtils.copyProperties(newTask, task);
+      } catch (InvocationTargetException | IllegalAccessException e) {
+        logger.error(e);
+      }
+
+      TaskTO returnedTask = new TaskTO();
+      Task createdTask = taskDao.addTask(newTask, newUser);
+
+      if (createdTask != null) {
         logger.info(
             "Task with [Title: "
                 + taskTitle
@@ -39,25 +60,51 @@ public class TaskServiceImpl implements TaskService {
                 + "] added to user: "
                 + userName
                 + ".");
-        return true;
+        try {
+          BeanUtils.copyProperties(returnedTask, createdTask);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+          logger.error(e);
+        }
+        return returnedTask;
       }
       logger.warn("No user with such username: " + userName);
     }
-    return false;
+    return null;
   }
 
   @Override
-  public List<Task> getTasksOfUser(User user) {
+  public List<TaskTO> getTasksOfUser(UserTO user) {
     if (user.getUserName() == null) {
       logger.warn("Missing information!");
     }
 
-    List<Task> tasks = taskDao.getTasks(user);
+    User selectedUser = EntityFactory.createUser();
+
+    try {
+      BeanUtils.copyProperties(selectedUser, user);
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
+
+    List<Task> tasks = taskDao.getTasks(selectedUser);
+    List<TaskTO> returnedTasks = new LinkedList<>();
 
     if (tasks == null) {
       logger.warn("No user with such username: " + user.getUserName());
+      return null;
     }
 
-    return tasks;
+    tasks.forEach(
+        task -> {
+          TaskTO task1 = new TaskTO();
+          try {
+            BeanUtils.copyProperties(task1, task);
+          } catch (InvocationTargetException | IllegalAccessException e) {
+            logger.error(e);
+          }
+          returnedTasks.add(task1);
+        });
+
+    return returnedTasks;
   }
 }

@@ -1,6 +1,8 @@
 package com.stefanini.taskmanager.persistence.dao.factory;
 
-import com.stefanini.taskmanager.persistence.dao.*;
+import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.persistence.dao.TaskDao;
+import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.dao.jdbc.GroupDaoJdbc;
 import com.stefanini.taskmanager.persistence.dao.jdbc.TaskDaoJdbc;
 import com.stefanini.taskmanager.persistence.dao.jdbc.UserDaoJdbc;

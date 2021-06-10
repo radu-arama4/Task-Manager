@@ -1,23 +1,20 @@
 package com.stefanini.taskmanager.parser;
 
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.UserTO;
 
-/**
- * Contains the necessary method/methods for parsing {@link User} related input.
- */
+/** Contains the necessary method/methods for parsing {@link UserTO} related input. */
 public class UserParser {
   private static final String FN = CommandLineVariables.FIRST_NAME.value;
   private static final String LN = CommandLineVariables.LAST_NAME.value;
   private static final String UN = CommandLineVariables.USER_NAME.value;
 
   /**
-   *
-   * Extracts and encapsulates the {@link User} related data from the command line arguments
+   * Extracts and encapsulates the {@link UserTO} related data from the command line arguments
    *
    * @param arguments - command line arguments
-   * @return object of type {@link User}
+   * @return object of type {@link UserTO}
    */
-  public static User parseUser(String[] arguments) {
+  public static UserTO parseUser(String[] arguments) {
     String firstName = null;
     String lastName = null;
     String userName = null;
@@ -32,6 +29,6 @@ public class UserParser {
       }
     }
 
-    return new User(firstName, lastName, userName);
+    return new UserTO(firstName, lastName, userName);
   }
 }

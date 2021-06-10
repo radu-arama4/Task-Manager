@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.operations.user;
 
-import com.stefanini.taskmanager.dto.User;
+import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.UserService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
@@ -20,7 +20,7 @@ public class ShowAllUsersOperation implements Operation {
 
   @Override
   public void execute() {
-    List<User> users = userService.getAllUsers();
+    List<UserTO> users = userService.getAllUsers();
     users.forEach(System.out::println);
   }
 }

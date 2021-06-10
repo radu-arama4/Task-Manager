@@ -1,21 +1,18 @@
 package com.stefanini.taskmanager.parser;
 
-import com.stefanini.taskmanager.dto.Group;
+import com.stefanini.taskmanager.dto.GroupTO;
 
-/**
- * Contains the necessary method/methods for parsing {@link Group} related input.
- */
+/** Contains the necessary method/methods for parsing {@link GroupTO} related input. */
 public class GroupParser {
   private static final String GN = CommandLineVariables.GROUP_NAME.value;
 
   /**
-   *
-   * Extracts and encapsulates the {@link Group} related data from the command line arguments
+   * Extracts and encapsulates the {@link GroupTO} related data from the command line arguments
    *
    * @param arguments - command line arguments
-   * @return object of type {@link Group}
+   * @return object of type {@link GroupTO}
    */
-  public static Group parseGroup(String[] arguments) {
+  public static GroupTO parseGroup(String[] arguments) {
     String groupName = null;
 
     for (String arg : arguments) {
@@ -24,6 +21,6 @@ public class GroupParser {
       }
     }
 
-    return new Group(groupName);
+    return new GroupTO(groupName);
   }
 }

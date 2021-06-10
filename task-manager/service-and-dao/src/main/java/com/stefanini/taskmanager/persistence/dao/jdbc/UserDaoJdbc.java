@@ -1,7 +1,9 @@
 package com.stefanini.taskmanager.persistence.dao.jdbc;
 
-import com.stefanini.taskmanager.dto.User;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
+import com.stefanini.taskmanager.persistence.entity.User;
+import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
+import com.stefanini.taskmanager.persistence.entity.jdbc.UserJdbc;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +51,7 @@ public class UserDaoJdbc implements UserDao {
 
       if (rs.next()) {
         userId = rs.getLong(1);
-        return new User(userId, firstName, lastName, userName);
+        return new UserHibernate(userId, firstName, lastName, userName);
       } else {
         return null;
       }
@@ -73,7 +75,7 @@ public class UserDaoJdbc implements UserDao {
         String lastName = rs.getString("last_name");
         String userName = rs.getString("username");
 
-        User newUser = new User(userId, firstName, lastName, userName);
+        User newUser = new UserJdbc(userId, firstName, lastName, userName);
         users.add(newUser);
       }
       rs.close();

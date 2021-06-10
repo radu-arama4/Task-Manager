@@ -3,6 +3,7 @@ package com.stefanini.taskmanager.service.factory;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactoryProvider;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoType;
+import com.stefanini.taskmanager.service.ExtendedService;
 import com.stefanini.taskmanager.service.GroupService;
 import com.stefanini.taskmanager.service.TaskService;
 import com.stefanini.taskmanager.service.UserService;
@@ -29,5 +30,10 @@ public class ServiceFactoryImpl implements ServiceFactory {
   @Override
   public GroupService getGroupService() {
     return new GroupServiceImpl(daoFactory);
+  }
+
+  @Override
+  public ExtendedService getExtendedService() {
+    return null;
   }
 }
