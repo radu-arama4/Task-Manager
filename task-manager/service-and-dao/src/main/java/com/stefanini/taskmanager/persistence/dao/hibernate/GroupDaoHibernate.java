@@ -8,7 +8,7 @@ import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.persistence.entity.hibernate.GroupHibernate;
 import com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate;
 import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
-import org.apache.commons.beanutils.BeanUtils;
+import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -18,7 +18,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.lang.reflect.InvocationTargetException;
 
 public class GroupDaoHibernate implements GroupDao {
   private final Session session;
@@ -97,11 +96,7 @@ public class GroupDaoHibernate implements GroupDao {
   public Task addTaskToGroup(Task newTask, Group group) {
     TaskHibernate task = new TaskHibernate();
 
-    try {
-      BeanUtils.copyProperties(task, newTask);
-    } catch (InvocationTargetException | IllegalAccessException e) {
-      e.printStackTrace();
-    }
+    OperationsUtil.copyObjectProperties(task, newTask);
 
     criteriaGroup
         .select(rootGroup)

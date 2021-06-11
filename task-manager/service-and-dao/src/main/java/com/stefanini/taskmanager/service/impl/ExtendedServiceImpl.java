@@ -9,13 +9,13 @@ import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.ExtendedService;
-import org.apache.commons.beanutils.BeanUtils;
+import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 //TODO - combine this service with already existing service
 public class ExtendedServiceImpl implements ExtendedService {
@@ -29,27 +29,19 @@ public class ExtendedServiceImpl implements ExtendedService {
   }
 
   @Override
-  public void createUserWithTasks(UserTO user, List<TaskTO> tasks) {
+  public void createUserWithTasks(UserTO user, Stream<TaskTO> tasks) {
     User newUser = EntityFactory.createUser();
     List<Task> newTasks = new LinkedList<>();
 
-    try {
-      BeanUtils.copyProperties(newUser, user);
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      logger.error(e);
-    }
+    OperationsUtil.copyObjectProperties(newUser, user);
 
     tasks.forEach(taskTO -> {
       Task task = EntityFactory.createTask();
-      try {
-        BeanUtils.copyProperties(task, taskTO);
-      } catch (IllegalAccessException | InvocationTargetException e) {
-        logger.error(e);
-      }
+      OperationsUtil.copyObjectProperties(task, taskTO);
       newTasks.add(task);
     });
 
     User createdUser = userDao.createUser(newUser);
-    taskDao.addMultipleTasks(newTasks, createdUser);
+    taskDao.addMultipleTasks(newTasks.stream(), createdUser);
   }
 }

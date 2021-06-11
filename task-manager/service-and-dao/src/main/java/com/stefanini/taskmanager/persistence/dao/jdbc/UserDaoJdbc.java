@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class UserDaoJdbc implements UserDao {
   private static UserDao singleInstance = null;
@@ -62,7 +63,7 @@ public class UserDaoJdbc implements UserDao {
   }
 
   @Override
-  public List<User> getUsers() {
+  public Stream<User> getUsers() {
     List<User> users = new ArrayList<>();
 
     try {
@@ -83,6 +84,6 @@ public class UserDaoJdbc implements UserDao {
       logger.error(e);
     }
 
-    return users;
+    return users.stream();
   }
 }

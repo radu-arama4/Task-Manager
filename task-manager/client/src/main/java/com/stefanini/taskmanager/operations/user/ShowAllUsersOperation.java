@@ -6,7 +6,7 @@ import com.stefanini.taskmanager.service.UserService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
 import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Implements {@link Operation}. Encapsulates no fields. The execution consists of calling the
@@ -20,7 +20,7 @@ public class ShowAllUsersOperation implements Operation {
 
   @Override
   public void execute() {
-    List<UserTO> users = userService.getAllUsers();
+    Stream<UserTO> users = userService.getAllUsers();
     users.forEach(System.out::println);
   }
 }

@@ -4,7 +4,7 @@ import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Interface TaskDao provides methods for performing some CRUD operations on {@link TaskTO}
@@ -30,7 +30,7 @@ public interface TaskDao {
    * @param user - the user to whom the tasks will be added
    * @return List<Task> - the tasks that have been added
    */
-  List<Task> addMultipleTasks(List<Task> tasks, User user);
+  Stream<Task> addMultipleTasks(Stream<Task> tasks, User user);
 
   /**
    * Method used for extracting all existing Task entities from the database in form of list
@@ -38,5 +38,5 @@ public interface TaskDao {
    * @param selectedUser - the user of whom the tasks will be shown
    * @return List<Task> - the tasks of the specified user
    */
-  List<Task> getTasks(User selectedUser);
+  Stream<Task> getTasks(User selectedUser);
 }

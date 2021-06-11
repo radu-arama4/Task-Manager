@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 
 @Aspect
 public class EmailProxy2 { // todo rename
-  @After("execution(* com.stefanini.taskmanager.service.impl.UserServiceImpl.*(..))")
+  @After("exe")
   public void sendEmail(JoinPoint joinPoint) {
     System.out.println("TEST");
   }

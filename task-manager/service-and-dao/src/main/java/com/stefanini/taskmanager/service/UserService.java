@@ -5,7 +5,7 @@ import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.service.proxy.email.EmailGenerator;
 import com.stefanini.taskmanager.service.proxy.transaction.Transactional;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Interface that provides business logic for {@link UserTO} entity.
@@ -30,5 +30,5 @@ public interface UserService {
    *
    * @return list of users - the existing users in the database
    */
-  List<UserTO> getAllUsers();
+  Stream<UserTO> getAllUsers();
 }

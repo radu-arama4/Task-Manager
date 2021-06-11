@@ -6,13 +6,11 @@ import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.UserService;
-import org.apache.commons.beanutils.BeanUtils;
+import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UserServiceImpl implements UserService {
   private final UserDao userDao;
@@ -36,22 +34,12 @@ public class UserServiceImpl implements UserService {
     } else {
       User newUser = EntityFactory.createUser();
 
-      //isolate mapping
-
-      try {
-        BeanUtils.copyProperties(newUser, user);
-      } catch (IllegalAccessException | InvocationTargetException e) {
-        e.printStackTrace();
-      }
+      OperationsUtil.copyObjectProperties(newUser, user);
 
       User createdUser = userDao.createUser(newUser);
       UserTO returnedUser = new UserTO();
 
-      try {
-        BeanUtils.copyProperties(returnedUser, createdUser);
-      } catch (IllegalAccessException | InvocationTargetException e) {
-        e.printStackTrace();
-      }
+      OperationsUtil.copyObjectProperties(returnedUser, createdUser);
 
       if (createdUser != null) {
         logger.info(
@@ -70,20 +58,13 @@ public class UserServiceImpl implements UserService {
 
   private UserTO toUserTO(User user) {
     UserTO returnedUser = new UserTO();
-    try {
-      BeanUtils.copyProperties(returnedUser, user);
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      logger.error(e);
-    }
+    OperationsUtil.copyObjectProperties(returnedUser, user);
     return returnedUser;
   }
 
   @Override
-  public List<UserTO> getAllUsers() {
+  public Stream<UserTO> getAllUsers() {
     logger.info("getAllUsers method started");
-
-    List<User> users = userDao.getUsers();
-
-    return users.stream().map(this::toUserTO).collect(Collectors.toList());
+    return userDao.getUsers().map(this::toUserTO);
   }
 }

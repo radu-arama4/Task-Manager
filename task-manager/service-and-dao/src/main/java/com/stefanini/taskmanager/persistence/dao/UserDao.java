@@ -3,7 +3,7 @@ package com.stefanini.taskmanager.persistence.dao;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.entity.User;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Interface UserDao provides methods for performing some CRUD operations on {@link UserTO} entities.
@@ -25,5 +25,5 @@ public interface UserDao {
    *
    * @return List<User> - all the existing users from the database
    */
-  List<User> getUsers();
+  Stream<User> getUsers();
 }

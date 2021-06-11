@@ -7,7 +7,7 @@ import com.stefanini.taskmanager.service.TaskService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
 import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Implements {@link Operation}. Encapsulates {@link UserTO} field. The execution consists of sending
@@ -24,7 +24,7 @@ public class ShowTasksOperation implements Operation {
 
   @Override
   public void execute() {
-    List<TaskTO> tasks = taskService.getTasksOfUser(user);
+    Stream<TaskTO> tasks = taskService.getTasksOfUser(user);
     tasks.forEach(System.out::println);
   }
 }

@@ -5,8 +5,13 @@ package com.stefanini.taskmanager.operations;
  *
  * @author rarama
  */
-public interface Operation {
+public interface Operation extends Runnable {
 
   /** Method user for starting executing a given operation. */
   void execute();
+
+  @Override
+  default void run() {
+    this.execute();
+  }
 }

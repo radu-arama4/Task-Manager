@@ -1,20 +1,18 @@
 package com.stefanini.taskmanager.service.impl;
 
+import com.stefanini.taskmanager.dto.GroupTO;
+import com.stefanini.taskmanager.dto.TaskTO;
+import com.stefanini.taskmanager.dto.UserTO;
+import com.stefanini.taskmanager.persistence.dao.GroupDao;
 import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.Group;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.GroupService;
-import org.apache.commons.beanutils.BeanUtils;
+import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.stefanini.taskmanager.dto.GroupTO;
-import com.stefanini.taskmanager.dto.TaskTO;
-import com.stefanini.taskmanager.dto.UserTO;
-import com.stefanini.taskmanager.persistence.dao.GroupDao;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class GroupServiceImpl implements GroupService {
   private final GroupDao groupDao;
@@ -33,11 +31,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     Group newGroup = EntityFactory.createGroup();
-    try {
-      BeanUtils.copyProperties(newGroup, group);
-    } catch (InvocationTargetException | IllegalAccessException e) {
-      e.printStackTrace();
-    }
+    OperationsUtil.copyObjectProperties(newGroup, group);
 
     if (groupDao.createGroup(newGroup) != null) {
       logger.info("New group " + group.getGroupName() + " created!");
@@ -59,12 +53,8 @@ public class GroupServiceImpl implements GroupService {
       Group selectedGroup = EntityFactory.createGroup();
       User selectedUser = EntityFactory.createUser();
 
-      try {
-        BeanUtils.copyProperties(selectedGroup, group);
-        BeanUtils.copyProperties(selectedUser, user);
-      } catch (InvocationTargetException | IllegalAccessException e) {
-        e.printStackTrace();
-      }
+      OperationsUtil.copyObjectProperties(selectedGroup, group);
+      OperationsUtil.copyObjectProperties(selectedUser, user);
 
       if (groupDao.addUserToGroup(selectedUser, selectedGroup) != null) {
         logger.info("User " + userName + " added to group " + groupName);
@@ -90,12 +80,8 @@ public class GroupServiceImpl implements GroupService {
       Group selectedGroup = EntityFactory.createGroup();
       Task selectedTask = EntityFactory.createTask();
 
-      try {
-        BeanUtils.copyProperties(selectedGroup, group);
-        BeanUtils.copyProperties(selectedTask, task);
-      } catch (InvocationTargetException | IllegalAccessException e) {
-        e.printStackTrace();
-      }
+      OperationsUtil.copyObjectProperties(selectedGroup, group);
+      OperationsUtil.copyObjectProperties(selectedTask, task);
 
       if (groupDao.addTaskToGroup(selectedTask, selectedGroup) != null) {
         logger.info(

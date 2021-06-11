@@ -4,7 +4,7 @@ import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.service.proxy.transaction.Transactional;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /** Interface that provides business logic for multiple entities. */
 @Transactional
@@ -15,5 +15,5 @@ public interface ExtendedService { //todo rename
    * @param user - user data transfer object
    * @param tasks - task data transfer object
    */
-  void createUserWithTasks(UserTO user, List<TaskTO> tasks);
+  void createUserWithTasks(UserTO user, Stream<TaskTO> tasks);
 }

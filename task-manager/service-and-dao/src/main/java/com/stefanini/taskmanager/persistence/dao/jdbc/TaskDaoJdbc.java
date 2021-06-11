@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class TaskDaoJdbc implements TaskDao {
   private static TaskDao singleInstance = null;
@@ -80,18 +80,14 @@ public class TaskDaoJdbc implements TaskDao {
   }
 
   @Override
-  public List<Task> addMultipleTasks(List<Task> tasks, User user) {
-    List<Task> addedTasks = new LinkedList<>();
+  public Stream<Task> addMultipleTasks(Stream<Task> tasks, User user) {
     tasks.forEach(
-        task -> {
-          Task addedTask = addTask(task, user);
-          addedTasks.add(addedTask);
-        });
-    return addedTasks;
+        task -> addTask(task, user));
+    return tasks;
   }
 
   @Override
-  public List<Task> getTasks(User selectedUser) {
+  public Stream<Task> getTasks(User selectedUser) {
     String userName = selectedUser.getUserName();
     List<Task> tasks = new ArrayList<>();
 
@@ -118,6 +114,6 @@ public class TaskDaoJdbc implements TaskDao {
       return null;
     }
 
-    return tasks;
+    return tasks.stream();
   }
 }

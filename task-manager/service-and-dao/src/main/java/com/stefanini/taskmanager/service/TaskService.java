@@ -6,7 +6,7 @@ import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.service.proxy.email.EmailGenerator;
 import com.stefanini.taskmanager.service.proxy.transaction.Transactional;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Interface that provides business logic for {@link TaskTO} entity.
@@ -35,5 +35,5 @@ public interface TaskService {
    * @param user user data transfer object
    * @return list of users - the existing users in the database
    */
-  List<TaskTO> getTasksOfUser(UserTO user);
+  Stream<TaskTO> getTasksOfUser(UserTO user);
 }

@@ -28,7 +28,15 @@ public class OperationExecutor {
 
   /** Executes all the existing operations in the list */
   public void executeOperations() {
-    textFileOperations.forEach(Operation::execute);
+    textFileOperations.forEach(operation -> {
+      Thread executionThread = new Thread(operation);
+      try {
+        executionThread.start();
+        executionThread.join();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    });
     textFileOperations.clear();
   }
 

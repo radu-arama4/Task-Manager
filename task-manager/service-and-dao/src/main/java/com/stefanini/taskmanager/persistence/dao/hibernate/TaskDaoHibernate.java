@@ -6,7 +6,7 @@ import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate;
 import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
-import org.apache.commons.beanutils.BeanUtils;
+import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -16,8 +16,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
+import java.util.stream.Stream;
 
 public class TaskDaoHibernate implements TaskDao {
   private final Session session;
@@ -60,7 +59,7 @@ public class TaskDaoHibernate implements TaskDao {
       return null;
     }
 
-    copyTasks(newTask, task);
+    OperationsUtil.copyObjectProperties(newTask, task);
 
     try {
       newTask.setUser(selectedUser);
@@ -73,20 +72,12 @@ public class TaskDaoHibernate implements TaskDao {
     return newTask;
   }
 
-  private void copyTasks(Task task1, Task task2) {
-    try {
-      BeanUtils.copyProperties(task1, task2);
-    } catch (InvocationTargetException | IllegalAccessException e) {
-      logger.error(e);
-    }
-  }
-
   @Override
-  public List<Task> addMultipleTasks(List<Task> tasks, User user) {
+  public Stream<Task> addMultipleTasks(Stream<Task> tasks, User user) {
     tasks.forEach(
         task -> {
           TaskHibernate newTask = new TaskHibernate();
-          copyTasks(newTask, task);
+          OperationsUtil.copyObjectProperties(newTask, task);
           newTask.setUser((UserHibernate) user);
           session.save(newTask);
         });
@@ -95,7 +86,7 @@ public class TaskDaoHibernate implements TaskDao {
   }
 
   @Override
-  public List<Task> getTasks(User selectedUser) {
+  public Stream<Task> getTasks(User selectedUser) {
     criteriaTask
         .select(rootTask)
         .where(builder.like(rootTask.get("user").get("userName"), selectedUser.getUserName()));
@@ -103,7 +94,7 @@ public class TaskDaoHibernate implements TaskDao {
     Query<Task> query = session.createQuery(criteriaTask);
 
     try {
-      return query.getResultList();
+      return query.getResultList().stream();
     } catch (NoResultException e) {
       logger.error(e);
       return null;

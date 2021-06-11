@@ -11,7 +11,7 @@ import org.hibernate.query.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
+import java.util.stream.Stream;
 
 public class UserDaoHibernate implements UserDao {
   private final Session session;
@@ -47,9 +47,9 @@ public class UserDaoHibernate implements UserDao {
   }
 
   @Override
-  public List<User> getUsers() {
+  public Stream<User> getUsers() {
     criteria.select(rootUser);
     Query<User> query = session.createQuery(criteria);
-    return query.getResultList();
+    return query.getResultList().stream();
   }
 }
