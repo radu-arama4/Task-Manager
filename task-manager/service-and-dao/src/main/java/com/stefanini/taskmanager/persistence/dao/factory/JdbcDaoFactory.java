@@ -15,7 +15,7 @@ import java.sql.Connection;
  * {@link UserDaoJdbc}, {@link TaskDaoJdbc}, {@link GroupDaoJdbc}.
  */
 public class JdbcDaoFactory implements DaoFactory {
-  private final Connection connection = DataBaseUtil.connectToDb();
+  private final Connection connection = DataBaseUtil.connectWithJdbc();
 
   public UserDao createUserDao() {
     return UserDaoJdbc.getInstance(connection);

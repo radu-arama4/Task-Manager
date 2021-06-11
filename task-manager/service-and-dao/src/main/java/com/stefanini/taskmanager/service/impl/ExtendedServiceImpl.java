@@ -17,11 +17,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
+//TODO - combine this service with already existing service
 public class ExtendedServiceImpl implements ExtendedService {
   private final UserDao userDao;
   private final TaskDao taskDao;
   private static final Logger logger = LogManager.getLogger(ExtendedServiceImpl.class);
-  //todo combine this service with already existing service
 
   public ExtendedServiceImpl(DaoFactory daoFactory) {
     this.userDao = daoFactory.createUserDao();
@@ -49,7 +49,7 @@ public class ExtendedServiceImpl implements ExtendedService {
       newTasks.add(task);
     });
 
-    User createdUser = userDao.createUser(newUser); //todo rename variables
+    User createdUser = userDao.createUser(newUser);
     taskDao.addMultipleTasks(newTasks, createdUser);
   }
 }

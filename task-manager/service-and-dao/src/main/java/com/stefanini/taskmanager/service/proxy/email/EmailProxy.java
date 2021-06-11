@@ -5,6 +5,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.*;
 
+/**
+ * Proxy for sending email about an executed operation annotated with @{@link EmailGenerator}. Also
+ * the method has to return an entity annotated with @{@link Email}, containing fields annotated
+ * with @{@link EmailField}
+ */
 public class EmailProxy implements InvocationHandler {
   private static final Logger logger = LogManager.getLogger(EmailProxy.class);
   private final Object obj;

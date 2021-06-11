@@ -3,6 +3,8 @@ package com.stefanini.taskmanager.persistence.entity.hibernate;
 import com.stefanini.taskmanager.persistence.entity.Group;
 import com.stefanini.taskmanager.service.proxy.email.Email;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,6 +14,7 @@ import java.util.Set;
 @Entity(name = "group_")
 @Table(name = "group_")
 @Email
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class GroupHibernate implements Group {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,17 +24,17 @@ public class GroupHibernate implements Group {
   @Column(name = "group_name", nullable = false)
   private String groupName;
 
-  @ManyToMany(cascade = CascadeType.DETACH)
+  @ManyToMany
   @JoinTable(
       name = "user_to_group",
       joinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "group_id")},
       inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
       uniqueConstraints = @UniqueConstraint(columnNames = {"group_id", "user_id"})
   )
-  private Set<UserHibernate> users = new HashSet<>();
+  @ToString.Exclude private Set<UserHibernate> users = new HashSet<>();
 
   @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-  private Set<TaskHibernate> tasks = new HashSet<>();
+  @ToString.Exclude private Set<TaskHibernate> tasks = new HashSet<>();
 
   public GroupHibernate() {}
 
@@ -51,4 +54,6 @@ public class GroupHibernate implements Group {
   public void addUser(UserHibernate user) {
     this.users.add(user);
   }
+
+
 }

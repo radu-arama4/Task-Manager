@@ -9,6 +9,10 @@ import com.stefanini.taskmanager.persistence.entity.jdbc.TaskJdbc;
 import com.stefanini.taskmanager.persistence.entity.jdbc.UserJdbc;
 import com.stefanini.taskmanager.util.ApplicationProperties;
 
+/**
+ * Factory which returns {@link User}, {@link Task} and {@link Group} entities based on the
+ * configured dao type.
+ */
 public class EntityFactory {
   private static final ApplicationProperties applicationProperties =
       ApplicationProperties.getInstance();

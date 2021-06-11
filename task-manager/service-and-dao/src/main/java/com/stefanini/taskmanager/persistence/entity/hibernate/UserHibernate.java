@@ -2,6 +2,8 @@ package com.stefanini.taskmanager.persistence.entity.hibernate;
 
 import com.stefanini.taskmanager.persistence.entity.User;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import java.util.Set;
 @Data
 @Entity(name = "User")
 @Table(name = "user")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class UserHibernate implements User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +29,10 @@ public class UserHibernate implements User {
   private String userName;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-  private Set<TaskHibernate> tasks = new HashSet<>();
+  @ToString.Exclude private Set<TaskHibernate> tasks = new HashSet<>();
 
   @ManyToMany(mappedBy = "users", cascade = CascadeType.DETACH)
-  private Set<GroupHibernate> groups = new HashSet<>();
+  @ToString.Exclude private Set<GroupHibernate> groups = new HashSet<>();
 
   public UserHibernate() {}
 

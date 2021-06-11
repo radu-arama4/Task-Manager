@@ -1,5 +1,6 @@
 package com.stefanini.taskmanager;
 
+import com.stefanini.taskmanager.persistence.util.ApplicationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +22,8 @@ public class Main {
     }
 
     Scanner scanner = new Scanner(System.in);
+
+    ApplicationManager.initApp();
 
     while (true) {
       System.out.println(MAIN.message);
@@ -106,8 +109,8 @@ public class Main {
           }
         case 4:
           {
-            logger.info("Program finished");
-            return;
+            ApplicationManager.closeApp();
+            System.exit(0);
           }
       }
       System.out.println("-------------------------------");

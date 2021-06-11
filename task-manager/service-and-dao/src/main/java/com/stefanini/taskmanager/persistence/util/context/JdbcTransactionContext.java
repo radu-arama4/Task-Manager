@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class JdbcTransactionContext implements TransactionContext {
-  private final Connection connection = DataBaseUtil.connectToDb();
+  private final Connection connection = DataBaseUtil.connectWithJdbc();
   private static final Logger logger = LogManager.getLogger(JdbcTransactionContext.class);
 
   @Override

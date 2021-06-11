@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Email(emailMessage = "User {firstNamee} / {lastName} identified by {userName} has been created")
+@Email(emailMessage = "User {firstName} / {lastName} identified by {userName} has been created")
 public class UserTO {
   private Long userId;
-  @EmailField(fieldName = "firstNamee")
+  @EmailField(fieldName = "firstName")
   private String firstName;
   @EmailField(fieldName = "lastName")
   private String lastName;

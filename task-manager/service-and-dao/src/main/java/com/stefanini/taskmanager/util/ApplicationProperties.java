@@ -23,9 +23,6 @@ public class ApplicationProperties {
   private final String driverClass;
   private final String dialect;
   private final String hbm2ddl;
-  private final String showSql;
-  private final String generateStatistics;
-  private final String useSqlComments;
 
   private static final Logger logger = LogManager.getLogger(ApplicationProperties.class);
 
@@ -40,9 +37,6 @@ public class ApplicationProperties {
     driverClass = properties.getProperty("connection.driver_class");
     dialect = properties.getProperty("dialect");
     hbm2ddl = properties.getProperty("hbm2ddl.auto");
-    showSql = properties.getProperty("hibernate.show_sql");
-    generateStatistics = properties.getProperty("hibernate.generate_statistics");
-    useSqlComments = properties.getProperty("hibernate.use_sql_comments");
 
     daoType = properties.getProperty("dao_type");
     serviceType = properties.getProperty("service_type");
@@ -57,19 +51,15 @@ public class ApplicationProperties {
     return instance;
   }
 
-  public Configuration setHibernateProperties() {
+  public Configuration getHibernateConfiguration() {
     Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
-    configuration
+    return configuration
         .setProperty("hibernate.connection.url", url)
         .setProperty("hibernate.connection.username", user)
         .setProperty("hibernate.connection.password", password)
         .setProperty("hibernate.hbm2ddl.auto", hbm2ddl)
         .setProperty("hibernate.dialect", dialect)
-        .setProperty("hibernate.connection.driver_class", driverClass)
-        .setProperty("hibernate.show_sql", showSql)
-        .setProperty("hibernate.generate_statistics", generateStatistics)
-        .setProperty("hibernate.use_sql_comments", useSqlComments);
-    return configuration;
+        .setProperty("hibernate.connection.driver_class", driverClass);
   }
 
   private Properties extractProperties() {

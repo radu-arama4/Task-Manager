@@ -5,7 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class HibernateTransactionContext implements TransactionContext {
-  private final Session session = DataBaseUtil.connectToHibernate();
+  private final Session session = DataBaseUtil.connectWithHibernate();
   private Transaction transaction = null;
 
   @Override
@@ -15,14 +15,14 @@ public class HibernateTransactionContext implements TransactionContext {
 
   @Override
   public void commit() {
-    if (transaction!=null) {
+    if (transaction != null) {
       transaction.commit();
     }
   }
 
   @Override
   public void rollback() {
-    if (transaction!=null) {
+    if (transaction != null) {
       transaction.rollback();
     }
   }

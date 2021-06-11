@@ -3,6 +3,8 @@ package com.stefanini.taskmanager.persistence.entity.hibernate;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.service.proxy.email.Email;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -10,6 +12,7 @@ import javax.persistence.*;
 @Entity(name = "Task")
 @Table(name = "task")
 @Email
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class TaskHibernate implements Task {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,14 +35,14 @@ public class TaskHibernate implements Task {
       name = "task_to_user",
       inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
       joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "task_id")})
-  private UserHibernate user;
+  @ToString.Exclude private UserHibernate user;
 
   @ManyToOne(cascade = CascadeType.DETACH)
   @JoinTable(
       name = "task_to_group",
       inverseJoinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "group_id")},
       joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "task_id")})
-  private GroupHibernate group;
+  @ToString.Exclude private GroupHibernate group;
 
   public TaskHibernate() {}
 

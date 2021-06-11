@@ -2,22 +2,30 @@ package com.stefanini.taskmanager.persistence.dao.hibernate;
 
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.entity.User;
+import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
-import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class UserDaoHibernate implements UserDao {
   private final Session session;
+  private final CriteriaQuery<User> criteria;
+  private final CriteriaBuilder builder;
+  private final Root<UserHibernate> rootUser;
   private static final Logger logger = LogManager.getLogger(UserDaoHibernate.class);
   private static UserDao singleInstance;
 
-  private static final String GET_USERS = "from User";
-
   private UserDaoHibernate(Session session) {
     this.session = session;
+    builder = session.getCriteriaBuilder();
+    criteria = builder.createQuery(User.class);
+    rootUser = criteria.from(UserHibernate.class);
   }
 
   public static UserDao getInstance(Session session) {
@@ -40,7 +48,8 @@ public class UserDaoHibernate implements UserDao {
 
   @Override
   public List<User> getUsers() {
-    Query query = session.createQuery(GET_USERS);
-    return (List<User>) query.getResultList();
+    criteria.select(rootUser);
+    Query<User> query = session.createQuery(criteria);
+    return query.getResultList();
   }
 }

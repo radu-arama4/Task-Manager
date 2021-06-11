@@ -25,8 +25,7 @@ public class DataBaseUtil {
   private static Connection connection = null;
   private static Session session = null;
 
-  // Method for connecting to the database
-  public static Connection connectToDb() {
+  public static Connection connectWithJdbc() {
     if (connection == null) {
       try {
         connection = DriverManager.getConnection(url, user, password);
@@ -40,15 +39,14 @@ public class DataBaseUtil {
     return connection;
   }
 
-  public static Session connectToHibernate() {
+  public static Session connectWithHibernate() {
     if (session == null) {
-      Configuration configuration = ApplicationProperties.getInstance().setHibernateProperties();
+      Configuration configuration = ApplicationProperties.getInstance().getHibernateConfiguration();
       session = configuration.buildSessionFactory().openSession();
     }
     return session;
   }
 
-  // Method for disconnecting from the database
   public static void disconnectJDBC() {
     try {
       connection.close();

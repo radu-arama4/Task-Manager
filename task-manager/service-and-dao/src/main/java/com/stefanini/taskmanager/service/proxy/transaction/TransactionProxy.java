@@ -4,12 +4,17 @@ import com.stefanini.taskmanager.persistence.util.context.ContextProvider;
 import com.stefanini.taskmanager.persistence.util.context.TransactionContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static java.lang.reflect.Proxy.newProxyInstance;
 
+/**
+ * Proxy for implementing transactions for the methods of a given service annotated with @{@link
+ * Transactional}. It includes start, commit and rollback operations.
+ */
 public class TransactionProxy implements InvocationHandler {
   private static final Logger logger = LogManager.getLogger(TransactionProxy.class);
   private final Object obj;
@@ -26,9 +31,6 @@ public class TransactionProxy implements InvocationHandler {
   public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
     Object result;
     TransactionContext transactionContext = ContextProvider.createTransactionContext();
-    if (transactionContext == null) {
-      throw new NotSupportedTypeException("Not supported type!");
-    }
     try {
       Class<?> clazz = m.getDeclaringClass();
       if (clazz.isAnnotationPresent(Transactional.class)) {
@@ -47,11 +49,5 @@ public class TransactionProxy implements InvocationHandler {
       throw new RuntimeException("Unexpected invocation exception: " + e.getMessage());
     }
     return result;
-  }
-
-  public static class NotSupportedTypeException extends Exception{
-    public NotSupportedTypeException(String errorMessage) {
-      super(errorMessage);
-    }
   }
 }

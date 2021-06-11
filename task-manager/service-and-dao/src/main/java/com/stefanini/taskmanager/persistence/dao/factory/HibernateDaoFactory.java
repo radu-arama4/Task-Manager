@@ -14,7 +14,7 @@ import org.hibernate.Session;
  * Hibernate Dao classes.
  */
 public class HibernateDaoFactory implements DaoFactory {
-  Session session = DataBaseUtil.connectToHibernate();
+  Session session = DataBaseUtil.connectWithHibernate();
 
   public UserDao createUserDao() {
     return UserDaoHibernate.getInstance(session);
