@@ -12,6 +12,7 @@ import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
@@ -20,7 +21,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 public class GroupDaoHibernate implements GroupDao {
-  private final Session session;
+  private final SessionFactory sessionFactory;
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
   private static GroupDao singleInstance;
   private final CriteriaQuery<User> criteriaUser;
@@ -31,9 +32,9 @@ public class GroupDaoHibernate implements GroupDao {
   private final Root<GroupHibernate> rootGroup;
   private final Root<UserHibernate> rootUser;
 
-  private GroupDaoHibernate(Session session) {
-    this.session = session;
-    builder = session.getCriteriaBuilder();
+  private GroupDaoHibernate(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+    builder = sessionFactory.getCriteriaBuilder();
     criteriaUser = builder.createQuery(User.class);
     criteriaTask = builder.createQuery(Task.class);
     criteriaGroup = builder.createQuery(Group.class);
@@ -42,27 +43,29 @@ public class GroupDaoHibernate implements GroupDao {
     rootGroup = criteriaGroup.from(GroupHibernate.class);
   }
 
-  public static GroupDao getInstance(Session session) {
+  public static GroupDao getInstance(SessionFactory sessionFactory) {
     if (singleInstance == null) {
-      singleInstance = new GroupDaoHibernate(session);
+      singleInstance = new GroupDaoHibernate(sessionFactory);
     }
     return singleInstance;
   }
 
   @Override
   public Group createGroup(Group group) {
+    Session session = sessionFactory.openSession();
     try {
       session.save(group);
     } catch (Exception e) {
       logger.error(e);
       return null;
     }
-
+    session.close();
     return group;
   }
 
   @Override
   public User addUserToGroup(User user, Group group) {
+    Session session = sessionFactory.openSession();
     UserHibernate selectedUser;
     GroupHibernate selectedGroup;
 
@@ -79,6 +82,7 @@ public class GroupDaoHibernate implements GroupDao {
       selectedGroup = (GroupHibernate) queryGroup.getSingleResult();
     } catch (NoResultException e) {
       logger.error(e);
+      session.close();
       return null;
     }
 
@@ -86,14 +90,17 @@ public class GroupDaoHibernate implements GroupDao {
       selectedGroup.addUser(selectedUser);
     } catch (Exception e) {
       logger.error(e);
+      session.close();
       return null;
     }
 
+    session.close();
     return selectedUser;
   }
 
   @Override
   public Task addTaskToGroup(Task newTask, Group group) {
+    Session session = sessionFactory.openSession();
     TaskHibernate task = new TaskHibernate();
 
     OperationsUtil.copyObjectProperties(task, newTask);
@@ -109,6 +116,7 @@ public class GroupDaoHibernate implements GroupDao {
       selectedGroup = (GroupHibernate) queryGroup.getSingleResult();
     } catch (Exception e) {
       logger.error(e);
+      session.close();
       return null;
     }
 
@@ -117,9 +125,11 @@ public class GroupDaoHibernate implements GroupDao {
       session.save(task);
     } catch (Exception e) {
       logger.error(e);
+      session.close();
       return null;
     }
 
+    session.close();
     return task;
   }
 }
