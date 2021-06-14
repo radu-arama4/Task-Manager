@@ -1,11 +1,13 @@
 package com.stefanini.taskmanager.operations;
 
+import com.stefanini.taskmanager.operations.execution.ThreadPool;
+
 import java.util.LinkedList;
 import java.util.List;
 
 /** Class for storing and executing all the given operations. */
 public class OperationExecutor {
-  private final List<Operation> textFileOperations = new LinkedList<>();
+  private final List<Operation> operations = new LinkedList<>();
   private static OperationExecutor instance = null;
 
   private OperationExecutor() {}
@@ -23,29 +25,31 @@ public class OperationExecutor {
    * @param operation object of type Operation
    */
   public void addOperation(Operation operation) {
-    textFileOperations.add(operation);
+    operations.add(operation);
   }
 
   /** Executes all the existing operations in the list */
   public void executeOperations() {
-    textFileOperations.forEach(operation -> {
-      Thread executionThread = new Thread(operation);
+    ThreadPool threadPool = new ThreadPool(4, 10);
+
+    operations.forEach(operation -> {
       try {
-        executionThread.start();
-        executionThread.join();
-      } catch (InterruptedException e) {
+        threadPool.execute(operation);
+      } catch (Exception e) {
         e.printStackTrace();
       }
     });
-    textFileOperations.clear();
+
+    threadPool.stop();
+    operations.clear();
   }
 
   public void printOperations() {
-    if (textFileOperations.size() == 0) {
+    if (operations.size() == 0) {
       System.out.println("Empty!");
       return;
     }
-    textFileOperations.forEach(
+    operations.forEach(
         operation -> {
           System.out.println(operation.getClass().getSimpleName());
         });
