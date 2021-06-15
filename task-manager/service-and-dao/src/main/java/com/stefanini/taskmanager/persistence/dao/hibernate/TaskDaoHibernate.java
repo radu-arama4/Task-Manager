@@ -10,6 +10,7 @@ import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
@@ -19,7 +20,7 @@ import javax.persistence.criteria.Root;
 import java.util.stream.Stream;
 
 public class TaskDaoHibernate implements TaskDao {
-  private final Session session;
+  private final SessionFactory sessionFactory;
   private final CriteriaQuery<User> criteriaUser;
   private final CriteriaBuilder builder;
   private final CriteriaQuery<Task> criteriaTask;
@@ -28,24 +29,25 @@ public class TaskDaoHibernate implements TaskDao {
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
   private static TaskDao singleInstance;
 
-  private TaskDaoHibernate(Session session) {
-    this.session = session;
-    builder = session.getCriteriaBuilder();
+  private TaskDaoHibernate(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+    builder = sessionFactory.getCriteriaBuilder();
     criteriaUser = builder.createQuery(User.class);
     criteriaTask = builder.createQuery(Task.class);
     rootUser = criteriaUser.from(UserHibernate.class);
     rootTask = criteriaTask.from(TaskHibernate.class);
   }
 
-  public static TaskDao getInstance(Session session) {
+  public static TaskDao getInstance(SessionFactory sessionFactory) {
     if (singleInstance == null) {
-      singleInstance = new TaskDaoHibernate(session);
+      singleInstance = new TaskDaoHibernate(sessionFactory);
     }
     return singleInstance;
   }
 
   @Override
   public Task addTask(Task task, User user) {
+    Session session = sessionFactory.getCurrentSession();
     TaskHibernate newTask = new TaskHibernate();
 
     criteriaUser.select(rootUser).where(builder.like(rootUser.get("userName"), user.getUserName()));
@@ -68,12 +70,12 @@ public class TaskDaoHibernate implements TaskDao {
       logger.error(e);
       return null;
     }
-
     return newTask;
   }
 
   @Override
   public Stream<Task> addMultipleTasks(Stream<Task> tasks, User user) {
+    Session session = sessionFactory.getCurrentSession();
     tasks.forEach(
         task -> {
           TaskHibernate newTask = new TaskHibernate();
@@ -87,6 +89,7 @@ public class TaskDaoHibernate implements TaskDao {
 
   @Override
   public Stream<Task> getTasks(User selectedUser) {
+    Session session = sessionFactory.getCurrentSession();
     criteriaTask
         .select(rootTask)
         .where(builder.like(rootTask.get("user").get("userName"), selectedUser.getUserName()));

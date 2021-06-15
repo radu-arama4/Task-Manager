@@ -3,7 +3,7 @@ package com.stefanini.taskmanager.persistence.util;
 import com.stefanini.taskmanager.util.ApplicationProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import java.sql.Connection;
@@ -23,7 +23,7 @@ public class DataBaseUtil {
   private static final String password = props.getPassword();
 
   private static Connection connection = null;
-  private static Session session = null;
+  private static SessionFactory sessionFactory = null;
 
   public static Connection connectWithJdbc() {
     if (connection == null) {
@@ -39,12 +39,12 @@ public class DataBaseUtil {
     return connection;
   }
 
-  public static Session connectWithHibernate() {
-    if (session == null) {
+  public static SessionFactory connectWithHibernate() {
+    if (sessionFactory == null) {
       Configuration configuration = ApplicationProperties.getInstance().getHibernateConfiguration();
-      session = configuration.buildSessionFactory().openSession();
+      sessionFactory = configuration.buildSessionFactory();
     }
-    return session;
+    return sessionFactory;
   }
 
   public static void disconnectJDBC() {
@@ -57,6 +57,8 @@ public class DataBaseUtil {
   }
 
   public static void disconnectHibernate() {
-    session.close();
+//    if (sessionFactory.getCurrentSession().isOpen()) {
+//      sessionFactory.getCurrentSession().close();
+//    }
   }
 }

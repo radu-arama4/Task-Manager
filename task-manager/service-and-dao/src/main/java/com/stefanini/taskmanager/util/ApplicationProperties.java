@@ -23,6 +23,7 @@ public class ApplicationProperties {
   private final String driverClass;
   private final String dialect;
   private final String hbm2ddl;
+  private final String current_session_context_class;
 
   private static final Logger logger = LogManager.getLogger(ApplicationProperties.class);
 
@@ -37,6 +38,7 @@ public class ApplicationProperties {
     driverClass = properties.getProperty("connection.driver_class");
     dialect = properties.getProperty("dialect");
     hbm2ddl = properties.getProperty("hbm2ddl.auto");
+    current_session_context_class = properties.getProperty("current_session_context_class");
 
     daoType = properties.getProperty("dao_type");
     serviceType = properties.getProperty("service_type");
@@ -59,7 +61,8 @@ public class ApplicationProperties {
         .setProperty("hibernate.connection.password", password)
         .setProperty("hibernate.hbm2ddl.auto", hbm2ddl)
         .setProperty("hibernate.dialect", dialect)
-        .setProperty("hibernate.connection.driver_class", driverClass);
+        .setProperty("hibernate.connection.driver_class", driverClass)
+        .setProperty("hibernate.current_session_context_class", current_session_context_class);
   }
 
   private Properties extractProperties() {
