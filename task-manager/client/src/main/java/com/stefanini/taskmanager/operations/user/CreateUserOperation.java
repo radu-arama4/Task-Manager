@@ -23,4 +23,8 @@ public class CreateUserOperation implements Operation {
   public void execute() {
     userService.createUser(user);
   }
+
+  public UserTO getUser() {
+    return user;
+  }
 }

@@ -27,4 +27,8 @@ public class AddTaskToGroupOperation implements Operation {
   public void execute() {
     groupService.addTaskToGroup(group, task);
   }
+
+  public GroupTO getGroup() {
+    return group;
+  }
 }

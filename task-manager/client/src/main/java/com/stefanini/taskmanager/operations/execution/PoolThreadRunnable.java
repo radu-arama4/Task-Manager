@@ -1,10 +1,15 @@
 package com.stefanini.taskmanager.operations.execution;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.concurrent.BlockingQueue;
 
 public class PoolThreadRunnable implements Runnable {
+  private static final Logger logger = LogManager.getLogger(PoolThreadRunnable.class);
+
   private Thread thread = null;
-  private BlockingQueue taskQueue = null;
+  private final BlockingQueue taskQueue;
   private boolean isStopped = false;
 
   public PoolThreadRunnable(BlockingQueue queue) {
@@ -18,15 +23,13 @@ public class PoolThreadRunnable implements Runnable {
         Runnable runnable = (Runnable) taskQueue.take();
         runnable.run();
       } catch (Exception e) {
-        // log or otherwise report exception,
-        // but keep pool thread alive.
+        logger.debug(e);
       }
     }
   }
 
   public synchronized void doStop() {
     isStopped = true;
-    // break pool thread out of dequeue() call.
     this.thread.interrupt();
   }
 

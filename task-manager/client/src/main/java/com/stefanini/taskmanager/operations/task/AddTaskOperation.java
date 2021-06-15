@@ -23,6 +23,14 @@ public class AddTaskOperation implements Operation {
     this.user = user;
   }
 
+  public TaskTO getTask() {
+    return task;
+  }
+
+  public UserTO getUser() {
+    return user;
+  }
+
   @Override
   public void execute() {
     taskService.addTask(task, user);

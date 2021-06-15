@@ -27,4 +27,8 @@ public class AddUserToGroupOperation implements Operation {
   public void execute() {
     groupService.addUserToGroup(group, user);
   }
+
+  public GroupTO getGroup() {
+    return group;
+  }
 }

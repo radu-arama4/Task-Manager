@@ -23,4 +23,8 @@ public class CreateGroupOperation implements Operation {
   public void execute() {
     groupService.createGroup(group);
   }
+
+  public GroupTO getGroup() {
+    return group;
+  }
 }
