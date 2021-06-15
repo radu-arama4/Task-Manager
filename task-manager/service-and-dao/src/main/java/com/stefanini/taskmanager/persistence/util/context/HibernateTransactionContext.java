@@ -8,24 +8,27 @@ import org.hibernate.Transaction;
 public class HibernateTransactionContext implements TransactionContext {
   private final SessionFactory sessionFactory = DataBaseUtil.connectWithHibernate();
   private Transaction transaction = null;
+  private Session session;
 
   @Override
   public void begin() {
-    Session session = sessionFactory.getCurrentSession();
+    session = sessionFactory.getCurrentSession();
     transaction = session.beginTransaction();
   }
 
   @Override
   public void commit() {
-    if (transaction != null) {
+    if (transaction.isActive()) {
       transaction.commit();
     }
+    session.close();
   }
 
   @Override
   public void rollback() {
-    if (transaction != null) {
+    if (transaction.isActive()) {
       transaction.rollback();
     }
+    session.close();
   }
 }

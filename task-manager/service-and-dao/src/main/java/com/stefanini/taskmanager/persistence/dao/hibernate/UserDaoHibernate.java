@@ -46,17 +46,14 @@ public class UserDaoHibernate implements UserDao {
       session.close();
       return null;
     }
-    session.close();
     return newUser;
   }
 
   @Override
   public Stream<User> getUsers() {
     Session session = sessionFactory.getCurrentSession();
-
     criteria.select(rootUser);
     Query<User> query = session.createQuery(criteria);
-    //session.close();
     return query.getResultList().stream();
   }
 }

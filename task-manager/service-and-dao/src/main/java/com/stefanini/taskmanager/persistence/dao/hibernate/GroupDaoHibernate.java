@@ -52,20 +52,19 @@ public class GroupDaoHibernate implements GroupDao {
 
   @Override
   public Group createGroup(Group group) {
-    Session session = sessionFactory.openSession();
+    Session session = sessionFactory.getCurrentSession();
     try {
       session.save(group);
     } catch (Exception e) {
       logger.error(e);
       return null;
     }
-    session.close();
     return group;
   }
 
   @Override
   public User addUserToGroup(User user, Group group) {
-    Session session = sessionFactory.openSession();
+    Session session = sessionFactory.getCurrentSession();
     UserHibernate selectedUser;
     GroupHibernate selectedGroup;
 
@@ -82,7 +81,6 @@ public class GroupDaoHibernate implements GroupDao {
       selectedGroup = (GroupHibernate) queryGroup.getSingleResult();
     } catch (NoResultException e) {
       logger.error(e);
-      session.close();
       return null;
     }
 
@@ -90,17 +88,15 @@ public class GroupDaoHibernate implements GroupDao {
       selectedGroup.addUser(selectedUser);
     } catch (Exception e) {
       logger.error(e);
-      session.close();
       return null;
     }
 
-    session.close();
     return selectedUser;
   }
 
   @Override
   public Task addTaskToGroup(Task newTask, Group group) {
-    Session session = sessionFactory.openSession();
+    Session session = sessionFactory.getCurrentSession();
     TaskHibernate task = new TaskHibernate();
 
     OperationsUtil.copyObjectProperties(task, newTask);
@@ -116,7 +112,6 @@ public class GroupDaoHibernate implements GroupDao {
       selectedGroup = (GroupHibernate) queryGroup.getSingleResult();
     } catch (Exception e) {
       logger.error(e);
-      session.close();
       return null;
     }
 
@@ -125,11 +120,9 @@ public class GroupDaoHibernate implements GroupDao {
       session.save(task);
     } catch (Exception e) {
       logger.error(e);
-      session.close();
       return null;
     }
 
-    session.close();
     return task;
   }
 }

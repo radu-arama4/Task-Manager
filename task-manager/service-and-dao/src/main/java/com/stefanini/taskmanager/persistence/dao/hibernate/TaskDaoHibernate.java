@@ -47,7 +47,7 @@ public class TaskDaoHibernate implements TaskDao {
 
   @Override
   public Task addTask(Task task, User user) {
-    Session session = sessionFactory.openSession();
+    Session session = sessionFactory.getCurrentSession();
     TaskHibernate newTask = new TaskHibernate();
 
     criteriaUser.select(rootUser).where(builder.like(rootUser.get("userName"), user.getUserName()));
@@ -58,7 +58,6 @@ public class TaskDaoHibernate implements TaskDao {
       selectedUser = (UserHibernate) query.getSingleResult();
     } catch (NoResultException e) {
       logger.error(e);
-      session.close();
       return null;
     }
 
@@ -67,19 +66,16 @@ public class TaskDaoHibernate implements TaskDao {
     try {
       newTask.setUser(selectedUser);
       session.save(newTask);
-      session.close();
     } catch (Exception e) {
       logger.error(e);
       return null;
     }
-
-    session.close();
     return newTask;
   }
 
   @Override
   public Stream<Task> addMultipleTasks(Stream<Task> tasks, User user) {
-    Session session = sessionFactory.openSession();
+    Session session = sessionFactory.getCurrentSession();
     tasks.forEach(
         task -> {
           TaskHibernate newTask = new TaskHibernate();
@@ -88,13 +84,12 @@ public class TaskDaoHibernate implements TaskDao {
           session.save(newTask);
         });
 
-    session.close();
     return tasks;
   }
 
   @Override
   public Stream<Task> getTasks(User selectedUser) {
-    Session session = sessionFactory.openSession();
+    Session session = sessionFactory.getCurrentSession();
     criteriaTask
         .select(rootTask)
         .where(builder.like(rootTask.get("user").get("userName"), selectedUser.getUserName()));
@@ -106,8 +101,6 @@ public class TaskDaoHibernate implements TaskDao {
     } catch (NoResultException e) {
       logger.error(e);
       return null;
-    } finally {
-      session.close();
     }
   }
 }
