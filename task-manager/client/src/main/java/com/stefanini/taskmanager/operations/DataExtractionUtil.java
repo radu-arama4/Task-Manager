@@ -7,8 +7,8 @@ import com.stefanini.taskmanager.operations.group.AddTaskToGroupOperation;
 import com.stefanini.taskmanager.operations.group.AddUserToGroupOperation;
 import com.stefanini.taskmanager.operations.group.CreateGroupOperation;
 import com.stefanini.taskmanager.operations.multiple.CreateUserWithTasks;
-import com.stefanini.taskmanager.operations.task.AddTaskOperation;
-import com.stefanini.taskmanager.operations.task.ShowTasksOperation;
+import com.stefanini.taskmanager.operations.task.AddTaskToUserOperation;
+import com.stefanini.taskmanager.operations.task.ShowTasksOfUserOperation;
 import com.stefanini.taskmanager.operations.user.CreateUserOperation;
 import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
 
@@ -48,14 +48,14 @@ public class DataExtractionUtil {
     scanner.nextLine();
     task = new TaskTO(taskTitle, taskDescription);
     user = new UserTO(username);
-    operationExecutor.addOperation(new AddTaskOperation(task, user));
+    operationExecutor.addOperation(new AddTaskToUserOperation(task, user));
   }
 
   public static void initShowTasks() {
     System.out.println(SHOW_TASKS_OF_USER.getMessage());
     String userName = scanner.next();
     user = new UserTO(userName);
-    operationExecutor.addOperation(new ShowTasksOperation(user));
+    operationExecutor.addOperation(new ShowTasksOfUserOperation(user));
   }
 
   public static void initCreateGroup() {

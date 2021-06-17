@@ -29,4 +29,8 @@ public class CreateUserWithTasks implements Operation {
   public void execute() {
     extendedService.createUserWithTasks(user, tasks.stream());
   }
+
+  public UserTO getUser() {
+    return user;
+  }
 }

@@ -23,4 +23,6 @@ public class ShowAllUsersOperation implements Operation {
     Stream<UserTO> users = userService.getAllUsers();
     users.forEach(System.out::println);
   }
+
+
 }

@@ -3,17 +3,17 @@ package com.stefanini.taskmanager.operations;
 import com.stefanini.taskmanager.operations.group.AddTaskToGroupOperation;
 import com.stefanini.taskmanager.operations.group.AddUserToGroupOperation;
 import com.stefanini.taskmanager.operations.group.CreateGroupOperation;
-import com.stefanini.taskmanager.operations.task.AddTaskOperation;
+import com.stefanini.taskmanager.operations.multiple.CreateUserWithTasks;
+import com.stefanini.taskmanager.operations.task.AddTaskToUserOperation;
+import com.stefanini.taskmanager.operations.task.ShowTasksOfUserOperation;
 import com.stefanini.taskmanager.operations.user.CreateUserOperation;
+import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /** Class for storing and executing all the given operations. */
 public class OperationExecutor {
@@ -41,19 +41,42 @@ public class OperationExecutor {
 
   /** Executes all the existing operations in the list */
   public void executeOperations() {
-    ThreadPoolExecutor threadPoolExecutor =
-        new ThreadPoolExecutor(
-            4, 4, 0, TimeUnit.SECONDS, new PriorityBlockingQueue<>(10, new OperationsComparator()));
-
-    operations.forEach(
-        operation -> {
-          try {
-            threadPoolExecutor.execute(operation);
-          } catch (Exception e) {
-            logger.error(e);
-          }
-        });
+    OperationExecutorStrategy strategy = new Parallel();
+    strategy.executeOperations(operations);
     operations.clear();
+  }
+
+  interface OperationExecutorStrategy {
+    void executeOperations(List<Operation> operations);
+  }
+
+  static class Sequential implements OperationExecutorStrategy {
+    @Override
+    public void executeOperations(List<Operation> operations) {
+      operations.forEach(Operation::execute);
+    }
+  }
+
+  static class Parallel implements OperationExecutorStrategy {
+    @Override
+    public void executeOperations(List<Operation> operations) {
+      ExecutorService service = Executors.newFixedThreadPool(4);
+      Map<OperationKey, PriorityQueue<Operation>> dividedOperations = divideOperations(operations);
+
+      dividedOperations.forEach(
+          (operationKey, operations1) -> {
+            try {
+              service.execute(
+                  () -> {
+                    List<Operation> listOfOperations = new LinkedList<>(operations1);
+                    Sequential sequential = new Sequential();
+                    sequential.executeOperations(listOfOperations);
+                  });
+            } catch (Exception e) {
+              logger.error(e);
+            }
+          });
+    }
   }
 
   public void printOperations() {
@@ -61,10 +84,113 @@ public class OperationExecutor {
       System.out.println("Empty!");
       return;
     }
+    operations.forEach(operation -> System.out.println(operation.getClass().getSimpleName()));
+  }
+
+  static class OperationKey {
+    private final String name;
+    private final String type;
+
+    public OperationKey(String name, String type) {
+      this.name = name;
+      this.type = type;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public String getType() {
+      return type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof OperationKey)) {
+        return false;
+      }
+      OperationKey operationKey1 = this;
+      OperationKey operationKey2 = (OperationKey) obj;
+      return operationKey1.getName().equals(operationKey2.getName())
+          && operationKey1.getType().equals(operationKey2.getType());
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(name, type);
+    }
+  }
+
+  public static Map<OperationKey, PriorityQueue<Operation>> divideOperations(
+      List<Operation> operations) {
+    Map<OperationKey, PriorityQueue<Operation>> dividedOperations = new HashMap<>();
+    PriorityQueue<Operation> printOperations = new PriorityQueue<>(new OperationsComparator());
+    dividedOperations.put(new OperationKey("", "printAllOperations"), printOperations);
+
+    List<String> userNames = new LinkedList<>();
+    List<String> groupNames = new LinkedList<>();
+
     operations.forEach(
         operation -> {
-          System.out.println(operation.getClass().getSimpleName());
+          if (operation.getClass().toString().contains("User")) {
+            String userName = null;
+            if (operation instanceof CreateUserOperation) {
+              CreateUserOperation createUserOperation = (CreateUserOperation) operation;
+              userName = createUserOperation.getUser().getUserName();
+            } else if (operation instanceof CreateUserWithTasks) {
+              CreateUserWithTasks createUserWithTasks = (CreateUserWithTasks) operation;
+              userName = createUserWithTasks.getUser().getUserName();
+            } else if (operation instanceof AddTaskToUserOperation) {
+              AddTaskToUserOperation addTaskToUserOperation = (AddTaskToUserOperation) operation;
+              userName = addTaskToUserOperation.getUser().getUserName();
+            } else if (operation instanceof ShowTasksOfUserOperation) {
+              ShowTasksOfUserOperation showTasksOfUserOperation =
+                  (ShowTasksOfUserOperation) operation;
+              userName = showTasksOfUserOperation.getUser().getUserName();
+            } else if (operation instanceof ShowAllUsersOperation) {
+              printOperations.add(operation);
+              return;
+            }
+
+            if (userNames.contains(userName)) {
+              PriorityQueue<Operation> foundQueue =
+                  dividedOperations.get(new OperationKey(userName, "User"));
+              foundQueue.add(operation);
+            } else {
+              userNames.add(userName);
+              PriorityQueue<Operation> newQueue =
+                  new PriorityQueue<>(12, new OperationsComparator());
+              newQueue.add(operation);
+              dividedOperations.put(new OperationKey(userName, "User"), newQueue);
+            }
+          } else if (operation.getClass().toString().contains("Group")) {
+            String groupName = null;
+            if (operation instanceof CreateGroupOperation) {
+              CreateGroupOperation createGroupOperation = (CreateGroupOperation) operation;
+              groupName = createGroupOperation.getGroup().getGroupName();
+            } else if (operation instanceof AddTaskToGroupOperation) {
+              AddTaskToGroupOperation addTaskToGroupOperation = (AddTaskToGroupOperation) operation;
+              groupName = addTaskToGroupOperation.getGroup().getGroupName();
+            } else if (operation instanceof AddUserToGroupOperation) {
+              AddUserToGroupOperation addUserToGroupOperation = (AddUserToGroupOperation) operation;
+              groupName = addUserToGroupOperation.getGroup().getGroupName();
+            }
+
+            if (groupNames.contains(groupName)) {
+              PriorityQueue<Operation> foundQueue =
+                  dividedOperations.get(new OperationKey(groupName, "Group"));
+              foundQueue.add(operation);
+            } else {
+              groupNames.add(groupName);
+              PriorityQueue<Operation> newQueue =
+                  new PriorityQueue<>(12, new OperationsComparator());
+              newQueue.add(operation);
+              dividedOperations.put(new OperationKey(groupName, "Group"), newQueue);
+            }
+          }
         });
+
+    return dividedOperations;
   }
 
   private static class OperationsComparator implements Comparator<Object> {
@@ -75,29 +201,29 @@ public class OperationExecutor {
       if (firstName.contains("Show") && secondName.contains("Show")) {
         return 0;
       }
-      if (o1 instanceof AddTaskOperation && o2 instanceof CreateUserOperation) {
-        AddTaskOperation operation1 = (AddTaskOperation) o1;
-        CreateUserOperation operation2 = (CreateUserOperation) o2;
-        if (operation1.getUser().getUserName().equals(operation2.getUser().getUserName())) {
-          return -1;
-        }
-        return 0;
+      if (o1 instanceof AddTaskToUserOperation && o2 instanceof CreateUserOperation) {
+        return 1;
+      }
+      if (o1 instanceof CreateUserOperation && o2 instanceof AddTaskToUserOperation) {
+        return -1;
+      }
+      if (o1 instanceof AddUserToGroupOperation && o2 instanceof CreateUserOperation) {
+        return 1;
+      }
+      if (o1 instanceof CreateUserOperation && o2 instanceof AddUserToGroupOperation) {
+        return -1;
       }
       if (o1 instanceof AddTaskToGroupOperation && o2 instanceof CreateGroupOperation) {
-        AddTaskToGroupOperation operation1 = (AddTaskToGroupOperation) o1;
-        CreateGroupOperation operation2 = (CreateGroupOperation) o2;
-        if (operation1.getGroup().getGroupName().equals(operation2.getGroup().getGroupName())) {
-          return -1;
-        }
-        return 0;
+        return 1;
+      }
+      if (o1 instanceof CreateGroupOperation && o2 instanceof AddTaskToGroupOperation) {
+        return -1;
       }
       if (o1 instanceof AddUserToGroupOperation && o2 instanceof CreateGroupOperation) {
-        AddUserToGroupOperation operation1 = (AddUserToGroupOperation) o1;
-        CreateGroupOperation operation2 = (CreateGroupOperation) o2;
-        if (operation1.getGroup().getGroupName().equals(operation2.getGroup().getGroupName())) {
-          return -1;
-        }
-        return 0;
+        return 1;
+      }
+      if (o1 instanceof CreateGroupOperation && o2 instanceof AddUserToGroupOperation) {
+        return -1;
       }
       return 0;
     }
