@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.operations.user;
+package com.stefanini.taskmanager.operations.categories.user;
 
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
@@ -23,6 +23,4 @@ public class ShowAllUsersOperation implements Operation {
     Stream<UserTO> users = userService.getAllUsers();
     users.forEach(System.out::println);
   }
-
-
 }

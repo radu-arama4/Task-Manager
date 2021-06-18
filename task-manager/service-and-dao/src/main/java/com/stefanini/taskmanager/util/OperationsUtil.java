@@ -4,7 +4,7 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
 
-//TODO javadoc
+/** Class containing common operations performed on objects. */
 public abstract class OperationsUtil {
   public static void copyObjectProperties(Object obj1, Object obj2) {
     try {

@@ -24,6 +24,7 @@ public class ApplicationProperties {
   private final String dialect;
   private final String hbm2ddl;
   private final String current_session_context_class;
+  private final String executor_type;
 
   private static final Logger logger = LogManager.getLogger(ApplicationProperties.class);
 
@@ -42,6 +43,7 @@ public class ApplicationProperties {
 
     daoType = properties.getProperty("dao_type");
     serviceType = properties.getProperty("service_type");
+    executor_type = properties.getProperty("executor_type");
 
     logger.debug("Properties extracted successfully");
   }
@@ -97,5 +99,9 @@ public class ApplicationProperties {
 
   public ServiceType getServiceType() {
     return ServiceType.valueOf(serviceType);
+  }
+
+  public String getExecutorType() {
+    return executor_type;
   }
 }
