@@ -12,7 +12,7 @@ import com.stefanini.taskmanager.util.ApplicationProperties;
 public abstract class ExecutorFactory {
   private static final String executorType = ApplicationProperties.getInstance().getExecutorType();
 
-  public static OperationExecutorStrategy generateExecutor() {
+  public static OperationExecutorStrategy createExecutor() {
     switch (ExecutorType.valueOf(executorType)) {
       case SEQUENTIAL:
         return new SequentialExecutor();

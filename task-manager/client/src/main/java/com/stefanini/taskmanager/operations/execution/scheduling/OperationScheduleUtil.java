@@ -15,11 +15,12 @@ import java.util.*;
 /** Contains methods for dividing the operations in order to be able to execute concurrently. */
 public class OperationScheduleUtil {
   /**
-   * Divides the operations based on the username or group name.
+   * Divides the operations based on the username or group name. Add ..
    *
    * @param operations list of operations
    * @return map with divided operations
    */
+  //todo complete javadoc
   public static Map<OperationKey, PriorityQueue<Operation>> divideOperations(
       List<Operation> operations) {
     Map<OperationKey, PriorityQueue<Operation>> dividedOperations = new HashMap<>();

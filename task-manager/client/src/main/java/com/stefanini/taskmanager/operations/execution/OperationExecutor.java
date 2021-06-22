@@ -31,7 +31,7 @@ public class OperationExecutor {
 
   /** Executes all the existing operations in the list */
   public void executeOperations() {
-    OperationExecutorStrategy strategy = ExecutorFactory.generateExecutor();
+    OperationExecutorStrategy strategy = ExecutorFactory.createExecutor();
     strategy.executeOperations(operations);
     operations.clear();
   }
