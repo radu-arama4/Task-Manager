@@ -19,7 +19,7 @@ public abstract class ApplicationManager {
     } catch (UnsupportedDaoTypeException e) {
       logger.error(e);
     }
-    logger.info("Application initialized!");
+    logger.info("-------------APPLICATION INITIALIZED!-------------");
   }
 
   /** Method for terminating the app. */
@@ -29,6 +29,6 @@ public abstract class ApplicationManager {
     } catch (UnsupportedDaoTypeException e) {
       logger.error(e);
     }
-    logger.info("Application closed!");
+    logger.info("-------------APPLICATION CLOSED!-------------");
   }
 }

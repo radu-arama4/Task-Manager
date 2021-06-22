@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.operations.user;
+package com.stefanini.taskmanager.operations.categories.user;
 
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
@@ -6,21 +6,21 @@ import com.stefanini.taskmanager.service.UserService;
 import com.stefanini.taskmanager.service.factory.ServiceFactory;
 import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
 
+import java.util.stream.Stream;
+
 /**
- * Implements {@link Operation}. Encapsulates {@link UserTO} field. The execution consists of sending
- * the encapsulated fields to {@link UserService#createUser(UserTO)} implementation as parameters.
+ * Implements {@link Operation}. Encapsulates no fields. The execution consists of calling the
+ * {@link UserService#getAllUsers()}
  */
-public class CreateUserOperation implements Operation {
-  private final UserTO user;
+public class ShowAllUsersOperation implements Operation {
   private final ServiceFactory serviceFactory = ServiceFactoryProvider.createServiceFactory();
   private final UserService userService = serviceFactory.getUserService();
 
-  public CreateUserOperation(UserTO user) {
-    this.user = user;
-  }
+  public ShowAllUsersOperation() {}
 
   @Override
   public void execute() {
-    userService.createUser(user);
+    Stream<UserTO> users = userService.getAllUsers();
+    users.forEach(System.out::println);
   }
 }

@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.operations.group;
+package com.stefanini.taskmanager.operations.categories.group;
 
 import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.operations.Operation;
@@ -22,5 +22,9 @@ public class CreateGroupOperation implements Operation {
   @Override
   public void execute() {
     groupService.createGroup(group);
+  }
+
+  public GroupTO getGroup() {
+    return group;
   }
 }

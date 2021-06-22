@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.operations.task;
+package com.stefanini.taskmanager.operations.categories.task;
 
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
@@ -10,15 +10,15 @@ import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
 import java.util.stream.Stream;
 
 /**
- * Implements {@link Operation}. Encapsulates {@link UserTO} field. The execution consists of sending
- * the encapsulated fields to {@link TaskService#getTasksOfUser(UserTO)} as parameters.
+ * Implements {@link Operation}. Encapsulates {@link UserTO} field. The execution consists of
+ * sending the encapsulated fields to {@link TaskService#getTasksOfUser(UserTO)} as parameters.
  */
-public class ShowTasksOperation implements Operation {
+public class ShowTasksOfUserOperation implements Operation {
   private final UserTO user;
   private final ServiceFactory serviceFactory = ServiceFactoryProvider.createServiceFactory();
   private final TaskService taskService = serviceFactory.getTaskService();
 
-  public ShowTasksOperation(UserTO user) {
+  public ShowTasksOfUserOperation(UserTO user) {
     this.user = user;
   }
 
@@ -26,5 +26,9 @@ public class ShowTasksOperation implements Operation {
   public void execute() {
     Stream<TaskTO> tasks = taskService.getTasksOfUser(user);
     tasks.forEach(System.out::println);
+  }
+
+  public UserTO getUser() {
+    return user;
   }
 }

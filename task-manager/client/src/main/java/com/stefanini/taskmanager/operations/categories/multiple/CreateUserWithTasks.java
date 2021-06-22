@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.operations.multiple;
+package com.stefanini.taskmanager.operations.categories.multiple;
 
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
@@ -28,5 +28,9 @@ public class CreateUserWithTasks implements Operation {
   @Override
   public void execute() {
     extendedService.createUserWithTasks(user, tasks.stream());
+  }
+
+  public UserTO getUser() {
+    return user;
   }
 }

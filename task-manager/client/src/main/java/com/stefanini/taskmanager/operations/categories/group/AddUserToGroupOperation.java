@@ -1,4 +1,4 @@
-package com.stefanini.taskmanager.operations.group;
+package com.stefanini.taskmanager.operations.categories.group;
 
 import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.UserTO;
@@ -26,5 +26,9 @@ public class AddUserToGroupOperation implements Operation {
   @Override
   public void execute() {
     groupService.addUserToGroup(group, user);
+  }
+
+  public GroupTO getGroup() {
+    return group;
   }
 }

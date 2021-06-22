@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Email(emailMessage = "Task {task title} {task description} has been assigned to {username}")
+@Email(emailMessage = "Task {taskTitle} {taskDescription} has been assigned to user.")
 public class TaskTO {
   private Long id;
 

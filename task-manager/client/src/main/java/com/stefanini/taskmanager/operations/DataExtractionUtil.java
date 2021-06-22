@@ -3,14 +3,15 @@ package com.stefanini.taskmanager.operations;
 import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
-import com.stefanini.taskmanager.operations.group.AddTaskToGroupOperation;
-import com.stefanini.taskmanager.operations.group.AddUserToGroupOperation;
-import com.stefanini.taskmanager.operations.group.CreateGroupOperation;
-import com.stefanini.taskmanager.operations.multiple.CreateUserWithTasks;
-import com.stefanini.taskmanager.operations.task.AddTaskOperation;
-import com.stefanini.taskmanager.operations.task.ShowTasksOperation;
-import com.stefanini.taskmanager.operations.user.CreateUserOperation;
-import com.stefanini.taskmanager.operations.user.ShowAllUsersOperation;
+import com.stefanini.taskmanager.operations.categories.group.AddTaskToGroupOperation;
+import com.stefanini.taskmanager.operations.categories.group.AddUserToGroupOperation;
+import com.stefanini.taskmanager.operations.categories.group.CreateGroupOperation;
+import com.stefanini.taskmanager.operations.categories.multiple.CreateUserWithTasks;
+import com.stefanini.taskmanager.operations.categories.task.AddTaskToUserOperation;
+import com.stefanini.taskmanager.operations.categories.task.ShowTasksOfUserOperation;
+import com.stefanini.taskmanager.operations.categories.user.CreateUserOperation;
+import com.stefanini.taskmanager.operations.categories.user.ShowAllUsersOperation;
+import com.stefanini.taskmanager.operations.execution.OperationExecutor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,14 +49,14 @@ public class DataExtractionUtil {
     scanner.nextLine();
     task = new TaskTO(taskTitle, taskDescription);
     user = new UserTO(username);
-    operationExecutor.addOperation(new AddTaskOperation(task, user));
+    operationExecutor.addOperation(new AddTaskToUserOperation(task, user));
   }
 
   public static void initShowTasks() {
     System.out.println(SHOW_TASKS_OF_USER.getMessage());
     String userName = scanner.next();
     user = new UserTO(userName);
-    operationExecutor.addOperation(new ShowTasksOperation(user));
+    operationExecutor.addOperation(new ShowTasksOfUserOperation(user));
   }
 
   public static void initCreateGroup() {
