@@ -20,12 +20,11 @@ public class OperationScheduleUtil {
    * @param operations list of operations
    * @return map with divided operations
    */
-  //todo complete javadoc
   public static Map<OperationKey, PriorityQueue<Operation>> divideOperations(
       List<Operation> operations) {
     Map<OperationKey, PriorityQueue<Operation>> dividedOperations = new HashMap<>();
     PriorityQueue<Operation> printOperations = new PriorityQueue<>(new OperationsComparator());
-    dividedOperations.put(new OperationKey("", "printAllUsersOperation"), printOperations); //
+    dividedOperations.put(new OperationKey("", "printAllUsersOperation"), printOperations);
 
     operations.forEach(
         operation -> {
