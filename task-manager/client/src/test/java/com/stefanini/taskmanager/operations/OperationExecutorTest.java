@@ -6,7 +6,7 @@ import com.stefanini.taskmanager.operations.categories.task.AddTaskToUserOperati
 import com.stefanini.taskmanager.operations.categories.user.CreateUserOperation;
 import com.stefanini.taskmanager.operations.categories.user.ShowAllUsersOperation;
 import com.stefanini.taskmanager.operations.execution.OperationExecutor;
-import com.stefanini.taskmanager.persistence.util.ApplicationManager;
+import com.stefanini.taskmanager.util.ApplicationManager;
 import org.junit.Before;
 import org.junit.Test;
 

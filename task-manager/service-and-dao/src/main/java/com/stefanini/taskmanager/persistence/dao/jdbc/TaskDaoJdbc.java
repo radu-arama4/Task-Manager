@@ -4,17 +4,23 @@ import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
+import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Component
+@Qualifier("jdbc")
+@Scope("singleton")
 public class TaskDaoJdbc implements TaskDao {
-  private static TaskDao singleInstance = null;
-  private final Connection connection;
+  private final Connection connection = DataBaseUtil.connectWithJdbc();
   private static final Logger logger = LogManager.getLogger(TaskDaoJdbc.class);
 
   private static final String INSERT_INTO_TASK_QUERY =
@@ -26,16 +32,8 @@ public class TaskDaoJdbc implements TaskDao {
       "SELECT task.task_title, task.task_description FROM ((user JOIN task_to_user ON user.user_id = task_to_user.user_id)"
           + " JOIN task ON task_to_user.task_id = task.task_id) WHERE user.username = ?";
 
-  private TaskDaoJdbc(Connection connection) {
-    this.connection = connection;
+  public TaskDaoJdbc() {
     logger.info("TaskDao instantiated");
-  }
-
-  public static TaskDao getInstance(Connection connection) {
-    if (singleInstance == null) {
-      singleInstance = new TaskDaoJdbc(connection);
-    }
-    return singleInstance;
   }
 
   @Override

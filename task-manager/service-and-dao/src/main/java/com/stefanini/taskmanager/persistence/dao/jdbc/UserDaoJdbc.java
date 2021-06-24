@@ -4,33 +4,31 @@ import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
 import com.stefanini.taskmanager.persistence.entity.jdbc.UserJdbc;
+import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Component
+@Qualifier("jdbc")
+@Scope("singleton")
 public class UserDaoJdbc implements UserDao {
-  private static UserDao singleInstance = null;
-  private final Connection connection;
+  private final Connection connection = DataBaseUtil.connectWithJdbc();
   private static final Logger logger = LogManager.getLogger(UserDaoJdbc.class);
 
   private static final String INSERT_USER_QUERY =
       "INSERT INTO user(first_name,last_name,username) VALUES(?, ?, ?)";
   private static final String SELECT_USERS_QUERY = "SELECT * FROM user";
 
-  private UserDaoJdbc(Connection connection) {
-    this.connection = connection;
+  public UserDaoJdbc() {
     logger.info("UserDao instantiated");
-  }
-
-  public static UserDao getInstance(Connection connection) {
-    if (singleInstance == null) {
-      singleInstance = new UserDaoJdbc(connection);
-    }
-    return singleInstance;
   }
 
   @Override

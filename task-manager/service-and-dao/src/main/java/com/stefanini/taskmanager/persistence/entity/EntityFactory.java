@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.persistence.entity;
 
-import com.stefanini.taskmanager.persistence.dao.factory.DaoType;
+import com.stefanini.taskmanager.persistence.dao.DaoType;
 import com.stefanini.taskmanager.persistence.entity.hibernate.GroupHibernate;
 import com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate;
 import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;

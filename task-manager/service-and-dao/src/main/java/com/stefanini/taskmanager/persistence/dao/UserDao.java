@@ -2,6 +2,7 @@ package com.stefanini.taskmanager.persistence.dao;
 
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.entity.User;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
  *
  * @author rarama
  */
+@Component
 public interface UserDao {
 
   /**

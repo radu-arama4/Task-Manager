@@ -4,8 +4,8 @@ import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.GroupService;
-import com.stefanini.taskmanager.service.factory.ServiceFactory;
-import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
+import com.stefanini.taskmanager.service.proxy.transaction.TransactionProxy;
+import com.stefanini.taskmanager.util.ApplicationContextProvider;
 
 /**
  * Implements {@link Operation}. Encapsulates {@link GroupTO} and {@link TaskTO} fields. The execution
@@ -15,8 +15,10 @@ import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
 public class AddTaskToGroupOperation implements Operation {
   private final GroupTO group;
   private final TaskTO task;
-  private final ServiceFactory serviceFactory = ServiceFactoryProvider.createServiceFactory();
-  private final GroupService groupService = serviceFactory.getGroupService();
+  private final GroupService groupService = (GroupService)
+          TransactionProxy.newInstance(
+                  ApplicationContextProvider.getApplicationContext()
+                          .getBean(GroupService.class));
 
   public AddTaskToGroupOperation(GroupTO group, TaskTO task) {
     this.group = group;

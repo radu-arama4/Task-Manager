@@ -3,8 +3,8 @@ package com.stefanini.taskmanager.operations.categories.group;
 import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.GroupService;
-import com.stefanini.taskmanager.service.factory.ServiceFactory;
-import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
+import com.stefanini.taskmanager.service.proxy.transaction.TransactionProxy;
+import com.stefanini.taskmanager.util.ApplicationContextProvider;
 
 /**
  * Implements {@link Operation}. Encapsulates the {@link GroupTO} fields. The execution consists of
@@ -12,8 +12,10 @@ import com.stefanini.taskmanager.service.factory.ServiceFactoryProvider;
  */
 public class CreateGroupOperation implements Operation {
   private final GroupTO group;
-  private final ServiceFactory serviceFactory = ServiceFactoryProvider.createServiceFactory();
-  private final GroupService groupService = serviceFactory.getGroupService();
+  private final GroupService groupService = (GroupService)
+          TransactionProxy.newInstance(
+                  ApplicationContextProvider.getApplicationContext()
+                          .getBean(GroupService.class));
 
   public CreateGroupOperation(GroupTO group) {
     this.group = group;

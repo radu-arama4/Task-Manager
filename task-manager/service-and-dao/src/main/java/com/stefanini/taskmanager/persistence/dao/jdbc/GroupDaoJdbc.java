@@ -4,14 +4,20 @@ import com.stefanini.taskmanager.persistence.dao.GroupDao;
 import com.stefanini.taskmanager.persistence.entity.Group;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
+import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 
+@Component
+@Qualifier("jdbc")
+@Scope("singleton")
 public class GroupDaoJdbc implements GroupDao {
-  private static GroupDao singleInstance = null;
-  private final Connection connection;
+  private final Connection connection = DataBaseUtil.connectWithJdbc();
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
 
   private static final String CREATE_GROUP_QUERY = "INSERT INTO `group_`(`group_name`) VALUES(?)";
@@ -26,16 +32,8 @@ public class GroupDaoJdbc implements GroupDao {
       "INSERT INTO `task_to_group` (`task_id`, `group_id`)"
           + "SELECT ?, group_id FROM `group_` WHERE group_.group_name LIKE ?";
 
-  private GroupDaoJdbc(Connection connection) {
-    this.connection = connection;
+  public GroupDaoJdbc() {
     logger.info("GroupDao instantiated");
-  }
-
-  public static GroupDao getInstance(Connection connection) {
-    if (singleInstance == null) {
-      singleInstance = new GroupDaoJdbc(connection);
-    }
-    return singleInstance;
   }
 
   @Override

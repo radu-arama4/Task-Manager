@@ -1,6 +1,7 @@
-package com.stefanini.taskmanager.persistence.util;
+package com.stefanini.taskmanager.util;
 
 
+import com.stefanini.taskmanager.persistence.util.ConnectionManager;
 import com.stefanini.taskmanager.persistence.util.exceptions.UnsupportedDaoTypeException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +20,8 @@ public abstract class ApplicationManager {
     } catch (UnsupportedDaoTypeException e) {
       logger.error(e);
     }
+
+    ApplicationContextProvider.createApplicationContext();
     logger.info("-------------APPLICATION INITIALIZED!-------------");
   }
 

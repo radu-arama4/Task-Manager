@@ -1,7 +1,7 @@
-package com.stefanini.taskmanager.service.factory;
+package com.stefanini.taskmanager.service;
 
 /**
- * Enum for storing all the supported types of implementations for {@link ServiceFactory}.
+ * Enum for storing all the supported types of implementations for Service.
  */
 public enum ServiceType {
     STANDARD,

@@ -9,4 +9,11 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
+    <context:component-scan base-package="com.stefanini.taskmanager"/>
+
+<!--    <bean id="userService" class="com.stefanini.taskmanager.service.impl.UserServiceImpl"/>-->
+<!--    <bean id="taskService" class="com.stefanini.taskmanager.service.impl.TaskServiceImpl"/>-->
+<!--    <bean id="groupService" class="com.stefanini.taskmanager.service.impl.GroupServiceImpl"/>-->
+<!--    <bean id="extendedService" class="com.stefanini.taskmanager.service.impl.ExtendedServiceImpl"/>-->
+
 </beans>

@@ -1,7 +1,7 @@
 package com.stefanini.taskmanager.util;
 
-import com.stefanini.taskmanager.persistence.dao.factory.DaoType;
-import com.stefanini.taskmanager.service.factory.ServiceType;
+import com.stefanini.taskmanager.persistence.dao.DaoType;
+import com.stefanini.taskmanager.service.ServiceType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.cfg.Configuration;

@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager;
 
-import com.stefanini.taskmanager.persistence.util.ApplicationManager;
+import com.stefanini.taskmanager.util.ApplicationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

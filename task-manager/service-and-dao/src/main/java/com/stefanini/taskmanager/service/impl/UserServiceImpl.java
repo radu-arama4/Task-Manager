@@ -2,22 +2,29 @@ package com.stefanini.taskmanager.service.impl;
 
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
-import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.UserService;
 import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
+@Component("standard")
+@Scope("singleton")
 public class UserServiceImpl implements UserService {
-  private final UserDao userDao;
+  @Autowired
+  @Qualifier("hibernate")
+  private UserDao userDao;
   private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-  public UserServiceImpl(DaoFactory daoFactory) {
-    this.userDao = daoFactory.createUserDao();
+  public UserServiceImpl(){
+
   }
 
   @Override

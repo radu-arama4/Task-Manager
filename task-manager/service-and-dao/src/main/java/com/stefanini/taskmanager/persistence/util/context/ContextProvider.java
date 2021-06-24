@@ -1,6 +1,6 @@
 package com.stefanini.taskmanager.persistence.util.context;
 
-import com.stefanini.taskmanager.persistence.dao.factory.DaoType;
+import com.stefanini.taskmanager.persistence.dao.DaoType;
 import com.stefanini.taskmanager.persistence.util.exceptions.UnsupportedDaoTypeException;
 import com.stefanini.taskmanager.util.ApplicationProperties;
 

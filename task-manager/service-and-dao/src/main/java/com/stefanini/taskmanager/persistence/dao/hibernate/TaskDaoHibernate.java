@@ -6,12 +6,16 @@ import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate;
 import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
+import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -19,30 +23,24 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.stream.Stream;
 
+@Component
+@Qualifier("hibernate")
+@Scope("singleton")
 public class TaskDaoHibernate implements TaskDao {
-  private final SessionFactory sessionFactory;
+  private final SessionFactory sessionFactory = DataBaseUtil.connectWithHibernate();
   private final CriteriaQuery<User> criteriaUser;
   private final CriteriaBuilder builder;
   private final CriteriaQuery<Task> criteriaTask;
   private final Root<TaskHibernate> rootTask;
   private final Root<UserHibernate> rootUser;
   private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
-  private static TaskDao singleInstance;
 
-  private TaskDaoHibernate(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
+  public TaskDaoHibernate() {
     builder = sessionFactory.getCriteriaBuilder();
     criteriaUser = builder.createQuery(User.class);
     criteriaTask = builder.createQuery(Task.class);
     rootUser = criteriaUser.from(UserHibernate.class);
     rootTask = criteriaTask.from(TaskHibernate.class);
-  }
-
-  public static TaskDao getInstance(SessionFactory sessionFactory) {
-    if (singleInstance == null) {
-      singleInstance = new TaskDaoHibernate(sessionFactory);
-    }
-    return singleInstance;
   }
 
   @Override

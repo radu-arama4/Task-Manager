@@ -4,7 +4,6 @@ import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
-import com.stefanini.taskmanager.persistence.dao.factory.DaoFactory;
 import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.Group;
 import com.stefanini.taskmanager.persistence.entity.Task;
@@ -13,14 +12,22 @@ import com.stefanini.taskmanager.service.GroupService;
 import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+@Scope("singleton")
 public class GroupServiceImpl implements GroupService {
-  private final GroupDao groupDao;
+  @Autowired
+  @Qualifier("hibernate")
+  private GroupDao groupDao;
+
   private static final Logger logger = LogManager.getLogger(GroupServiceImpl.class);
 
-  public GroupServiceImpl(DaoFactory daoFactory) {
-    this.groupDao = daoFactory.createGroupDao();
-  }
+  @Autowired
+  public GroupServiceImpl() {}
 
   @Override
   public boolean createGroup(GroupTO group) {
