@@ -4,7 +4,6 @@ import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.ExtendedService;
-import com.stefanini.taskmanager.service.proxy.transaction.TransactionProxy;
 import com.stefanini.taskmanager.util.ApplicationContextProvider;
 
 import java.util.List;
@@ -17,10 +16,8 @@ import java.util.List;
 public class CreateUserWithTasks implements Operation {
   private final UserTO user;
   private final List<TaskTO> tasks;
-  private final ExtendedService extendedService = (ExtendedService)
-          TransactionProxy.newInstance(
-                  ApplicationContextProvider.getApplicationContext()
-                          .getBean(ExtendedService.class));
+  private final ExtendedService extendedService =
+      ApplicationContextProvider.getApplicationContext().getBean(ExtendedService.class);
 
   public CreateUserWithTasks(UserTO user, List<TaskTO> tasks) {
     this.user = user;

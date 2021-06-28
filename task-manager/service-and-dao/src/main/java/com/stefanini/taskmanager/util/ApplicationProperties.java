@@ -1,7 +1,5 @@
 package com.stefanini.taskmanager.util;
 
-import com.stefanini.taskmanager.persistence.dao.DaoType;
-import com.stefanini.taskmanager.service.ServiceType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.cfg.Configuration;
@@ -18,8 +16,6 @@ public class ApplicationProperties {
   private final String user;
   private final String password;
   private final String url;
-  private final String daoType;
-  private final String serviceType;
   private final String driverClass;
   private final String dialect;
   private final String hbm2ddl;
@@ -41,8 +37,6 @@ public class ApplicationProperties {
     hbm2ddl = properties.getProperty("hbm2ddl.auto");
     current_session_context_class = properties.getProperty("current_session_context_class");
 
-    daoType = properties.getProperty("dao_type");
-    serviceType = properties.getProperty("service_type");
     executor_type = properties.getProperty("executor_type");
 
     logger.debug("Properties extracted successfully");
@@ -58,13 +52,13 @@ public class ApplicationProperties {
   public Configuration getHibernateConfiguration() {
     Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
     return configuration
-        .setProperty("hibernate.connection.url", url)
-        .setProperty("hibernate.connection.username", user)
-        .setProperty("hibernate.connection.password", password)
+        //        .setProperty("hibernate.connection.url", url)
+        //        .setProperty("hibernate.connection.username", user)
+        //        .setProperty("hibernate.connection.password", password)
         .setProperty("hibernate.hbm2ddl.auto", hbm2ddl)
-        .setProperty("hibernate.dialect", dialect)
-        .setProperty("hibernate.connection.driver_class", driverClass)
-        .setProperty("hibernate.current_session_context_class", current_session_context_class);
+        .setProperty("hibernate.dialect", dialect);
+        //        .setProperty("hibernate.connection.driver_class", driverClass);
+//        .setProperty("hibernate.current_session_context_class", current_session_context_class);
   }
 
   private Properties extractProperties() {
@@ -93,15 +87,11 @@ public class ApplicationProperties {
     return url;
   }
 
-  public DaoType getDaoType() {
-    return DaoType.valueOf(daoType);
-  }
-
-  public ServiceType getServiceType() {
-    return ServiceType.valueOf(serviceType);
-  }
-
   public String getExecutorType() {
     return executor_type;
+  }
+
+  public String getDriverClass() {
+    return driverClass;
   }
 }

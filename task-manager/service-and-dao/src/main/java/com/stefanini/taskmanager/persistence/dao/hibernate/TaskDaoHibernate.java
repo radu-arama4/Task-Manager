@@ -1,15 +1,12 @@
 package com.stefanini.taskmanager.persistence.dao.hibernate;
 
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
-import com.stefanini.taskmanager.persistence.dao.jdbc.GroupDaoJdbc;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
-import com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate;
-import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
-import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -27,33 +24,41 @@ import java.util.stream.Stream;
 @Qualifier("hibernate")
 @Scope("singleton")
 public class TaskDaoHibernate implements TaskDao {
-  private final SessionFactory sessionFactory = DataBaseUtil.connectWithHibernate();
+  private final SessionFactory sessionFactory;
   private final CriteriaQuery<User> criteriaUser;
   private final CriteriaBuilder builder;
   private final CriteriaQuery<Task> criteriaTask;
-  private final Root<TaskHibernate> rootTask;
-  private final Root<UserHibernate> rootUser;
-  private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
+  private final Root<Task> rootTask;
+  private final Root<User> rootUser;
+  private static final Logger logger = LogManager.getLogger(TaskDaoHibernate.class);
 
-  public TaskDaoHibernate() {
+  public TaskDaoHibernate(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
     builder = sessionFactory.getCriteriaBuilder();
     criteriaUser = builder.createQuery(User.class);
     criteriaTask = builder.createQuery(Task.class);
-    rootUser = criteriaUser.from(UserHibernate.class);
-    rootTask = criteriaTask.from(TaskHibernate.class);
+    rootUser = criteriaUser.from(User.class);
+    rootTask = criteriaTask.from(Task.class);
   }
 
   @Override
   public Task addTask(Task task, User user) {
-    Session session = sessionFactory.getCurrentSession();
-    TaskHibernate newTask = new TaskHibernate();
+    Session session;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
+    Task newTask = new Task();
 
     criteriaUser.select(rootUser).where(builder.like(rootUser.get("userName"), user.getUserName()));
     Query<User> query = session.createQuery(criteriaUser);
-    UserHibernate selectedUser;
+    User selectedUser;
 
     try {
-      selectedUser = (UserHibernate) query.getSingleResult();
+      selectedUser = (User) query.getSingleResult();
     } catch (NoResultException e) {
       logger.error(e);
       return null;
@@ -73,13 +78,21 @@ public class TaskDaoHibernate implements TaskDao {
 
   @Override
   public Stream<Task> addMultipleTasks(Stream<Task> tasks, User user) {
-    Session session = sessionFactory.getCurrentSession();
+    Session session;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
+    Session finalSession = session;
     tasks.forEach(
         task -> {
-          TaskHibernate newTask = new TaskHibernate();
+          Task newTask = new Task();
           OperationsUtil.copyObjectProperties(newTask, task);
-          newTask.setUser((UserHibernate) user);
-          session.save(newTask);
+          newTask.setUser((User) user);
+          finalSession.save(newTask);
         });
 
     return tasks;
@@ -87,7 +100,14 @@ public class TaskDaoHibernate implements TaskDao {
 
   @Override
   public Stream<Task> getTasks(User selectedUser) {
-    Session session = sessionFactory.getCurrentSession();
+    Session session;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
     criteriaTask
         .select(rootTask)
         .where(builder.like(rootTask.get("user").get("userName"), selectedUser.getUserName()));

@@ -6,10 +6,10 @@
 <hibernate-configuration>
     <session-factory>
         <mapping
-                class="com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate"/>
+                class="com.stefanini.taskmanager.persistence.entity.User"/>
         <mapping
-                class="com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate"/>
+                class="com.stefanini.taskmanager.persistence.entity.Task"/>
         <mapping
-                class="com.stefanini.taskmanager.persistence.entity.hibernate.GroupHibernate"/>
+                class="com.stefanini.taskmanager.persistence.entity.Group"/>
     </session-factory>
 </hibernate-configuration>  

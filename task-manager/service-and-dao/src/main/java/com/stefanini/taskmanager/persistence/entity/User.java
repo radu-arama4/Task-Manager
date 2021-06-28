@@ -1,23 +1,50 @@
 package com.stefanini.taskmanager.persistence.entity;
 
-/**
- * Interface that represents the User entity. Contains the getters and setters of the contained
- * fields.
- */
-public interface User {
-  Long getUserId();
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-  String getUserName();
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-  String getFirstName();
+@Data
+@Entity(name = "User")
+@Table(name = "user")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class User{
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_id", unique = true, nullable = false)
+  private Long userId;
 
-  String getLastName();
+  @Column(name = "first_name", nullable = false)
+  private String firstName;
 
-  void setUserId(Long userId);
+  @Column(name = "last_name", nullable = false)
+  private String lastName;
 
-  void setUserName(String userName);
+  @Column(name = "username", unique = true, nullable = false)
+  private String userName;
 
-  void setFirstName(String firstName);
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @ToString.Exclude private Set<Task> tasks = new HashSet<>();
 
-  void setLastName(String lastName);
+  @ManyToMany(mappedBy = "users", cascade = CascadeType.DETACH)
+  @ToString.Exclude private Set<Group> groups = new HashSet<>();
+
+  public User() {}
+
+  public User(String firstName, String lastName, String userName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.userName = userName;
+  }
+
+  public User(Long userId, String firstName, String lastName, String userName) {
+    this.userId = userId;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.userName = userName;
+  }
 }

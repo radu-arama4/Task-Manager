@@ -4,7 +4,6 @@ import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
-import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.Group;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
@@ -15,9 +14,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @Scope("singleton")
 public class GroupServiceImpl implements GroupService {
   @Autowired
@@ -37,7 +36,7 @@ public class GroupServiceImpl implements GroupService {
       return false;
     }
 
-    Group newGroup = EntityFactory.createGroup();
+    Group newGroup = new Group();
     OperationsUtil.copyObjectProperties(newGroup, group);
 
     if (groupDao.createGroup(newGroup) != null) {
@@ -57,8 +56,8 @@ public class GroupServiceImpl implements GroupService {
     String userName = user.getUserName();
 
     if (groupName != null || userName != null) {
-      Group selectedGroup = EntityFactory.createGroup();
-      User selectedUser = EntityFactory.createUser();
+      Group selectedGroup = new Group();
+      User selectedUser = new User();
 
       OperationsUtil.copyObjectProperties(selectedGroup, group);
       OperationsUtil.copyObjectProperties(selectedUser, user);
@@ -84,8 +83,8 @@ public class GroupServiceImpl implements GroupService {
     if (groupName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Information missing!");
     } else {
-      Group selectedGroup = EntityFactory.createGroup();
-      Task selectedTask = EntityFactory.createTask();
+      Group selectedGroup = new Group();
+      Task selectedTask = new Task();
 
       OperationsUtil.copyObjectProperties(selectedGroup, group);
       OperationsUtil.copyObjectProperties(selectedTask, task);

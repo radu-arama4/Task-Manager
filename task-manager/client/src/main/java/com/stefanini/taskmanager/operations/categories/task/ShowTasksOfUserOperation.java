@@ -4,7 +4,6 @@ import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.TaskService;
-import com.stefanini.taskmanager.service.proxy.transaction.TransactionProxy;
 import com.stefanini.taskmanager.util.ApplicationContextProvider;
 
 import java.util.stream.Stream;
@@ -16,10 +15,7 @@ import java.util.stream.Stream;
 public class ShowTasksOfUserOperation implements Operation {
   private final UserTO user;
   private final TaskService taskService =
-          (TaskService)
-                  TransactionProxy.newInstance(
-                          ApplicationContextProvider.getApplicationContext()
-                                  .getBean(TaskService.class));
+      ApplicationContextProvider.getApplicationContext().getBean(TaskService.class);
 
   public ShowTasksOfUserOperation(UserTO user) {
     this.user = user;

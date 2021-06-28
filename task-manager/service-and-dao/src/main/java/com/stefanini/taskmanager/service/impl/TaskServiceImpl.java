@@ -3,7 +3,6 @@ package com.stefanini.taskmanager.service.impl;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
-import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.TaskService;
@@ -13,13 +12,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Component
+@Service
 @Scope("singleton")
 public class TaskServiceImpl implements TaskService {
   @Autowired
@@ -39,15 +38,12 @@ public class TaskServiceImpl implements TaskService {
     String taskTitle = task.getTaskTitle();
     String taskDescription = task.getTaskDescription();
 
-    User newUser;
-    Task newTask;
+    User newUser = new User();
+    Task newTask = new Task();
 
     if (userName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Missing information!");
     } else {
-      newUser = EntityFactory.createUser();
-      newTask = EntityFactory.createTask();
-
       OperationsUtil.copyObjectProperties(newUser, user);
       OperationsUtil.copyObjectProperties(newTask, task);
 
@@ -80,7 +76,7 @@ public class TaskServiceImpl implements TaskService {
       logger.warn("Missing information!");
     }
 
-    User selectedUser = EntityFactory.createUser();
+    User selectedUser = new User();
 
     OperationsUtil.copyObjectProperties(selectedUser, user);
 

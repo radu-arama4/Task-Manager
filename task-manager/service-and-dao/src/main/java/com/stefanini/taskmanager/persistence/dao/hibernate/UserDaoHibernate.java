@@ -2,10 +2,9 @@ package com.stefanini.taskmanager.persistence.dao.hibernate;
 
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.entity.User;
-import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
-import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -22,21 +21,29 @@ import java.util.stream.Stream;
 @Qualifier("hibernate")
 @Scope("singleton")
 public class UserDaoHibernate implements UserDao {
-  private final SessionFactory sessionFactory = DataBaseUtil.connectWithHibernate();
+  private final SessionFactory sessionFactory;
   private final CriteriaQuery<User> criteria;
   private final CriteriaBuilder builder;
-  private final Root<UserHibernate> rootUser;
+  private final Root<User> rootUser;
   private static final Logger logger = LogManager.getLogger(UserDaoHibernate.class);
 
-  public UserDaoHibernate() {
+  public UserDaoHibernate(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
     builder = sessionFactory.getCriteriaBuilder();
     criteria = builder.createQuery(User.class);
-    rootUser = criteria.from(UserHibernate.class);
+    rootUser = criteria.from(User.class);
   }
 
   @Override
   public User createUser(User newUser) {
-    Session session = sessionFactory.getCurrentSession();
+    Session session;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
     try {
       session.save(newUser);
     } catch (Exception e) {
@@ -49,7 +56,14 @@ public class UserDaoHibernate implements UserDao {
 
   @Override
   public Stream<User> getUsers() {
-    Session session = sessionFactory.getCurrentSession();
+    Session session;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
     criteria.select(rootUser);
     Query<User> query = session.createQuery(criteria);
     return query.getResultList().stream();

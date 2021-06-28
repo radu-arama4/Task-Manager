@@ -1,8 +1,6 @@
 package com.stefanini.taskmanager.util;
 
 
-import com.stefanini.taskmanager.persistence.util.ConnectionManager;
-import com.stefanini.taskmanager.persistence.util.exceptions.UnsupportedDaoTypeException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,23 +13,13 @@ public abstract class ApplicationManager {
 
   /** Method for initializing the app. */
   public static void initApp() {
-    try {
-      ConnectionManager.connectToDataBase();
-    } catch (UnsupportedDaoTypeException e) {
-      logger.error(e);
-    }
-
     ApplicationContextProvider.createApplicationContext();
     logger.info("-------------APPLICATION INITIALIZED!-------------");
   }
 
   /** Method for terminating the app. */
   public static void closeApp() {
-    try {
-      ConnectionManager.disconnectFromDataBase();
-    } catch (UnsupportedDaoTypeException e) {
-      logger.error(e);
-    }
+    //TODO try to close spring app
     logger.info("-------------APPLICATION CLOSED!-------------");
   }
 }

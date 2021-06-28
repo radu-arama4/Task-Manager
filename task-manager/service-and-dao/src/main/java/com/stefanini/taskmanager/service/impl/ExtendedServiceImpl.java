@@ -4,7 +4,6 @@ import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
-import com.stefanini.taskmanager.persistence.entity.EntityFactory;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.ExtendedService;
@@ -14,13 +13,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Component
+@Service
 @Scope("singleton")
 public class ExtendedServiceImpl implements ExtendedService {
   @Autowired
@@ -38,14 +37,14 @@ public class ExtendedServiceImpl implements ExtendedService {
 
   @Override
   public void createUserWithTasks(UserTO user, Stream<TaskTO> tasks) {
-    User newUser = EntityFactory.createUser();
+    User newUser = new User();
     List<Task> newTasks = new LinkedList<>();
 
     OperationsUtil.copyObjectProperties(newUser, user);
 
     tasks.forEach(
         taskTO -> {
-          Task task = EntityFactory.createTask();
+          Task task = new Task();
           OperationsUtil.copyObjectProperties(task, taskTO);
           newTasks.add(task);
         });

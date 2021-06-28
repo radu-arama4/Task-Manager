@@ -1,17 +1,13 @@
 package com.stefanini.taskmanager.persistence.dao.hibernate;
 
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
-import com.stefanini.taskmanager.persistence.dao.jdbc.GroupDaoJdbc;
 import com.stefanini.taskmanager.persistence.entity.Group;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
-import com.stefanini.taskmanager.persistence.entity.hibernate.GroupHibernate;
-import com.stefanini.taskmanager.persistence.entity.hibernate.TaskHibernate;
-import com.stefanini.taskmanager.persistence.entity.hibernate.UserHibernate;
-import com.stefanini.taskmanager.persistence.util.DataBaseUtil;
 import com.stefanini.taskmanager.util.OperationsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -28,29 +24,37 @@ import javax.persistence.criteria.Root;
 @Qualifier("hibernate")
 @Scope("singleton")
 public class GroupDaoHibernate implements GroupDao {
-  private final SessionFactory sessionFactory = DataBaseUtil.connectWithHibernate();
-  private static final Logger logger = LogManager.getLogger(GroupDaoJdbc.class);
+  private final SessionFactory sessionFactory;
+  private static final Logger logger = LogManager.getLogger(GroupDaoHibernate.class);
   private final CriteriaQuery<User> criteriaUser;
   private final CriteriaQuery<Task> criteriaTask;
   private final CriteriaQuery<Group> criteriaGroup;
   private final CriteriaBuilder builder;
-  private final Root<TaskHibernate> rootTask;
-  private final Root<GroupHibernate> rootGroup;
-  private final Root<UserHibernate> rootUser;
+  private final Root<Task> rootTask;
+  private final Root<Group> rootGroup;
+  private final Root<User> rootUser;
 
-  public GroupDaoHibernate() {
+  public GroupDaoHibernate(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
     builder = sessionFactory.getCriteriaBuilder();
     criteriaUser = builder.createQuery(User.class);
     criteriaTask = builder.createQuery(Task.class);
     criteriaGroup = builder.createQuery(Group.class);
-    rootUser = criteriaUser.from(UserHibernate.class);
-    rootTask = criteriaTask.from(TaskHibernate.class);
-    rootGroup = criteriaGroup.from(GroupHibernate.class);
+    rootUser = criteriaUser.from(User.class);
+    rootTask = criteriaTask.from(Task.class);
+    rootGroup = criteriaGroup.from(Group.class);
   }
 
   @Override
   public Group createGroup(Group group) {
-    Session session = sessionFactory.getCurrentSession();
+    Session session;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
     try {
       session.save(group);
     } catch (Exception e) {
@@ -62,9 +66,16 @@ public class GroupDaoHibernate implements GroupDao {
 
   @Override
   public User addUserToGroup(User user, Group group) {
-    Session session = sessionFactory.getCurrentSession();
-    UserHibernate selectedUser;
-    GroupHibernate selectedGroup;
+    Session session;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
+    User selectedUser;
+    Group selectedGroup;
 
     criteriaUser.select(rootUser).where(builder.like(rootUser.get("userName"), user.getUserName()));
     criteriaGroup
@@ -75,8 +86,8 @@ public class GroupDaoHibernate implements GroupDao {
     Query<Group> queryGroup = session.createQuery(criteriaGroup);
 
     try {
-      selectedUser = (UserHibernate) queryUser.getSingleResult();
-      selectedGroup = (GroupHibernate) queryGroup.getSingleResult();
+      selectedUser = (User) queryUser.getSingleResult();
+      selectedGroup = (Group) queryGroup.getSingleResult();
     } catch (NoResultException e) {
       logger.error(e);
       return null;
@@ -94,8 +105,15 @@ public class GroupDaoHibernate implements GroupDao {
 
   @Override
   public Task addTaskToGroup(Task newTask, Group group) {
-    Session session = sessionFactory.getCurrentSession();
-    TaskHibernate task = new TaskHibernate();
+    Session session;
+
+    try {
+      session = sessionFactory.getCurrentSession();
+    } catch (HibernateException e) {
+      session = sessionFactory.openSession();
+    }
+
+    Task task = new Task();
 
     OperationsUtil.copyObjectProperties(task, newTask);
 
@@ -104,10 +122,10 @@ public class GroupDaoHibernate implements GroupDao {
         .where(builder.like(rootGroup.get("groupName"), group.getGroupName()));
 
     Query<Group> queryGroup = session.createQuery(criteriaGroup);
-    GroupHibernate selectedGroup;
+    Group selectedGroup;
 
     try {
-      selectedGroup = (GroupHibernate) queryGroup.getSingleResult();
+      selectedGroup = (Group) queryGroup.getSingleResult();
     } catch (Exception e) {
       logger.error(e);
       return null;

@@ -9,11 +9,32 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
+    <context:annotation-config/>
     <context:component-scan base-package="com.stefanini.taskmanager"/>
 
-<!--    <bean id="userService" class="com.stefanini.taskmanager.service.impl.UserServiceImpl"/>-->
-<!--    <bean id="taskService" class="com.stefanini.taskmanager.service.impl.TaskServiceImpl"/>-->
-<!--    <bean id="groupService" class="com.stefanini.taskmanager.service.impl.GroupServiceImpl"/>-->
-<!--    <bean id="extendedService" class="com.stefanini.taskmanager.service.impl.ExtendedServiceImpl"/>-->
+    <!--    <bean id="userService" class="com.stefanini.taskmanager.service.impl.UserServiceImpl"/>-->
+    <!--    <bean id="taskService" class="com.stefanini.taskmanager.service.impl.TaskServiceImpl"/>-->
+    <!--    <bean id="groupService" class="com.stefanini.taskmanager.service.impl.GroupServiceImpl"/>-->
+    <!--    <bean id="extendedService" class="com.stefanini.taskmanager.service.impl.ExtendedServiceImpl"/>-->
+
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mappingResources">
+            <list>
+                <value>org/springframework/samples/petclinic/hibernate/petclinic.hbm.xml</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=${hibernate.dialect}
+            </value>
+        </property>
+    </bean>
+
+    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
 
 </beans>

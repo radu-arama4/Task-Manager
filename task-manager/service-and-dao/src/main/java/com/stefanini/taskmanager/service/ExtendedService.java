@@ -2,7 +2,7 @@ package com.stefanini.taskmanager.service;
 
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
-import com.stefanini.taskmanager.service.proxy.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Stream;
 
