@@ -4,7 +4,7 @@ import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.GroupService;
-import com.stefanini.taskmanager.util.ApplicationContextProvider;
+import com.stefanini.taskmanager.util.context.ApplicationContextManager;
 
 /**
  * Implements {@link Operation}. Encapsulates {@link GroupTO} and {@link UserTO} fields. The
@@ -15,7 +15,7 @@ public class AddUserToGroupOperation implements Operation {
   private final GroupTO group;
   private final UserTO user;
   private final GroupService groupService =
-      ApplicationContextProvider.getApplicationContext().getBean(GroupService.class);
+      ApplicationContextManager.getApplicationContext().getBean(GroupService.class);
 
   public AddUserToGroupOperation(GroupTO group, UserTO user) {
     this.group = group;

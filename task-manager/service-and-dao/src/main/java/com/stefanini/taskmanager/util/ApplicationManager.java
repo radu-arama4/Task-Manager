@@ -1,6 +1,7 @@
 package com.stefanini.taskmanager.util;
 
 
+import com.stefanini.taskmanager.util.context.ApplicationContextManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,13 +14,13 @@ public abstract class ApplicationManager {
 
   /** Method for initializing the app. */
   public static void initApp() {
-    ApplicationContextProvider.createApplicationContext();
+    ApplicationContextManager.createApplicationContext();
     logger.info("-------------APPLICATION INITIALIZED!-------------");
   }
 
   /** Method for terminating the app. */
   public static void closeApp() {
-    //TODO try to close spring app
+    ApplicationContextManager.closeApplicationContext();
     logger.info("-------------APPLICATION CLOSED!-------------");
   }
 }

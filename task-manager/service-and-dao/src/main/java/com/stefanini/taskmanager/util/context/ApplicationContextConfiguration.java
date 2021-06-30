@@ -1,19 +1,25 @@
-package com.stefanini.taskmanager.util;
+package com.stefanini.taskmanager.util.context;
 
+import com.stefanini.taskmanager.util.ApplicationProperties;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.stefanini.taskmanager")
-//@EnableTransactionManagement
+@EnableTransactionManagement
+@EnableJpaRepositories(value = "com.stefanini.taskmanager", entityManagerFactoryRef = "emf")
 public class ApplicationContextConfiguration {
   @Bean
   public LocalSessionFactoryBean sessionFactory() {
@@ -34,36 +40,12 @@ public class ApplicationContextConfiguration {
   }
 
   @Bean
-  public PlatformTransactionManager transactionManager() {
-    HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-    transactionManager.setSessionFactory(sessionFactory().getObject());
+  public PlatformTransactionManager transactionManager(
+      LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean) {
+    JpaTransactionManager transactionManager = new JpaTransactionManager();
+    transactionManager.setEntityManagerFactory(localContainerEntityManagerFactoryBean.getObject());
     return transactionManager;
   }
-
-  //  @Bean
-  //  public PlatformTransactionManager transactionManager(DataSource dataSource) {
-  //    HibernateTransactionManager txManager = new HibernateTransactionManager();
-  //    txManager.setNestedTransactionAllowed(true);
-  //    txManager.setDataSource(dataSource);
-  //    return txManager;
-  //  }
-
-  //  @Bean
-  //  public DataSource dataSource() {
-  //    MysqlDataSource dataSource = new MysqlDataSource();
-  //
-  //
-  //    dataSource.setPassword(applicationProperties.getPassword());
-  //    dataSource.setUser(applicationProperties.getUser());
-  //    dataSource.setUrl(applicationProperties.getUrl());
-  //    try {
-  //      dataSource.setAllowPublicKeyRetrieval(true);
-  //    } catch (SQLException throwables) {
-  //      throwables.printStackTrace();
-  //    }
-  //
-  //    return dataSource;
-  //  }
 
   @Bean
   public DataSource dataSource() {
@@ -78,9 +60,13 @@ public class ApplicationContextConfiguration {
     return dataSource;
   }
 
-  //
-  //  @Override
-  //  public PlatformTransactionManager annotationDrivenTransactionManager() {
-  //    return transactionManager();
-  //  }
+  @Bean("emf")
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+    LocalContainerEntityManagerFactoryBean entityManagerFactory =
+        new LocalContainerEntityManagerFactoryBean();
+    entityManagerFactory.setPersistenceProvider(new HibernatePersistenceProvider());
+    entityManagerFactory.setDataSource(dataSource());
+    entityManagerFactory.setPackagesToScan("com.stefanini.taskmanager");
+    return entityManagerFactory;
+  }
 }

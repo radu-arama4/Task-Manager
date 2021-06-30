@@ -4,7 +4,7 @@ import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.ExtendedService;
-import com.stefanini.taskmanager.util.ApplicationContextProvider;
+import com.stefanini.taskmanager.util.context.ApplicationContextManager;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class CreateUserWithTasks implements Operation {
   private final UserTO user;
   private final List<TaskTO> tasks;
   private final ExtendedService extendedService =
-      ApplicationContextProvider.getApplicationContext().getBean(ExtendedService.class);
+      ApplicationContextManager.getApplicationContext().getBean(ExtendedService.class);
 
   public CreateUserWithTasks(UserTO user, List<TaskTO> tasks) {
     this.user = user;

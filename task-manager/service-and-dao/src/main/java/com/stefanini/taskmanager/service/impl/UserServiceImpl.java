@@ -4,27 +4,23 @@ import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.UserService;
-import com.stefanini.taskmanager.util.OperationsUtil;
+import com.stefanini.taskmanager.util.BeansUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-@Service("standard")
+@Service
 @Scope("singleton")
 public class UserServiceImpl implements UserService {
-  @Autowired
-  @Qualifier("hibernate")
-  private UserDao userDao;
+  @Autowired private UserDao userDao;
   private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-  public UserServiceImpl(){
-
-  }
+  public UserServiceImpl() {}
 
   @Override
   public UserTO createUser(UserTO user) {
@@ -40,12 +36,11 @@ public class UserServiceImpl implements UserService {
     } else {
       User newUser = new User();
 
-      OperationsUtil.copyObjectProperties(newUser, user);
-
-      User createdUser = userDao.createUser(newUser);
+      BeansUtil.copyObjectProperties(newUser, user);
+      User createdUser = userDao.save(newUser);
       UserTO returnedUser = new UserTO();
 
-      OperationsUtil.copyObjectProperties(returnedUser, createdUser);
+      BeansUtil.copyObjectProperties(returnedUser, createdUser);
 
       if (createdUser != null) {
         logger.info(
@@ -64,13 +59,14 @@ public class UserServiceImpl implements UserService {
 
   private UserTO toUserTO(User user) {
     UserTO returnedUser = new UserTO();
-    OperationsUtil.copyObjectProperties(returnedUser, user);
+    BeansUtil.copyObjectProperties(returnedUser, user);
     return returnedUser;
   }
 
   @Override
   public Stream<UserTO> getAllUsers() {
     logger.info("getAllUsers method started");
-    return userDao.getUsers().map(this::toUserTO);
+
+    return StreamSupport.stream(userDao.findAll().spliterator(), false).map(this::toUserTO);
   }
 }

@@ -4,24 +4,27 @@ import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.GroupDao;
+import com.stefanini.taskmanager.persistence.dao.TaskDao;
+import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.entity.Group;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.GroupService;
-import com.stefanini.taskmanager.util.OperationsUtil;
+import com.stefanini.taskmanager.util.BeansUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 @Service
 @Scope("singleton")
 public class GroupServiceImpl implements GroupService {
-  @Autowired
-  @Qualifier("hibernate")
-  private GroupDao groupDao;
+  @Autowired private GroupDao groupDao;
+
+  @Autowired private UserDao userDao;
+
+  @Autowired private TaskDao taskDao;
 
   private static final Logger logger = LogManager.getLogger(GroupServiceImpl.class);
 
@@ -37,9 +40,9 @@ public class GroupServiceImpl implements GroupService {
     }
 
     Group newGroup = new Group();
-    OperationsUtil.copyObjectProperties(newGroup, group);
+    BeansUtil.copyObjectProperties(newGroup, group);
 
-    if (groupDao.createGroup(newGroup) != null) {
+    if (groupDao.save(newGroup) != null) {
       logger.info("New group " + group.getGroupName() + " created!");
       return true;
     }
@@ -56,13 +59,12 @@ public class GroupServiceImpl implements GroupService {
     String userName = user.getUserName();
 
     if (groupName != null || userName != null) {
-      Group selectedGroup = new Group();
-      User selectedUser = new User();
+      Group selectedGroup = groupDao.findByGroupName(groupName);
+      User selectedUser = userDao.findByUserName(userName);
 
-      OperationsUtil.copyObjectProperties(selectedGroup, group);
-      OperationsUtil.copyObjectProperties(selectedUser, user);
+      selectedGroup.addUser(selectedUser);
 
-      if (groupDao.addUserToGroup(selectedUser, selectedGroup) != null) {
+      if (groupDao.save(selectedGroup) != null) {
         logger.info("User " + userName + " added to group " + groupName);
         return true;
       }
@@ -83,13 +85,13 @@ public class GroupServiceImpl implements GroupService {
     if (groupName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Information missing!");
     } else {
-      Group selectedGroup = new Group();
+      Group selectedGroup = groupDao.findByGroupName(groupName);
+
       Task selectedTask = new Task();
+      BeansUtil.copyObjectProperties(selectedTask, task);
+      selectedTask.setGroup(selectedGroup);
 
-      OperationsUtil.copyObjectProperties(selectedGroup, group);
-      OperationsUtil.copyObjectProperties(selectedTask, task);
-
-      if (groupDao.addTaskToGroup(selectedTask, selectedGroup) != null) {
+      if (taskDao.save(selectedTask) != null) {
         logger.info(
             "Task with [title: "
                 + taskTitle

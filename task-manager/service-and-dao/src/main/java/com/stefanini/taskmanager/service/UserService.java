@@ -3,8 +3,8 @@ package com.stefanini.taskmanager.service;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.service.proxy.email.EmailGenerator;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.stream.Stream;
 
 /**
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @author rarama
  */
 @Transactional
-public interface UserService {
+public interface UserService{
 
   /**
    * Method which receives the {@link UserTO} as DTO in order to be sent to the {@link UserDao} and

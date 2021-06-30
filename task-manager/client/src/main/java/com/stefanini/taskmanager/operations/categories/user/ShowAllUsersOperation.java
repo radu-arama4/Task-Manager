@@ -3,7 +3,7 @@ package com.stefanini.taskmanager.operations.categories.user;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.UserService;
-import com.stefanini.taskmanager.util.ApplicationContextProvider;
+import com.stefanini.taskmanager.util.context.ApplicationContextManager;
 
 import java.util.stream.Stream;
 
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  */
 public class ShowAllUsersOperation implements Operation {
   private final UserService userService =
-      ApplicationContextProvider.getApplicationContext().getBean("standard", UserService.class);
+      ApplicationContextManager.getApplicationContext().getBean(UserService.class);
 
   public ShowAllUsersOperation() {}
 

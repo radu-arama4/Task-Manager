@@ -52,13 +52,8 @@ public class ApplicationProperties {
   public Configuration getHibernateConfiguration() {
     Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
     return configuration
-        //        .setProperty("hibernate.connection.url", url)
-        //        .setProperty("hibernate.connection.username", user)
-        //        .setProperty("hibernate.connection.password", password)
         .setProperty("hibernate.hbm2ddl.auto", hbm2ddl)
         .setProperty("hibernate.dialect", dialect);
-        //        .setProperty("hibernate.connection.driver_class", driverClass);
-//        .setProperty("hibernate.current_session_context_class", current_session_context_class);
   }
 
   private Properties extractProperties() {

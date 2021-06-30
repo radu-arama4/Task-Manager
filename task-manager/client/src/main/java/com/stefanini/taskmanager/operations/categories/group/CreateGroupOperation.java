@@ -3,7 +3,7 @@ package com.stefanini.taskmanager.operations.categories.group;
 import com.stefanini.taskmanager.dto.GroupTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.GroupService;
-import com.stefanini.taskmanager.util.ApplicationContextProvider;
+import com.stefanini.taskmanager.util.context.ApplicationContextManager;
 
 /**
  * Implements {@link Operation}. Encapsulates the {@link GroupTO} fields. The execution consists of
@@ -13,7 +13,7 @@ import com.stefanini.taskmanager.util.ApplicationContextProvider;
 public class CreateGroupOperation implements Operation {
   private final GroupTO group;
   private final GroupService groupService =
-      ApplicationContextProvider.getApplicationContext().getBean(GroupService.class);
+      ApplicationContextManager.getApplicationContext().getBean(GroupService.class);
 
   public CreateGroupOperation(GroupTO group) {
     this.group = group;

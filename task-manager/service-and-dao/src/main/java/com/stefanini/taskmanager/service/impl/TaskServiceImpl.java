@@ -3,14 +3,14 @@ package com.stefanini.taskmanager.service.impl;
 import com.stefanini.taskmanager.dto.TaskTO;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.persistence.dao.TaskDao;
+import com.stefanini.taskmanager.persistence.dao.UserDao;
 import com.stefanini.taskmanager.persistence.entity.Task;
 import com.stefanini.taskmanager.persistence.entity.User;
 import com.stefanini.taskmanager.service.TaskService;
-import com.stefanini.taskmanager.util.OperationsUtil;
+import com.stefanini.taskmanager.util.BeansUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +21,14 @@ import java.util.stream.Stream;
 @Service
 @Scope("singleton")
 public class TaskServiceImpl implements TaskService {
-  @Autowired
-  @Qualifier("hibernate")
-  private TaskDao taskDao;
+  @Autowired private TaskDao taskDao;
+
+  @Autowired private UserDao userDao;
+
   private static final Logger logger = LogManager.getLogger(TaskServiceImpl.class);
 
   @Autowired
-  public TaskServiceImpl() {
-  }
+  public TaskServiceImpl() {}
 
   @Override
   public TaskTO addTask(TaskTO task, UserTO user) {
@@ -38,17 +38,18 @@ public class TaskServiceImpl implements TaskService {
     String taskTitle = task.getTaskTitle();
     String taskDescription = task.getTaskDescription();
 
-    User newUser = new User();
     Task newTask = new Task();
 
     if (userName == null || taskTitle == null || taskDescription == null) {
       logger.warn("Missing information!");
     } else {
-      OperationsUtil.copyObjectProperties(newUser, user);
-      OperationsUtil.copyObjectProperties(newTask, task);
+      BeansUtil.copyObjectProperties(newTask, task);
+
+      User selectedUser = userDao.findByUserName(user.getUserName());
+      newTask.setUser(selectedUser);
+      Task createdTask = taskDao.save(newTask);
 
       TaskTO returnedTask = new TaskTO();
-      Task createdTask = taskDao.addTask(newTask, newUser);
 
       if (createdTask != null) {
         logger.info(
@@ -61,8 +62,7 @@ public class TaskServiceImpl implements TaskService {
                 + userName
                 + ".");
 
-        OperationsUtil.copyObjectProperties(returnedTask, createdTask);
-
+        BeansUtil.copyObjectProperties(returnedTask, createdTask);
         return returnedTask;
       }
       logger.warn("No user with such username: " + userName);
@@ -76,11 +76,9 @@ public class TaskServiceImpl implements TaskService {
       logger.warn("Missing information!");
     }
 
-    User selectedUser = new User();
+    User selectedUser = userDao.findByUserName(user.getUserName());
 
-    OperationsUtil.copyObjectProperties(selectedUser, user);
-
-    Stream<Task> tasks = taskDao.getTasks(selectedUser);
+    List<Task> tasks = taskDao.findByUser(selectedUser);
     List<TaskTO> returnedTasks = new LinkedList<>();
 
     if (tasks == null) {
@@ -91,7 +89,7 @@ public class TaskServiceImpl implements TaskService {
     tasks.forEach(
         task -> {
           TaskTO task1 = new TaskTO();
-          OperationsUtil.copyObjectProperties(task1, task);
+          BeansUtil.copyObjectProperties(task1, task);
           returnedTasks.add(task1);
         });
 

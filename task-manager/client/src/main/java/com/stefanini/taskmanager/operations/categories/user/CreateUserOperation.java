@@ -3,7 +3,7 @@ package com.stefanini.taskmanager.operations.categories.user;
 import com.stefanini.taskmanager.dto.UserTO;
 import com.stefanini.taskmanager.operations.Operation;
 import com.stefanini.taskmanager.service.UserService;
-import com.stefanini.taskmanager.util.ApplicationContextProvider;
+import com.stefanini.taskmanager.util.context.ApplicationContextManager;
 
 /**
  * Implements {@link Operation}. Encapsulates {@link UserTO} field. The execution consists of
@@ -13,7 +13,7 @@ import com.stefanini.taskmanager.util.ApplicationContextProvider;
 public class CreateUserOperation implements Operation {
   private final UserTO user;
   private final UserService userService =
-      ApplicationContextProvider.getApplicationContext().getBean("standard", UserService.class);
+      ApplicationContextManager.getApplicationContext().getBean("standard", UserService.class);
 
   public CreateUserOperation(UserTO user) {
     this.user = user;
