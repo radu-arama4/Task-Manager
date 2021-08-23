@@ -32,23 +32,26 @@ public class GroupServiceImpl implements GroupService {
   public GroupServiceImpl() {}
 
   @Override
-  public boolean createGroup(GroupTO group) {
+  public GroupTO createGroup(GroupTO group) {
     logger.info("createGroup method started");
 
     if (group.getGroupName() == null) {
-      return false;
+      return null;
     }
 
     Group newGroup = new Group();
     BeansUtil.copyObjectProperties(newGroup, group);
 
+    GroupTO returnedGroup = new GroupTO();
+
     if (groupDao.save(newGroup) != null) {
       logger.info("New group " + group.getGroupName() + " created!");
-      return true;
+      BeansUtil.copyObjectProperties(returnedGroup, newGroup);
+      return returnedGroup;
     }
 
     logger.warn("Incorrect argument or already existing group!");
-    return false;
+    return null;
   }
 
   @Override
@@ -61,6 +64,11 @@ public class GroupServiceImpl implements GroupService {
     if (groupName != null || userName != null) {
       Group selectedGroup = groupDao.findByGroupName(groupName);
       User selectedUser = userDao.findByUserName(userName);
+
+      if(selectedUser == null){
+        logger.warn("User with username" + user.getUserName() + " not existing!");
+        return false;
+      }
 
       selectedGroup.addUser(selectedUser);
 

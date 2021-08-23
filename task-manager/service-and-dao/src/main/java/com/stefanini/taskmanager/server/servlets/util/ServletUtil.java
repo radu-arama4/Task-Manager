@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class ServletUtil {
-  public static String getBody(HttpServletRequest request) throws IOException {
+  public static String getBodyContent(HttpServletRequest request) throws IOException {
 
     String body = null;
     StringBuilder stringBuilder = new StringBuilder();

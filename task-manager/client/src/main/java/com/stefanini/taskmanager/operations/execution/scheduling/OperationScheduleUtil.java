@@ -32,7 +32,6 @@ public class OperationScheduleUtil {
             printOperations.add(operation);
             return;
           }
-
           if (operation.getClass().toString().contains("User")) {
             scheduleUserOperations(dividedOperations, operation);
           } else if (operation.getClass().toString().contains("Group")) {

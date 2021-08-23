@@ -23,7 +23,7 @@ public interface GroupService {
    * @return boolean value - to show if the operation succeeded
    */
   @EmailGenerator
-  boolean createGroup(GroupTO group);
+  GroupTO createGroup(GroupTO group);
 
   /**
    * Method which receives the {@link GroupTO} data and {@link UserTO} data as DTOs in order to be sent
